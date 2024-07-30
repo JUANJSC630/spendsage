@@ -9,10 +9,10 @@ export default function dashboardLayout({
 }) {
   return (
     <div className="flex w-full h-full">
-      <div className="hidden h-full xl:block w-80 xl:fixed">
+      <div className="hidden h-full xl:block w-60 xl:fixed">
         <Sidebar />
       </div>
-      <div className="w-full h-full xl:ml-80">
+      <div className="w-full h-full xl:ml-60">
         <NavbarDashboard />
         <div className="h-max">{children}</div>
       </div>
