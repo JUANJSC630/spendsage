@@ -3,12 +3,12 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <main className="flex h-screen flex-col items-center justify-center gap-8 px-72">
+    <div className="flex flex-col items-center justify-center gap-8 bg-slate-50 p-8">
       <h1 className="text-4xl font-bold">Welcome to your app</h1>
       <p className="text-lg text-center">
         Get started by editing <code>pages/index.tsx</code>
       </p>
-      <p className="text-center"> 
+      <p className="text-center md:w-[50%]"> 
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit quaerat
         dicta, minima, ut velit culpa porro voluptas officiis totam
         reprehenderit similique distinctio maiores. Repellat, quasi autem rem
@@ -30,6 +30,6 @@ export default function Home() {
       <Button>
         <code>Send</code>
       </Button>
-    </main>
+    </div>
   );
 }
