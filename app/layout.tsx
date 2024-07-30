@@ -1,6 +1,7 @@
 import "./globals.css";
 
 import { Nunito } from "next/font/google";
+import NextTopLoader from "nextjs-toploader";
 
 import type { Metadata } from "next";
 
@@ -18,7 +19,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={nunito.className}>{children}</body>
+      <body className={nunito.className}>
+        <NextTopLoader />
+        {children}
+      </body>
     </html>
   );
 }
