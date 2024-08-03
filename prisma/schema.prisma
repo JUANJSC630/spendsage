@@ -12,6 +12,7 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 model Transactions {
   id          String   @id @default(uuid())
   userId      String   @db.Text
@@ -19,21 +20,32 @@ model Transactions {
   amount      String   @db.Text
   date        DateTime
   description String   @db.Text
-
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
 model PaymentSchedule {
-  id          String   @id @default(uuid())
-  userId      String   @db.Text
-  category    String   @db.Text
-  amount      String   @db.Text
-  description String   @db.Text
-  frequency   String   @db.Text
-  startDate   DateTime
-  endDate     DateTime
+  id           String        @id @default(uuid())
+  userId       String        @db.Text
+  date         DateTime
+  name         String        @db.Text
+  paymentItems PaymentItem[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+model PaymentItem {
+  id                String          @id @default(uuid())
+  userId            String          @db.Text
+  paymentScheduleId String          @db.Text
+  check             Boolean
+  amount            String          @db.Text
+  date              DateTime
+  description       String          @db.Text
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  paymentSchedule   PaymentSchedule @relation(fields: [paymentScheduleId], references: [id], onDelete: Cascade)
+
+  @@index([paymentScheduleId])
+  @@index([userId])
 }
