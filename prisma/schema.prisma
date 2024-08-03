@@ -12,18 +12,11 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
-enum Category {
-  INCOME
-  FIXED_EXPENSE
-  VARIABLE_EXPENSE
-}
-
 model Transactions {
   id          String   @id @default(uuid())
   userId      String   @db.Text
-  category    Category
-  amount      Int      @db.Integer
+  category    String   @db.Text
+  amount      String   @db.Text
   description String   @db.Text
 
   createdAt   DateTime @default(now())

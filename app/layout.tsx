@@ -6,6 +6,7 @@ import NextTopLoader from "nextjs-toploader";
 import { ClerkProvider } from "@clerk/nextjs";
 
 import type { Metadata } from "next";
+import ReactQueryProvider from "@/utils/providers/ReactQueryProvider";
 
 const nunito = Nunito({ subsets: ["latin"], weight: ["400", "700"] });
 
@@ -22,12 +23,14 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body className={nunito.className}>
-          <NextTopLoader color="#000" />
-          {children}
-        </body>
-      </html>
+      <ReactQueryProvider>
+        <html lang="en">
+          <body className={nunito.className}>
+            <NextTopLoader color="#000" />
+            {children}
+          </body>
+        </html>
+      </ReactQueryProvider>
     </ClerkProvider>
   );
 }
