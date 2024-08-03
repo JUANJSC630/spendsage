@@ -23,12 +23,12 @@ export default function CardTransaction(props: CardTransactionProps) {
   return (
     <div
       key={transaction.id}
-      className="grid grid-cols-3 gap-4 bg-white hover:bg-gray-50/50 rounded-lg p-4 shadow-md"
+      className="grid grid-cols-3 gap-4 bg-gray-50 rounded-lg p-4"
     >
       <div className="col-span-2">
         <p className="text-lg font-bold">{transaction.description}</p>
         <p className="text-sm text-gray-400">
-          {new Date(transaction.createdAt).toLocaleDateString("es-ES")}
+          {new Date(transaction.date).toLocaleDateString("es-ES")}
         </p>
         <p>
           {

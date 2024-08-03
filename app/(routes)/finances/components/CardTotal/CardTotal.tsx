@@ -31,7 +31,7 @@ export default function CardTotal(props: CardTotalProps) {
   };
 
   return (
-    <div className="bg-white hover:bg-gray-50 rounded-lg p-8 border grid gap-6">
+    <div className="bg-white hover:bg-gray-50 rounded-lg p-8 border grid gap-6 shadow-md">
       <h2 className="text-2xl font-bold">{props.title}</h2>
       <p
         className={`text-center text-4xl font-bold ${

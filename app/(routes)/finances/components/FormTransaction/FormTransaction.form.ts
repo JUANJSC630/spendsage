@@ -20,4 +20,9 @@ export const formSchema = z.object({
     .refine((value) => value.length >= 4, {
       message: "Amount must be at least 4 digits",
     }),
+    date: z.date(
+      {
+        required_error: "Date is required",
+      }
+    ),
 });
