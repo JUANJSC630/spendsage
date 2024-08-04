@@ -27,7 +27,8 @@ model Transactions {
 model PaymentSchedule {
   id           String        @id @default(uuid())
   userId       String        @db.Text
-  date         DateTime
+  fromDate     DateTime
+  toDate       DateTime
   name         String        @db.Text
   paymentItems PaymentItem[]
   createdAt    DateTime      @default(now())

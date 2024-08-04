@@ -4,10 +4,12 @@ import React from "react";
 
 import { Button } from "@/components/ui/button";
 
+import { ButtonAddPaymentSchedule } from "../ButtonAddPaymentSchedule/ButtonAddPaymentSchedule";
+
 export function Navbar() {
   return (
     <div className="bg-background py-4 px-6">
-      <div className="container mx-auto flex items-center gap-8">
+      <div className="container mx-auto flex items-center justify-between gap-8">
         <div>
           <Link href="/finances">
             <Button variant="outline" className="flex items-center gap-2">
@@ -16,6 +18,7 @@ export function Navbar() {
             </Button>
           </Link>
         </div>
+        <ButtonAddPaymentSchedule />
       </div>
     </div>
   );
