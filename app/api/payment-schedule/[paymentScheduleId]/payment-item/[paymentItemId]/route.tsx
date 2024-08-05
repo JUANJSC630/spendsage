@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 interface Params {
-  params: { paymentScheduleId: string };
+  params: { paymentItemId: string };
 }
 
 export async function DELETE(req: Request, { params }: Params) {
@@ -14,21 +14,21 @@ export async function DELETE(req: Request, { params }: Params) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    if (!params || !params.paymentScheduleId) {
+    if (!params || !params.paymentItemId) {
       return new NextResponse("Bad Request", { status: 400 });
     }
 
-    const { paymentScheduleId } = params;
+    const { paymentItemId } = params;
 
-    const deletePaymentSchedule = await db.paymentSchedule.delete({
+    const deletePaymentItem = await db.paymentItem.delete({
       where: {
-        id: paymentScheduleId,
+        id: paymentItemId,
       },
     });
 
-    return NextResponse.json(deletePaymentSchedule);
+    return NextResponse.json(deletePaymentItem);
   } catch (e) {
-    console.error("[DELETE PAYMENT SCHEDULE]", e);
+    console.error("[DELETE PAYMENT ITEM]", e);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }

@@ -1,5 +1,5 @@
 import { PaymentSchedule } from "@prisma/client";
 
-export type CardPaymentScheduleProps = {
+export type ButtonDeletePaymentScheduleProps = {
   paymentSchedule: PaymentSchedule;
 };
