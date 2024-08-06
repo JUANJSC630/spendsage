@@ -75,7 +75,7 @@ export function FormItems(props: FormItemsProps) {
                       onCheckedChange={() => field.onChange(true)}
                     />
                   </FormControl>
-                  <FormLabel>Pain</FormLabel>
+                  <FormLabel>Paid</FormLabel>
                 </div>
                 <div className="flex flex-row justify-start gap-2 items-center">
                   <FormControl>
@@ -84,7 +84,7 @@ export function FormItems(props: FormItemsProps) {
                       onCheckedChange={() => field.onChange(false)}
                     />
                   </FormControl>
-                  <FormLabel>Not Pain</FormLabel>
+                  <FormLabel>Not Paid</FormLabel>
                 </div>
               </div>
               <FormMessage />
