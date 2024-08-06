@@ -32,3 +32,31 @@ export async function DELETE(req: Request, { params }: Params) {
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
+
+export async function PATCH(
+  req: Request,
+  { params }: { params: { paymentItemId: string } }
+) {
+  try {
+    const { userId } = auth();
+    const { paymentItemId } = params;
+    const values = await req.json();
+
+    if (!userId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const paymentItem = await db.paymentItem.update({
+      where: {
+        id: paymentItemId,
+        userId,
+      },
+      data: values,
+    });
+
+    return NextResponse.json(paymentItem);
+  } catch (e) {
+    console.error("[PATCH PAYMENT ITEM]", e);
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
+}
