@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 
-export type FormPaymentSchedule = {
+export type FormPaymentScheduleProps = {
   setOpenDialog: Dispatch<SetStateAction<boolean>>;
 };
+

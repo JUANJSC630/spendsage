@@ -1,6 +1,5 @@
 import Image from "next/image";
 import React from "react";
-import { Tranquiluxe } from "uvcanvas";
 
 export default function layout({ children }: { children: React.ReactNode }) {
   return (

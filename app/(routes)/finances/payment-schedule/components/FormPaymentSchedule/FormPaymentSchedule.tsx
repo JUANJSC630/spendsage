@@ -30,9 +30,9 @@ import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { formSchema } from "./FormPaymentSchedule.form";
-import { FormPaymentSchedule } from "./FormPaymentSchedule.types";
+import { FormPaymentScheduleProps } from "./FormPaymentSchedule.types";
 
-function FormPaymentSchedule(props: FormPaymentSchedule) {
+function FormPaymentSchedule(props: FormPaymentScheduleProps) {
   const { setOpenDialog } = props;
   const router = useRouter();
 
