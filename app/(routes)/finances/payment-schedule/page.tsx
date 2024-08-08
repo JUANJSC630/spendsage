@@ -24,7 +24,7 @@ export default async function PaymentSchedulePage() {
     <div className="flex flex-col pb-8">
       <Navbar />
       <div className="container mx-auto px-8 flex-1 ">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
           {data.map((paymentSchedule) => (
             <CardPaymentSchedule
               paymentSchedule={paymentSchedule}
