@@ -1,15 +1,17 @@
 "use client";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
 
 import ButtonDeletePaymentItem from "../ButtonDeletePaymentItem/ButtonDeletePaymentItem";
 import { CheckBoxUpdatePaymentItem } from "../CheckBoxUpdatePaymentItem/CheckBoxUpdatePaymentItem";
 import { PaymentScheduleItemProps } from "./PaymentScheduleItem.types";
+import useCurrencyStore from "@/store/useStore";
 
 export default function PaymentScheduleItem(props: PaymentScheduleItemProps) {
   const { paymentItem, paymentSchedule } = props;
+  const { getSymbol } = useCurrencyStore();
   const [checked, setChecked] = useState(paymentItem.check);
 
   const router = useRouter();
@@ -45,7 +47,10 @@ export default function PaymentScheduleItem(props: PaymentScheduleItemProps) {
         />
         <div className="flex flex-col">
           <div className="text-gray-500">{paymentItem.description}</div>
-          <div className="font-semibold">${paymentItem.amount}</div>
+          <div className="font-semibold">
+            {getSymbol()}
+            {paymentItem.amount}
+          </div>
           <div className="text-gray-500 text-xs">
             {new Date(paymentItem.date).toLocaleDateString("es-ES")}
           </div>

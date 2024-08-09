@@ -1,8 +1,11 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import { CardTotalProps } from "./CardTotal.types";
+import useCurrencyStore from "@/store/useStore";
 
 export default function CardTotal(props: CardTotalProps) {
   const { transactions } = props;
+  const { getSymbol } = useCurrencyStore();
 
   // Procesar los datos para sumar montos por categoría
   const totals = transactions.reduce((acc, item) => {
@@ -38,7 +41,7 @@ export default function CardTotal(props: CardTotalProps) {
           props.type === "balance" && totalBalance <= 0 ? "text-red-500" : ""
         }`}
       >
-        $
+        {getSymbol()}
         {formatNumber(
           props.type === "income"
             ? totalIncome

@@ -1,3 +1,4 @@
+"use client";
 import { useRouter } from "next/navigation";
 
 import React from "react";
@@ -5,9 +6,13 @@ import { CardTransactionProps } from "./CardTransaction.types";
 import { Trash } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import useCurrencyStore from "@/store/useStore";
 
 export default function CardTransaction(props: CardTransactionProps) {
   const { transaction } = props;
+
+  const { currency, getSymbol } = useCurrencyStore();
+
   const router = useRouter();
 
   const deleteTransaction = async () => {
@@ -48,7 +53,8 @@ export default function CardTransaction(props: CardTransactionProps) {
               : "text-red-500"
           }`}
         >
-          {transaction.category === "income" ? "+" : "-"}$
+          {transaction.category === "income" ? "+" : "-"}
+          {getSymbol()}
           {new Intl.NumberFormat("es-ES", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
