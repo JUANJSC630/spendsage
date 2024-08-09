@@ -17,7 +17,7 @@ export const formSchema = z.object({
     .refine((value) => /^\d+$/.test(value), {
       message: "Amount must be a number",
     })
-    .refine((value) => value.length >= 4, {
+    .refine((value) => value.length >= 3, {
       message: "Amount must be at least 4 digits",
     }),
     date: z.date(
