@@ -14,7 +14,7 @@ import { CalendarIcon } from "@/utils/CalendarIcon";
 export function Navbar() {
   return (
     <div className="bg-background text-primary-foreground py-4 px-6">
-      <div className="container mx-auto flex items-center justify-end gap-8">
+      <div className="container mx-auto flex flex-col-reverse md:flex-row items-center justify-end gap-8">
         <div>
           <Link href="/finances/payment-schedule">
             <Button variant="outline" className="flex items-center gap-2">
