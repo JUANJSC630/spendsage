@@ -38,11 +38,6 @@ function FormPaymentSchedule(props: FormPaymentScheduleProps) {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      fromDate: undefined,
-      toDate: undefined,
-      name: "",
-    },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -95,7 +90,6 @@ function FormPaymentSchedule(props: FormPaymentScheduleProps) {
                           mode="single"
                           selected={field.value}
                           onSelect={field.onChange}
-                          initialFocus
                         />
                       </PopoverContent>
                     </Popover>
@@ -133,10 +127,6 @@ function FormPaymentSchedule(props: FormPaymentScheduleProps) {
                           mode="single"
                           selected={field.value}
                           onSelect={field.onChange}
-                          disabled={(date) =>
-                            date < addDays(form.getValues("fromDate"), 1)
-                          }
-                          initialFocus
                         />
                       </PopoverContent>
                     </Popover>

@@ -134,7 +134,6 @@ export function FormItems(props: FormItemsProps) {
                     mode="single"
                     selected={field.value}
                     onSelect={field.onChange}
-                    initialFocus
                   />
                 </PopoverContent>
               </Popover>
