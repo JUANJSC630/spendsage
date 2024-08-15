@@ -41,7 +41,7 @@ export function Navbar() {
   };
 
   return (
-    <div className="bg-background py-4 px-6">
+    <div className="py-4 px-6">
       <div className="container mx-auto flex flex-col-reverse md:flex-row items-end md:items-center justify-end gap-2 md:gap-8">
         <div>
           <Select value={currency} onValueChange={handleCurrencyChange}>

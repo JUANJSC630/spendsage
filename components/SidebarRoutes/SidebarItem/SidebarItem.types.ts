@@ -7,4 +7,5 @@ export type SidebarItemProps = {
     href: string;
   };
   key: string;
+  setOpen: boolean;
 };

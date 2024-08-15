@@ -23,31 +23,25 @@ export default async function FinancesPage() {
   });
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-full h-full justify-center">
       <Navbar />
-      <div className="flex-1 py-8 md:px-6">
-        <div className="container mx-auto grid gap-8">
-          <div className="grid md:grid-cols-2 gap-8 md:p-4">
-            <div className="border border-slate-100 p-4 rounded-md transition-colors duration-300 ease-in">
-              <FromTransaction />
-            </div>
-            <div className="border border-slate-100 p-4 rounded-md transition-colors duration-300 ease-in">
-              <ListTransaction transactions={data} />
-            </div>
+      <div className="container mx-auto grid gap-8">
+        <div className="grid md:grid-cols-2 gap-8 md:p-4">
+          <div className="border border-slate-100 p-4 rounded-md transition-colors duration-300 ease-in">
+            <FromTransaction />
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            <CardTotal transactions={data} type="income" title="Total Income" />
-            <CardTotal
-              transactions={data}
-              type="expenses"
-              title="Total Expenses"
-            />
-            <CardTotal
-              transactions={data}
-              type="balance"
-              title="Total Balance"
-            />
+          <div className="border border-slate-100 p-4 rounded-md transition-colors duration-300 ease-in">
+            <ListTransaction transactions={data} />
           </div>
+        </div>
+        <div className="grid md:grid-cols-3 gap-8">
+          <CardTotal transactions={data} type="income" title="Total Income" />
+          <CardTotal
+            transactions={data}
+            type="expenses"
+            title="Total Expenses"
+          />
+          <CardTotal transactions={data} type="balance" title="Total Balance" />
         </div>
       </div>
     </div>

@@ -3,7 +3,7 @@ import React from "react";
 
 export default function dashboardPage() {
   return (
-    <div className="flex flex-col items-center justify-center gap-8 bg-sky-50 p-8">
+    <div className="flex flex-col items-center justify-center gap-8 p-8">
       <h1 className="text-4xl font-bold">Dashboard Page</h1>
       <p className="text-center md:w-[50%]">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit quaerat
