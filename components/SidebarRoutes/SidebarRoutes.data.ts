@@ -3,8 +3,8 @@ import { LayoutDashboard,ScrollText,BadgeDollarSign } from "lucide-react";
 export const dataGeneralSidebar = [
   {
     icon: LayoutDashboard,
-    label: "Dashboard",
-    href: "/dashboard",
+    label: "Home",
+    href: "/",
   },
   {
     icon: BadgeDollarSign,
