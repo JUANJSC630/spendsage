@@ -81,7 +81,7 @@ function FromTransaction() {
   return (
     <div className="space-y-4">
       <Toaster position="top-right" reverseOrder={true} />
-      <h2 className="text-2xl font-bold mb-4">Income</h2>
+      <h2 className="text-2xl font-bold mb-4">Add Transaction</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 gap-4">
