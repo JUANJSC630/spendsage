@@ -6,7 +6,7 @@ import { CardTransactionProps } from "./CardTransaction.types";
 import { Trash } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import useCurrencyStore from "@/store/useStore";
+import { useCurrencyStore } from "@/store/useCurrencyStore";
 
 export default function CardTransaction(props: CardTransactionProps) {
   const { transaction } = props;

@@ -1,4 +1,9 @@
-import { LayoutDashboard,ScrollText,BadgeDollarSign } from "lucide-react";
+import {
+  LayoutDashboard,
+  ScrollText,
+  BadgeDollarSign,
+  Settings,
+} from "lucide-react";
 
 export const dataGeneralSidebar = [
   {
@@ -15,5 +20,13 @@ export const dataGeneralSidebar = [
     icon: ScrollText,
     label: "Reports",
     href: "/reports",
+  },
+];
+
+export const dataSettingsSidebar = [
+  {
+    icon: Settings,
+    label: "Settings",
+    href: "/settings",
   },
 ];

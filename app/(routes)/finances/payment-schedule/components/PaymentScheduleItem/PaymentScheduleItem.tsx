@@ -7,7 +7,7 @@ import { toast, Toaster } from "react-hot-toast";
 import ButtonDeletePaymentItem from "../ButtonDeletePaymentItem/ButtonDeletePaymentItem";
 import { CheckBoxUpdatePaymentItem } from "../CheckBoxUpdatePaymentItem/CheckBoxUpdatePaymentItem";
 import { PaymentScheduleItemProps } from "./PaymentScheduleItem.types";
-import useCurrencyStore from "@/store/useStore";
+import { useCurrencyStore } from "@/store/useCurrencyStore";
 
 export default function PaymentScheduleItem(props: PaymentScheduleItemProps) {
   const { paymentItem, paymentSchedule } = props;

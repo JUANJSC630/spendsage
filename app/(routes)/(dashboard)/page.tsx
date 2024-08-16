@@ -22,31 +22,34 @@ import ExpenseIncomeLineChart from "./components/ExpenseIncomeLineChart/ExpenseI
 import ExpensePieChart from "./components/ExpensePieChart/ExpensePieChart";
 import AccountDistributionPieChart from "./components/AccountDistributionPieChart/AccountDistributionPieChart";
 import ExpenseRadarChart from "./components/ExpenseRadarChart/ExpenseRadarChart";
+import TitleText from "./components/TitleText/TitleText";
 
 export default function dashboardPage() {
   return (
-    <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
-      <div className="flex items-center gap-4">
-        <h1 className="font-semibold text-lg md:text-xl">Dashboard</h1>
-        <div className="ml-auto flex items-center gap-2">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                id="date"
-                variant="outline"
-                className="w-[280px] justify-start text-left font-normal"
-              >
-                <CalendarClockIcon className="mr-2 h-4 w-4" />
-                June 01, 2023 - June 30, 2023
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="end">
-              <Calendar initialFocus mode="range" numberOfMonths={2} />
-            </PopoverContent>
-          </Popover>
-        </div>
+    <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8 ">
+      <div className="w-full flex items-center justify-end gap-4">
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              id="date"
+              variant="outline"
+              className=" justify-start text-left font-normal"
+            >
+              <CalendarClockIcon className="mr-2 h-4 w-4" />
+              {new Intl.DateTimeFormat("en-US", {
+                month: "long",
+              }).format(new Date())}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="end">
+            <Calendar initialFocus mode="range" numberOfMonths={1} />
+          </PopoverContent>
+        </Popover>
       </div>
-      <div className="grid gap-6">
+      <div>
+        <TitleText />
+      </div>
+      {/* <div className="grid gap-6">
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           <Card>
             <CardHeader>
@@ -218,7 +221,7 @@ export default function dashboardPage() {
             </CardContent>
           </Card>
         </div>
-      </div>
-    </main>
+      </div> */}
+    </div>
   );
 }

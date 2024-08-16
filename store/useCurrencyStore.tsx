@@ -14,7 +14,7 @@ const initialCurrency: "USD" | "EUR" | "COP" =
     (localStorage.getItem("currency") as "USD" | "EUR" | "COP")) ||
   "USD";
 
-const useCurrencyStore = create<CurrencyState>((set, get) => ({
+export const useCurrencyStore = create<CurrencyState>((set, get) => ({
   currency: initialCurrency,
   toggleCurrency: () => {
     set((state) => {
@@ -46,5 +46,3 @@ const useCurrencyStore = create<CurrencyState>((set, get) => ({
     }
   },
 }));
-
-export default useCurrencyStore;

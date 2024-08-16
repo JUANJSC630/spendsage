@@ -1,6 +1,6 @@
 "use client";
 
-import useCurrencyStore from "@/store/useStore";
+import { useCurrencyStore } from "@/store/useCurrencyStore";
 import React from "react";
 import { PaymentItem } from "@prisma/client";
 
