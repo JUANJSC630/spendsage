@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CalendarIcon } from "@/utils/CalendarIcon";
-import { useCurrencyStore } from "@/store/useCurrencyStore";
+import { useCurrencyStore } from "@/hooks/useCurrencyStore";
 
 export function Navbar() {
   const {

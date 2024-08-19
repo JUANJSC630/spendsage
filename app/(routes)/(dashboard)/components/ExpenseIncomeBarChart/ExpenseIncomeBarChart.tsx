@@ -26,18 +26,18 @@ type ExpenseIncomeBarChartProps = {
   }[];
 };
 
-const ExpenseIncomeBarChart = (props: ExpenseIncomeBarChartProps) => (
-  <ResponsiveContainer width="100%" height={300}>
-    <BarChart width={300} height={300} data={data}>
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="name" />
-      <YAxis />
-      <Tooltip />
-      <Legend />
-      <Bar dataKey="gastos" fill="#8884d8" />
-      <Bar dataKey="ingresos" fill="#82ca9d" />
-    </BarChart>
-  </ResponsiveContainer>
-);
-
-export default ExpenseIncomeBarChart;
+export function ExpenseIncomeBarChart(props: ExpenseIncomeBarChartProps) {
+  return (
+    <ResponsiveContainer width="100%" height={300}>
+      <BarChart width={300} height={300} data={data}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="name" />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        <Bar dataKey="gastos" fill="#8884d8" />
+        <Bar dataKey="ingresos" fill="#82ca9d" />
+      </BarChart>
+    </ResponsiveContainer>
+  );
+}

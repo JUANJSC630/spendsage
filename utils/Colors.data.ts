@@ -19,3 +19,19 @@ export const COLORS = [
     "#E1A8A8", // Rojo Coral Suave
     "#B3D9D9", // Verde Agua Suave
   ];
+
+  // Lista de opciones de color
+export const colorOptions = [
+  { color: "#3b82f6" }, // Azul
+  { color: "#ef4444" }, // Rojo
+  { color: "#10b981" }, // Verde
+  { color: "#f59e0b" }, // Amarillo
+  { color: "#6366f1" }, // Índigo
+
+  { color: "#f97316" }, // Naranja
+  { color: "#14b8a6" }, // Teal
+
+  { color: "#7c3aed" }, // Violeta
+  { color: "#0ea5e9" }, // Azul celeste
+  { color: "#d946ef" }, // Fucsia
+];

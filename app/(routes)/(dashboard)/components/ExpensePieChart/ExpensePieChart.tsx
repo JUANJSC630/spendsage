@@ -18,25 +18,25 @@ const data = [
   // Agrega más categorías según sea necesario
 ];
 
-const ExpensePieChart = () => (
-  <ResponsiveContainer width="100%" height={400}>
-    <PieChart width={400} height={200}>
-      <Pie
-        data={data}
-        dataKey="value"
-        nameKey="name"
-        outerRadius={150}
-        fill="#8884d8"
-        label
-      >
-        {data.map((entry, index) => (
-          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-        ))}
-      </Pie>
-      <Tooltip />
-      <Legend />
-    </PieChart>
-  </ResponsiveContainer>
-);
-
-export default ExpensePieChart;
+export function ExpensePieChart() {
+  return (
+    <ResponsiveContainer width="100%" height={400}>
+      <PieChart width={400} height={200}>
+        <Pie
+          data={data}
+          dataKey="value"
+          nameKey="name"
+          outerRadius={150}
+          fill="#8884d8"
+          label
+        >
+          {data.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          ))}
+        </Pie>
+        <Tooltip />
+        <Legend />
+      </PieChart>
+    </ResponsiveContainer>
+  );
+}

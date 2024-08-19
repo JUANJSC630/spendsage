@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { CardTotalProps } from "./CardTotal.types";
-import { useCurrencyStore } from "@/store/useCurrencyStore";
+import { useCurrencyStore } from "@/hooks/useCurrencyStore";
 
 export default function CardTotal(props: CardTotalProps) {
   const { transactions } = props;

@@ -1,12 +1,21 @@
 import React from "react";
-import { Settings } from "lucide-react";
+import { CardTitleSettings } from "./components/CardTitleSettings";
+import { TitleColorTheme } from "./components/TitleColorTheme";
+import { ButtonChangeColor } from "./components/ButtonChangeColor";
+import { colorOptions } from "@/utils/Colors.data";
 
 export default function SettingsPage() {
   return (
-    <div className="flex flex-col h-full items-center justify-center gap-8 p-8">
-      <div>
-        <h1>Settings</h1>
-        <p>Here you can change your Settings</p>
+    <div className="flex flex-col h-full items-center justify-center gap-24 p-8">
+      <CardTitleSettings />
+
+      <div className="flex flex-col gap-2">
+        <TitleColorTheme />
+        <div className="grid grid-cols-5 gap-4">
+          {colorOptions.map((option) => (
+            <ButtonChangeColor key={option.color} color={option.color} />
+          ))}
+        </div>
       </div>
     </div>
   );

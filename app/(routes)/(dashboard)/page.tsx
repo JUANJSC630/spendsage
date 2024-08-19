@@ -17,17 +17,17 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 
-import ExpenseIncomeBarChart from "./components/ExpenseIncomeBarChart/ExpenseIncomeBarChart";
-import ExpenseIncomeLineChart from "./components/ExpenseIncomeLineChart/ExpenseIncomeLineChart";
-import ExpensePieChart from "./components/ExpensePieChart/ExpensePieChart";
-import AccountDistributionPieChart from "./components/AccountDistributionPieChart/AccountDistributionPieChart";
-import ExpenseRadarChart from "./components/ExpenseRadarChart/ExpenseRadarChart";
-import TitleText from "./components/TitleText/TitleText";
+import { AccountDistributionPieChart } from "./components/AccountDistributionPieChart";
+import { ExpenseIncomeBarChart } from "./components/ExpenseIncomeBarChart";
+import { ExpenseIncomeLineChart } from "./components/ExpenseIncomeLineChart";
+import { ExpensePieChart } from "./components/ExpensePieChart";
+import { ExpenseRadarChart } from "./components/ExpenseRadarChart";
+import { TitleText } from "./components/TitleText";
 
 export default function dashboardPage() {
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8 ">
-      <div className="w-full flex items-center justify-end gap-4">
+      {/* <div className="w-full flex items-center justify-end gap-4">
         <Popover>
           <PopoverTrigger asChild>
             <Button
@@ -45,7 +45,7 @@ export default function dashboardPage() {
             <Calendar initialFocus mode="range" numberOfMonths={1} />
           </PopoverContent>
         </Popover>
-      </div>
+      </div> */}
       <div>
         <TitleText />
       </div>

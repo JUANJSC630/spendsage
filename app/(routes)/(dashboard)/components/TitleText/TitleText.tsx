@@ -2,9 +2,9 @@
 import React from "react";
 
 import { useUser } from "@clerk/nextjs";
-import { useColorThemeStore } from "@/store/useColorThemeStore";
+import { useColorThemeStore } from "@/hooks/useColorThemeStore";
 
-export default function TitleText() {
+export function TitleText() {
   const { user } = useUser();
 
   const { colorTheme } = useColorThemeStore();
