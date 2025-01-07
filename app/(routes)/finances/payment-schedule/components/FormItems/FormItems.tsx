@@ -67,7 +67,7 @@ export function FormItems(props: FormItemsProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Status</FormLabel>
-              <div className="flex flex-row gap-4">
+              <div className="flex flex-col gap-4">
                 <div className="flex flex-row justify-start gap-2 items-center">
                   <FormControl>
                     <Checkbox
@@ -108,7 +108,7 @@ export function FormItems(props: FormItemsProps) {
           control={form.control}
           name="date"
           render={({ field }) => (
-            <FormItem className="flex flex-col">
+            <FormItem className="flex flex-col md:mt-2.5">
               <FormLabel>Date</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
