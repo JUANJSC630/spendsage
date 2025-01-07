@@ -49,7 +49,7 @@ export function SidebarRoutes(props: SidebarRoutesProps) {
         <div>
           <Separator />
 
-          <footer className="p-3 text-center">2024. All rights reserved</footer>
+          <footer className="p-3 text-center">2025 © SpendSage</footer>
         </div>
       ) : null}
     </div>
