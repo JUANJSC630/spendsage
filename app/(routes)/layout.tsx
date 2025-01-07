@@ -15,7 +15,7 @@ export default function DashboardLayout({
         <div className="block md:hidden">
           <NavbarDashboard />
         </div>
-        <div className="w-full md:h-full">{children}</div>
+        <div className="w-full md:h-full md:overflow-y-auto">{children}</div>
       </div>
     </div>
   );
