@@ -21,7 +21,7 @@ export default async function PaymentSchedulePage() {
   });
 
   return (
-    <div className="flex flex-col pb-8">
+    <div className="flex flex-col py-8">
       <Navbar />
       <div className="container mx-auto px-8 flex-1 ">
         <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">

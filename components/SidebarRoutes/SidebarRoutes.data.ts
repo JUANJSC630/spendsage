@@ -3,6 +3,7 @@ import {
   ScrollText,
   BadgeDollarSign,
   Settings,
+  ListCheck,
 } from "lucide-react";
 
 export const dataGeneralSidebar = [
@@ -17,9 +18,9 @@ export const dataGeneralSidebar = [
     href: "/finances",
   },
   {
-    icon: ScrollText,
-    label: "Reports",
-    href: "/reports",
+    icon: ListCheck,
+    label: "Payment Schedule",
+    href: "/finances/payment-schedule",
   },
 ];
 

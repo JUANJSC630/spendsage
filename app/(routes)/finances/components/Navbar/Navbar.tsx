@@ -76,14 +76,6 @@ export function Navbar() {
             </SelectContent>
           </Select>
         </div>
-        <div>
-          <Link href="/finances/payment-schedule">
-            <Button variant="outline" className="flex items-center gap-2">
-              <ListCheck className="h-5 w-5 text-gray-900" />
-              <span className="text-gray-900">Payment Schedule</span>
-            </Button>
-          </Link>
-        </div>
         <div className="flex items-center gap-4">
           <Popover>
             <PopoverTrigger asChild>
