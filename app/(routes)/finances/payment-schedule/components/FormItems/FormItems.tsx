@@ -29,17 +29,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { formSchema } from "./FormItems.form";
 import { FormItemsProps } from "./FormItems.types";
 import { Checkbox } from "@/components/ui/checkbox";
+import useFormatAmount from "@/hooks/useFormatAmount";
 
 export function FormItems(props: FormItemsProps) {
   const { setOpen, paymentSchedule } = props;
-
+  const formatAmount = useFormatAmount();
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       check: false,
+      amount: "",
+      description: "",
     },
   });
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.post(
@@ -52,6 +56,11 @@ export function FormItems(props: FormItemsProps) {
     } catch (error) {
       toast.error("Error creating payment item");
     }
+  };
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, "");
+    form.setValue("amount", value);
   };
 
   return (
@@ -67,7 +76,7 @@ export function FormItems(props: FormItemsProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Status</FormLabel>
-              <div className="flex flex-row gap-4">
+              <div className="flex flex-col gap-4">
                 <div className="flex flex-row justify-start gap-2 items-center">
                   <FormControl>
                     <Checkbox
@@ -98,7 +107,12 @@ export function FormItems(props: FormItemsProps) {
             <FormItem>
               <FormLabel>Amount</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input
+                  {...field}
+                  type="text"
+                  value={formatAmount(form.watch("amount"))}
+                  onChange={handleAmountChange}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -108,7 +122,7 @@ export function FormItems(props: FormItemsProps) {
           control={form.control}
           name="date"
           render={({ field }) => (
-            <FormItem className="flex flex-col">
+            <FormItem className="flex flex-col md:mt-2.5">
               <FormLabel>Date</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>

@@ -37,14 +37,24 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 // import { FormTransactionProps } from "./FormTransaction.types";
 import { formSchema } from "./FormTransaction.form";
+import useFormatAmount from "@/hooks/useFormatAmount";
 
 function FromTransaction() {
   const router = useRouter();
 
+  const [formattedAmount, setFormattedAmount] = useState("");
+
+  const formatAmount = useFormatAmount();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      category: "",
+      description: "",
+      amount: "",
+      date: new Date(),
+    },
   });
-  const [formattedAmount, setFormattedAmount] = useState("");
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -58,22 +68,9 @@ function FromTransaction() {
     }
   };
 
-  const formatAmount = (value: string) => {
-    // Remove non-numeric characters except for periods
-    const numberValue = value.replace(/\D/g, "");
-    return new Intl.NumberFormat("de-DE", {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(Number(numberValue));
-  };
-
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    // Remove periods for internal value handling
-    const unformattedValue = value.replace(/\./g, "");
-    form.setValue("amount", unformattedValue);
-    // Update formatted value for display
-    setFormattedAmount(formatAmount(unformattedValue));
+    const value = e.target.value.replace(/\D/g, "");
+    form.setValue("amount", value);
   };
 
   const { isValid } = form.formState;
@@ -176,9 +173,9 @@ function FromTransaction() {
                   <FormControl>
                     <Input
                       {...field}
-                      type="text" // Change to text to allow formatting
-                      value={formattedAmount} // Display formatted value
-                      onChange={handleAmountChange} // Handle change and format
+                      type="text"
+                      value={formatAmount(form.watch("amount"))}
+                      onChange={handleAmountChange}
                     />
                   </FormControl>
                   <FormMessage />

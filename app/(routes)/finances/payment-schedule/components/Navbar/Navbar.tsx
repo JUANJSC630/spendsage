@@ -10,14 +10,6 @@ export function Navbar() {
   return (
     <div className="bg-background py-4 px-6">
       <div className="container mx-auto flex flex-col md:flex-row items-end md:items-center justify-end gap-2 md:gap-8">
-        <div>
-          <Link href="/finances">
-            <Button variant="outline" className="flex items-center gap-2">
-              <ArrowLeft className="h-5 w-5 text-gray-700" />
-              <span className="text-gray-700">Finances</span>
-            </Button>
-          </Link>
-        </div>
         <ButtonAddPaymentSchedule />
       </div>
     </div>

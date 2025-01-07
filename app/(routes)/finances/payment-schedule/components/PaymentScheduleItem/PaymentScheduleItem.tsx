@@ -49,7 +49,11 @@ export default function PaymentScheduleItem(props: PaymentScheduleItemProps) {
           <div className="text-gray-500">{paymentItem.description}</div>
           <div className="font-semibold">
             {getSymbol()}
-            {paymentItem.amount}
+
+            {new Intl.NumberFormat("es-ES", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            }).format(parseFloat(paymentItem.amount))}
           </div>
           <div className="text-gray-500 text-xs">
             {new Date(paymentItem.date).toLocaleDateString("es-ES")}
