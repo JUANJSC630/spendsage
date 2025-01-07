@@ -43,6 +43,12 @@ function FromTransaction() {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      category: "",
+      description: "",
+      amount: "",
+      date: new Date(),
+    },
   });
   const [formattedAmount, setFormattedAmount] = useState("");
 
