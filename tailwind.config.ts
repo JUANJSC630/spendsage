@@ -74,6 +74,7 @@ const config = {
       },
       fontFamily: {
         caveat: ["Caveat", "cursive"],
+        tsukimi: ["Tsukimi Rounded", "serif"]
       },
     },
   },

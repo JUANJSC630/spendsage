@@ -23,18 +23,7 @@ export function Sidebar() {
       }}
     >
       <div className="flex flex-col items-center pt-6">
-        {sidebarOpen ? (
-          <LogoDashboard />
-        ) : (
-          <Image
-            src="/cat-logo-2.png"
-            alt="Logo"
-            width={40}
-            height={40}
-            priority
-          />
-        )}
-
+        <LogoDashboard open={sidebarOpen} />
         <Button
           variant="ghost"
           size="icon"
