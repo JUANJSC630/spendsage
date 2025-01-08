@@ -14,7 +14,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
         <div className="flex items-center justify-center">
           {children}
           <Image
-            src="/gato-logo-sz.png"
+            src="/spendsage-logo.png"
             width={300}
             height={300}
             alt="Logo"
