@@ -20,7 +20,7 @@ export const dataGeneralSidebar = [
   {
     icon: ListCheck,
     label: "Payment Schedule",
-    href: "/finances/payment-schedule",
+    href: "/payment-schedule",
   },
 ];
 
