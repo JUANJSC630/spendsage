@@ -23,66 +23,12 @@ import { CalendarIcon } from "@/utils/CalendarIcon";
 import { useCurrencyStore } from "@/hooks/useCurrencyStore";
 
 export function Navbar() {
-  const {
-    currency: storeCurrency,
-    setCurrency,
-    getSymbol,
-  } = useCurrencyStore();
-
-  const [symbol, setSymbol] = useState<string>(""); // Nuevo estado para manejar el símbolo de la moneda
-
-  useEffect(() => {
-    // Actualiza el símbolo después de la hidratación
-    setSymbol(getSymbol());
-  }, [getSymbol]);
-
-  const [currency, setLocalCurrency] = useState(storeCurrency);
-
-  useEffect(() => {
-    setLocalCurrency(storeCurrency);
-  }, [storeCurrency]);
-
-  const handleCurrencyChange = (value: "USD" | "EUR" | "COP") => {
-    setCurrency(value);
-    setLocalCurrency(value);
-  };
+  
 
   return (
     <div className="py-4 px-6">
       <div className="container mx-auto flex flex-col-reverse md:flex-row items-end md:items-center justify-end gap-2 md:gap-8">
-        <div>
-          <Select value={currency} onValueChange={handleCurrencyChange}>
-            <SelectTrigger>
-              <SelectValue>
-                <span className="flex items-center gap-4 px-2">
-                  {currency} {symbol}
-                </span>
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value={"COP"}>
-                <span className="flex items-center gap-2">
-                  <span>COP</span>
-                  <span className="text-gray-500">- Colombian Peso $</span>
-                </span>
-              </SelectItem>
-              <SelectItem value={"USD"}>
-                <span className="flex items-center gap-2">
-                  <span>USD</span>
-                  <span className="text-gray-500">
-                    - United States Dollar $
-                  </span>
-                </span>
-              </SelectItem>
-              <SelectItem value={"EUR"}>
-                <span className="flex items-center gap-2">
-                  <span>EUR</span>
-                  <span className="text-gray-500">- Euro €</span>
-                </span>
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        
         <div className="flex items-center gap-4">
           <Popover>
             <PopoverTrigger asChild>
