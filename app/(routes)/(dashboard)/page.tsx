@@ -1,33 +1,44 @@
 import { CalendarClockIcon } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Separator } from "@/components/ui/separator";
 
-import { AccountDistributionPieChart } from "./components/AccountDistributionPieChart";
-import { ExpenseIncomeBarChart } from "./components/ExpenseIncomeBarChart";
-import { ExpenseIncomeLineChart } from "./components/ExpenseIncomeLineChart";
-import { ExpensePieChart } from "./components/ExpensePieChart";
-import { ExpenseRadarChart } from "./components/ExpenseRadarChart";
 import { TitleText } from "./components/TitleText";
+import ExpenseIncomeChart from "./components/ExpenseIncomeChart";
+import FinancialSummary from "./components/FinancialSummary";
+import { auth } from "@clerk/nextjs/server";
+import { db } from "@/lib/db";
+import CategoriesSummary from "./components/CategoriesSummary";
 
-export default function dashboardPage() {
+export default async function dashboardPage() {
+  // const [expenses, setExpenses] = useState(123010);
+  // const [income, setIncome] = useState(500430);
+
+  const { userId } = auth();
+
+  if (!userId) {
+    return;
+  }
+
+  const data = await db.transactions.findMany({
+    where: {
+      userId,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8 ">
-      {/* <div className="w-full flex items-center justify-end gap-4">
+      <div className="w-full flex items-center justify-end gap-4">
         <Popover>
           <PopoverTrigger asChild>
             <Button
@@ -45,183 +56,22 @@ export default function dashboardPage() {
             <Calendar initialFocus mode="range" numberOfMonths={1} />
           </PopoverContent>
         </Popover>
-      </div> */}
+      </div>
       <div>
         <TitleText />
       </div>
-      {/* <div className="grid gap-6">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card>
-            <CardHeader>
-              <CardDescription>Checking</CardDescription>
-              <CardTitle>$12,345.67</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-4">
-                <div className="flex items-center justify-between">
-                  <div className="font-medium">Rent</div>
-                  <div className="text-muted-foreground">-$1,500.00</div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="font-medium">Groceries</div>
-                  <div className="text-muted-foreground">-$500.00</div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="font-medium">Utilities</div>
-                  <div className="text-muted-foreground">-$200.00</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardDescription>Savings</CardDescription>
-              <CardTitle>$25,000.00</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-4">
-                <div className="flex items-center justify-between">
-                  <div className="font-medium">Interest</div>
-                  <div className="text-muted-foreground">+$50.00</div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="font-medium">Transfer</div>
-                  <div className="text-muted-foreground">+$500.00</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardDescription>Credit Card</CardDescription>
-              <CardTitle>$2,345.67</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-4">
-                <div className="flex items-center justify-between">
-                  <div className="font-medium">Dining</div>
-                  <div className="text-muted-foreground">-$150.00</div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="font-medium">Shopping</div>
-                  <div className="text-muted-foreground">-$300.00</div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="font-medium">Travel</div>
-                  <div className="text-muted-foreground">-$500.00</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+        <div className="md:col-span-2 w-full flex flex-col justify-between items-center">
+          <FinancialSummary
+            data={data}
+            className="w-full flex flex-col md:flex-row justify-evenly gap-2"
+          />
+          <div className="w-full h-full flex flex-col justify-between items-center">
+            <CategoriesSummary transactions={data} />
+          </div>
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Monthly Expenses</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-4">
-                <div className="flex items-center justify-between">
-                  <div className="font-medium">Rent</div>
-                  <div className="text-muted-foreground">$1,500.00</div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="font-medium">Groceries</div>
-                  <div className="text-muted-foreground">$500.00</div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="font-medium">Utilities</div>
-                  <div className="text-muted-foreground">$200.00</div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="font-medium">Transportation</div>
-                  <div className="text-muted-foreground">$150.00</div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="font-medium">Entertainment</div>
-                  <div className="text-muted-foreground">$300.00</div>
-                </div>
-                <Separator className="my-2" />
-                <div className="flex items-center justify-between font-semibold">
-                  <div>Total Expenses</div>
-                  <div>$2,650.00</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Monthly Income</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-4">
-                <div className="flex items-center justify-between">
-                  <div className="font-medium">Salary</div>
-                  <div className="text-muted-foreground">$5,000.00</div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="font-medium">Freelance</div>
-                  <div className="text-muted-foreground">$1,000.00</div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="font-medium">Interest</div>
-                  <div className="text-muted-foreground">$50.00</div>
-                </div>
-                <div className="flex items-center justify-between font-semibold">
-                  <div>Total Income</div>
-                  <div>$6,050.00</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Total Expenses and Income</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ExpenseIncomeBarChart data={[]} />
-            </CardContent>
-          </Card>
-        </div>
-        <div className="grid md:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>
-                Evolution of Expenses and Revenues Over Time
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ExpenseRadarChart />
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>
-                Evolution of Expenses and Revenues Over Time
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ExpenseIncomeLineChart />
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Expense Distribution</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ExpensePieChart />
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Account Distribution</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <AccountDistributionPieChart />
-            </CardContent>
-          </Card>
-        </div>
-      </div> */}
+        <ExpenseIncomeChart transactions={data} className="md:col-span-3" />
+      </div>
     </div>
   );
 }
