@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,25 +8,43 @@ datasource db {
 }
 
 model Transactions {
-  id          String   @id @default(uuid())
-  userId      String   @db.Text
-  category    String   @db.Text
-  amount      String   @db.Text
-  date        DateTime
-  description String   @db.Text
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                                                  String       @id @default(uuid())
+  userId                                              String
+  amount                                              String
+  description                                         String
+  createdAt                                           DateTime     @default(now())
+  updatedAt                                           DateTime     @updatedAt
+  category                                            String
+  date                                                DateTime
+  fromAccountId                                       String?
+  toAccountId                                         String?
+  BankAccount_Transactions_fromAccountIdToBankAccount BankAccount? @relation("Transactions_fromAccountIdToBankAccount", fields: [fromAccountId], references: [id])
+  BankAccount_Transactions_toAccountIdToBankAccount   BankAccount? @relation("Transactions_toAccountIdToBankAccount", fields: [toAccountId], references: [id])
+}
+
+model ListPaymentSchedule {
+  id               String            @id @default(uuid())
+  userId           String            @db.Text
+  paymentSchedules PaymentSchedule[]
+  name             String            @db.Text
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
 }
 
 model PaymentSchedule {
-  id           String        @id @default(uuid())
-  userId       String        @db.Text
-  fromDate     DateTime
-  toDate       DateTime
-  name         String        @db.Text
-  paymentItems PaymentItem[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  id                    String               @id @default(uuid())
+  userId                String               @db.Text
+  ListPaymentScheduleId String               @db.Text
+  fromDate              DateTime
+  toDate                DateTime
+  name                  String               @db.Text
+  paymentItems          PaymentItem[]
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
+  ListPaymentSchedule   ListPaymentSchedule? @relation(fields: [ListPaymentScheduleId], references: [id])
+
+  @@index([ListPaymentScheduleId])
+  @@index([userId])
 }
 
 model PaymentItem {
@@ -49,4 +61,15 @@ model PaymentItem {
 
   @@index([paymentScheduleId])
   @@index([userId])
+}
+
+model BankAccount {
+  id                                                   String         @id
+  userId                                               String
+  name                                                 String
+  balance                                              Float          @default(0)
+  createdAt                                            DateTime       @default(now())
+  updatedAt                                            DateTime
+  Transactions_Transactions_fromAccountIdToBankAccount Transactions[] @relation("Transactions_fromAccountIdToBankAccount")
+  Transactions_Transactions_toAccountIdToBankAccount   Transactions[] @relation("Transactions_toAccountIdToBankAccount")
 }
