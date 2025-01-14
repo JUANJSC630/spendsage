@@ -66,7 +66,7 @@ export default async function dashboardPage() {
             data={data}
             className="w-full flex flex-col md:flex-row justify-evenly gap-2"
           />
-          <div className="w-full h-full flex flex-col justify-between items-center">
+          <div className="w-full h-full flex flex-col justify-center items-center">
             <CategoriesSummary transactions={data} />
           </div>
         </div>
