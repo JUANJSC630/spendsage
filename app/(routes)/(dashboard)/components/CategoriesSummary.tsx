@@ -45,8 +45,6 @@ export default function CategoriesSummary(props: CategoriesSummaryProps) {
     return acc;
   }, {} as Record<string, number>);
 
-  console.log(currentMonthTransactions);
-
   const data = {
     labels: ["Income", "Variable Expenses", "Fixed Expenses"],
     datasets: [
@@ -82,5 +80,9 @@ export default function CategoriesSummary(props: CategoriesSummaryProps) {
     },
   };
 
-  return <Doughnut options={options} data={data} />;
+  return (
+    <div className=" md:w-[450px] w-full">
+      <Doughnut options={options} data={data} />
+    </div>
+  );
 }
