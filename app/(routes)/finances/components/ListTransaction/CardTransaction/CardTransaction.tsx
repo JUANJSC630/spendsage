@@ -7,10 +7,12 @@ import { Trash } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useCurrencyStore } from "@/hooks/useCurrencyStore";
+import useFormatAmount from "@/hooks/useFormatAmount";
 
 export default function CardTransaction(props: CardTransactionProps) {
   const { transaction } = props;
 
+  const formatAmount = useFormatAmount();
   const { currency, getSymbol } = useCurrencyStore();
 
   const router = useRouter();
@@ -55,10 +57,7 @@ export default function CardTransaction(props: CardTransactionProps) {
         >
           {transaction.category === "income" ? "+" : "-"}
           {getSymbol()}
-          {new Intl.NumberFormat("es-ES", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          }).format(parseFloat(transaction.amount))}
+          {formatAmount(transaction.amount)}
         </p>
         <button
           className="hover:text-red-500 text-red-700/50"
