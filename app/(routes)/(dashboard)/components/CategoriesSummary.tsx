@@ -1,6 +1,6 @@
 "use client";
 import useFormatAmount from "@/hooks/useFormatAmount";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "chart.js/auto";
 import { Doughnut } from "react-chartjs-2";
 import { useCurrencyStore } from "@/hooks/useCurrencyStore";
@@ -15,7 +15,12 @@ export default function CategoriesSummary(props: CategoriesSummaryProps) {
   const { transactions, className } = props;
   const formatAmount = useFormatAmount();
   const { getSymbol } = useCurrencyStore();
+  const [symbol, setSymbol] = useState<string>(""); // Nuevo estado para manejar el símbolo de la moneda
 
+  useEffect(() => {
+    // Actualiza el símbolo después de la hidratación
+    setSymbol(getSymbol());
+  }, [getSymbol]);
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth();
   const currentYear = currentDate.getFullYear();
@@ -71,7 +76,7 @@ export default function CategoriesSummary(props: CategoriesSummaryProps) {
         enabled: true,
         callbacks: {
           label: (context: any) =>
-            `${getSymbol()} ${formatAmount(context.raw.toString())}`,
+            `${symbol} ${formatAmount(context.raw.toString())}`,
         },
       },
     },

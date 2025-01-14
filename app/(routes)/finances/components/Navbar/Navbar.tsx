@@ -29,6 +29,13 @@ export function Navbar() {
     getSymbol,
   } = useCurrencyStore();
 
+  const [symbol, setSymbol] = useState<string>(""); // Nuevo estado para manejar el símbolo de la moneda
+
+  useEffect(() => {
+    // Actualiza el símbolo después de la hidratación
+    setSymbol(getSymbol());
+  }, [getSymbol]);
+
   const [currency, setLocalCurrency] = useState(storeCurrency);
 
   useEffect(() => {
@@ -48,7 +55,7 @@ export function Navbar() {
             <SelectTrigger>
               <SelectValue>
                 <span className="flex items-center gap-4 px-2">
-                  {currency} {getSymbol()}
+                  {currency} {symbol}
                 </span>
               </SelectValue>
             </SelectTrigger>
