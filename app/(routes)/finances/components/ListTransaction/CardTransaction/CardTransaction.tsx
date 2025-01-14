@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CardTransactionProps } from "./CardTransaction.types";
 import { Trash } from "lucide-react";
 import axios from "axios";
@@ -13,8 +13,13 @@ export default function CardTransaction(props: CardTransactionProps) {
   const { transaction } = props;
 
   const formatAmount = useFormatAmount();
-  const { currency, getSymbol } = useCurrencyStore();
+  const { getSymbol } = useCurrencyStore();
+  const [symbol, setSymbol] = useState<string>(""); // Nuevo estado para manejar el símbolo de la moneda
 
+  useEffect(() => {
+    // Actualiza el símbolo después de la hidratación
+    setSymbol(getSymbol());
+  }, [getSymbol]);
   const router = useRouter();
 
   const deleteTransaction = async () => {
@@ -56,7 +61,7 @@ export default function CardTransaction(props: CardTransactionProps) {
           }`}
         >
           {transaction.category === "income" ? "+" : "-"}
-          {getSymbol()}
+          {symbol}
           {formatAmount(transaction.amount)}
         </p>
         <button

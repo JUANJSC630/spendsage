@@ -7,6 +7,12 @@ import useFormatAmount from "@/hooks/useFormatAmount";
 export default function CardTotal(props: CardTotalProps) {
   const { transactions } = props;
   const { getSymbol } = useCurrencyStore();
+  const [symbol, setSymbol] = useState<string>(""); // Nuevo estado para manejar el símbolo de la moneda
+
+  useEffect(() => {
+    // Actualiza el símbolo después de la hidratación
+    setSymbol(getSymbol());
+  }, [getSymbol]);
   const formatAmount = useFormatAmount();
 
   // Procesar los datos para sumar montos por categoría
@@ -46,7 +52,7 @@ export default function CardTotal(props: CardTotalProps) {
           props.type === "balance" && totalBalance <= 0 ? "text-red-500" : ""
         }`.trim()}
       >
-        {getSymbol()}
+        {symbol}
         {formatAmount(
           props.type === "income"
             ? totalIncome.toString()

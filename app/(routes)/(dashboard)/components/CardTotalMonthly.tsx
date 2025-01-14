@@ -20,6 +20,12 @@ export default function CardTotalMonthly(props: CardTotalMonthlyProps) {
   const formatAmount = useFormatAmount();
 
   const [monthlyTotal, setMonthlyTotal] = useState<number>(0);
+  const [symbol, setSymbol] = useState<string>(""); // Nuevo estado para manejar el símbolo de la moneda
+
+  useEffect(() => {
+    // Actualiza el símbolo después de la hidratación
+    setSymbol(getSymbol());
+  }, [getSymbol]);
 
   useEffect(() => {
     const now = new Date();
@@ -39,7 +45,6 @@ export default function CardTotalMonthly(props: CardTotalMonthlyProps) {
     const total = currentMonthTransactions.reduce((acc, item) => {
       const amount = parseFloat(item.amount);
 
-      // Solo sumar las transacciones que coincidan con el tipo
       if (props.type === "income" && item.category === "income") {
         acc += amount;
       } else if (
@@ -84,7 +89,7 @@ export default function CardTotalMonthly(props: CardTotalMonthlyProps) {
           props.type === "balance" && monthlyTotal <= 0 ? "text-red-500" : ""
         }`.trim()}
       >
-        {getSymbol()}
+        {symbol}
         {formatAmount(monthlyTotal.toString())}
       </p>
     </div>

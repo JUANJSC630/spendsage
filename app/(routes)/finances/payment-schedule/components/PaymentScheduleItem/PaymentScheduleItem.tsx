@@ -1,7 +1,7 @@
 "use client";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import React, { use, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
 
 import ButtonDeletePaymentItem from "../ButtonDeletePaymentItem/ButtonDeletePaymentItem";
@@ -13,6 +13,13 @@ export default function PaymentScheduleItem(props: PaymentScheduleItemProps) {
   const { paymentItem, paymentSchedule } = props;
   const { getSymbol } = useCurrencyStore();
   const [checked, setChecked] = useState(paymentItem.check);
+
+  const [symbol, setSymbol] = useState<string>(""); // Nuevo estado para manejar el símbolo de la moneda
+
+  useEffect(() => {
+    // Actualiza el símbolo después de la hidratación
+    setSymbol(getSymbol());
+  }, [getSymbol]);
 
   const router = useRouter();
 
@@ -48,7 +55,7 @@ export default function PaymentScheduleItem(props: PaymentScheduleItemProps) {
         <div className="flex flex-col">
           <div className="text-gray-500">{paymentItem.description}</div>
           <div className="font-semibold">
-            {getSymbol()}
+            {symbol}
 
             {new Intl.NumberFormat("es-ES", {
               minimumFractionDigits: 2,

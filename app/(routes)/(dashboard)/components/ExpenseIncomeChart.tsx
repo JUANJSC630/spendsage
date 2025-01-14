@@ -37,6 +37,13 @@ export default function ExpenseIncomeChart(props: ExpenseIncomeChartProps) {
   const formatAmount = useFormatAmount();
   const { getSymbol } = useCurrencyStore();
 
+  const [symbol, setSymbol] = useState<string>(""); // Nuevo estado para manejar el símbolo de la moneda
+
+  useEffect(() => {
+    // Actualiza el símbolo después de la hidratación
+    setSymbol(getSymbol());
+  }, [getSymbol]);
+
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
   const [groupedData, setGroupedData] = useState<
@@ -108,7 +115,7 @@ export default function ExpenseIncomeChart(props: ExpenseIncomeChartProps) {
         enabled: true,
         callbacks: {
           label: (context: any) =>
-            `${getSymbol()} ${formatAmount(context.raw.toString())}`,
+            `${symbol} ${formatAmount(context.raw.toString())}`,
         },
       },
     },
@@ -136,11 +143,11 @@ export default function ExpenseIncomeChart(props: ExpenseIncomeChartProps) {
                 <div key={key} className="flex flex-row gap-2 mt-2">
                   <span className="text-xs md:text-lg">{key}:</span>
                   <span className="text-xs md:text-lg">
-                    <strong>Income:</strong> {getSymbol()}{" "}
+                    <strong>Income:</strong> {symbol}{" "}
                     {formatAmount(groupedData[key].income.toString())}
                   </span>
                   <span className="text-xs md:text-lg">
-                    <strong>Expenses:</strong> {getSymbol()}{" "}
+                    <strong>Expenses:</strong> {symbol}{" "}
                     {formatAmount(groupedData[key].expenses.toString())}
                   </span>
                 </div>
