@@ -1,41 +1,37 @@
 import { create } from "zustand";
 
-// Definición del estado de la moneda y las funciones relacionadas
+// Definición del estado de la moneda y funciones relacionadas
 interface CurrencyState {
-  currency: "USD" | "EUR" | "COP";
-  toggleCurrency: () => void; // Función para alternar la moneda
-  setCurrency: (currency: "USD" | "EUR" | "COP") => void; // Función para establecer una moneda directamente
-  getSymbol: () => string; // Función para obtener el símbolo de la moneda
+  currency: "USD" | "EUR" | "COP"; // Monedas soportadas
+  toggleCurrency: () => void; // Alternar entre monedas
+  setCurrency: (currency: "USD" | "EUR" | "COP") => void; // Establecer moneda directamente
+  getSymbol: () => string; // Obtener el símbolo de la moneda actual
 }
 
-// Recupera la moneda almacenada en localStorage o usa "USD" por defecto
-const initialCurrency: "USD" | "EUR" | "COP" =
-  (typeof window !== "undefined" &&
-    (localStorage.getItem("currency") as "USD" | "EUR" | "COP")) ||
-  "USD";
-
 export const useCurrencyStore = create<CurrencyState>((set, get) => ({
-  currency: initialCurrency,
+  currency: "USD", // Valor inicial seguro para SSR
   toggleCurrency: () => {
     set((state) => {
-      // Alterna la moneda entre USD, EUR y COP
       const newCurrency =
         state.currency === "USD"
           ? "EUR"
           : state.currency === "EUR"
           ? "COP"
           : "USD";
-      localStorage.setItem("currency", newCurrency); // Actualiza localStorage
+      if (typeof window !== "undefined") {
+        localStorage.setItem("currency", newCurrency); // Actualizar localStorage en el cliente
+      }
       return { currency: newCurrency };
     });
   },
   setCurrency: (currency) => {
-    localStorage.setItem("currency", currency); // Actualiza localStorage
+    if (typeof window !== "undefined") {
+      localStorage.setItem("currency", currency); // Guardar en localStorage
+    }
     set({ currency });
   },
   getSymbol: () => {
     const { currency } = get();
-    // Devuelve el símbolo de la moneda actual
     switch (currency) {
       case "USD":
         return "$";
@@ -43,6 +39,19 @@ export const useCurrencyStore = create<CurrencyState>((set, get) => ({
         return "€";
       case "COP":
         return "$";
+      default:
+        return "$"; // Valor predeterminado
     }
   },
 }));
+
+// Sincronización inicial con localStorage después de la hidratación del cliente
+if (typeof window !== "undefined") {
+  const storedCurrency = localStorage.getItem("currency") as
+    | "USD"
+    | "EUR"
+    | "COP";
+  if (storedCurrency) {
+    useCurrencyStore.getState().setCurrency(storedCurrency);
+  }
+}
