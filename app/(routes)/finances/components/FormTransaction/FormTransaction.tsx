@@ -137,7 +137,25 @@ function FromTransaction() {
                       <Calendar
                         mode="single"
                         selected={field.value}
-                        onSelect={field.onChange}
+                        onSelect={(date) => {
+                          if (date) {
+                            const newDate = new Date(date.setHours(0, 0, 0, 0)); // Normalize the date
+                            const currentDate = new Date(field.value).setHours(
+                              0,
+                              0,
+                              0,
+                              0
+                            );
+
+                            // Compare the timestamps
+                            if (newDate.getTime() !== currentDate) {
+                              field.onChange(newDate);
+                            } else {
+                              // Force update if the date is the same
+                              field.onChange(newDate);
+                            }
+                          }
+                        }}
                         disabled={(date) =>
                           date > new Date() || date < new Date("1900-01-01")
                         }
