@@ -10,4 +10,7 @@ export const formSchema = z.object({
   name: z.string().nonempty({
     message: "Name is required",
   }),
+  listPaymentScheduleId: z.string().nonempty({
+    message: "List payment schedule id is required",
+  }),
 });

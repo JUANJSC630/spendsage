@@ -38,6 +38,9 @@ function FormPaymentSchedule(props: FormPaymentScheduleProps) {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      listPaymentScheduleId: props.listPaymentScheduleId,
+    },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {

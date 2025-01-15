@@ -14,7 +14,12 @@ import {
 
 import { FormPaymentSchedule } from "../FormPaymentSchedule/FormPaymentSchedule";
 
-export function ButtonAddPaymentSchedule() {
+type ButtonAddPaymentScheduleProps = {
+  listPaymentScheduleId: string;
+};
+
+export function ButtonAddPaymentSchedule(props: ButtonAddPaymentScheduleProps) {
+  const { listPaymentScheduleId } = props;
   const [isOpenModalCreate, setIsOpenModalCreate] = useState(false);
   return (
     <Dialog open={isOpenModalCreate} onOpenChange={setIsOpenModalCreate}>
@@ -31,7 +36,10 @@ export function ButtonAddPaymentSchedule() {
             Add a new payment schedule to your list.
           </DialogDescription>
         </DialogHeader>
-        <FormPaymentSchedule setOpenDialog={setIsOpenModalCreate} />
+        <FormPaymentSchedule
+          setOpenDialog={setIsOpenModalCreate}
+          listPaymentScheduleId={listPaymentScheduleId}
+        />
       </DialogContent>
     </Dialog>
   );
