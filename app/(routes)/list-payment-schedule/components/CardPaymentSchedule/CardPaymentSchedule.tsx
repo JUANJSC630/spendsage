@@ -7,7 +7,7 @@ import { CardPaymentScheduleProps } from "./CardPaymentSchedule.types";
 export function CardPaymentSchedule(props: CardPaymentScheduleProps) {
   const { paymentSchedule } = props;
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="bg-white rounded-lg border border-gray-200 shadow-md p-6">
       <div className="flex items-center justify-between mb-4">
         <div>
           <h1 className="text-xl font-semibold">{paymentSchedule.name}</h1>

@@ -34,16 +34,16 @@ model ListPaymentSchedule {
 model PaymentSchedule {
   id                    String               @id @default(uuid())
   userId                String               @db.Text
-  ListPaymentScheduleId String               @db.Text
+  listPaymentScheduleId String               @db.Text
   fromDate              DateTime
   toDate                DateTime
   name                  String               @db.Text
   paymentItems          PaymentItem[]
   createdAt             DateTime             @default(now())
   updatedAt             DateTime             @updatedAt
-  ListPaymentSchedule   ListPaymentSchedule? @relation(fields: [ListPaymentScheduleId], references: [id])
+  listPaymentSchedule   ListPaymentSchedule @relation(fields: [listPaymentScheduleId], references: [id], onDelete: Cascade)
 
-  @@index([ListPaymentScheduleId])
+  @@index([listPaymentScheduleId])
   @@index([userId])
 }
 
