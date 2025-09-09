@@ -1,16 +1,23 @@
 import { z } from "zod";
 
 export const formSchema = z.object({
-  fromDate: z.date({
-    required_error: "From date is required",
+  dateRange: z.object({
+    from: z.date({
+      required_error: "Start date is required",
+    }),
+    to: z.date({
+      required_error: "End date is required",
+    }),
+  }, {
+    required_error: "Date range is required",
+  }).refine((data) => data.to >= data.from, {
+    message: "End date must be after start date",
+    path: ["to"],
   }),
-  toDate: z.date({
-    required_error: "To date is required",
-  }),
-  name: z.string().nonempty({
+  name: z.string().min(1, {
     message: "Name is required",
   }),
-  listPaymentScheduleId: z.string().nonempty({
+  listPaymentScheduleId: z.string().min(1, {
     message: "List payment schedule id is required",
   }),
 });
