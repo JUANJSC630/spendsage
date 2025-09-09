@@ -70,6 +70,7 @@ export function FormItems(props: FormItemsProps) {
         onSubmit={form.handleSubmit(onSubmit)}
         className="md:grid-cols-2 grid gap-4"
       >
+        {/* Status */}
         <FormField
           control={form.control}
           name="check"
@@ -100,6 +101,21 @@ export function FormItems(props: FormItemsProps) {
             </FormItem>
           )}
         />
+        {/* Description */}
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {/* Amount */}
         <FormField
           control={form.control}
           name="amount"
@@ -118,6 +134,7 @@ export function FormItems(props: FormItemsProps) {
             </FormItem>
           )}
         />
+        {/* Date */}
         <FormField
           control={form.control}
           name="date"
@@ -151,19 +168,6 @@ export function FormItems(props: FormItemsProps) {
                   />
                 </PopoverContent>
               </Popover>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Description</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
               <FormMessage />
             </FormItem>
           )}
