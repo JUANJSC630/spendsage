@@ -16,12 +16,12 @@ interface YearFilterProps {
 
 export function YearFilter({ availableYears, selectedYear, onYearChange }: YearFilterProps) {
   const currentYear = new Date().getFullYear();
-  const defaultValue = selectedYear?.toString() || currentYear.toString();
-
+  const value = selectedYear !== null ? selectedYear.toString() : currentYear.toString();
+  
   return (
     <div className="flex items-center gap-2">
       <Select
-        value={defaultValue}
+        value={value}
         onValueChange={(value) => onYearChange(value === "all" ? null : parseInt(value))}
       >
         <SelectTrigger className="w-32">

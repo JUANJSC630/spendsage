@@ -14,7 +14,15 @@ export function FilterYear({ data }: FilterYearProps) {
   
   const availableYears = useMemo(() => {
     const years = data.map((item) => new Date(item.createdAt).getFullYear());
-    return Array.from(new Set(years)).sort((a, b) => b - a);
+    const uniqueYears = Array.from(new Set(years)).sort((a, b) => b - a);
+    
+    const currentYear = new Date().getFullYear();
+    if (!uniqueYears.includes(currentYear)) {
+      uniqueYears.push(currentYear);
+      uniqueYears.sort((a, b) => b - a);
+    }
+    
+    return uniqueYears;
   }, [data]);
 
   if (availableYears.length === 0) return null;

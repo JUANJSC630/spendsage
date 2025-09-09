@@ -25,7 +25,8 @@ interface YearProviderProps {
 }
 
 export function YearProvider({ children, data }: YearProviderProps) {
-  const [selectedYear, setSelectedYear] = useState<number | null>(null);
+  const currentYear = new Date().getFullYear();
+  const [selectedYear, setSelectedYear] = useState<number | null>(currentYear);
 
   const filteredData = useMemo(() => {
     if (!selectedYear) return data;
