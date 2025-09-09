@@ -26,14 +26,14 @@ export function ButtonAddPaymentSchedule(props: ButtonAddPaymentScheduleProps) {
       <DialogTrigger asChild>
         <Button className="space-x-2">
           <PlusCircle className="h-5 w-5" />
-          <span>Add Payment Schedule</span>
+          <span>Agregar Lista de Pagos</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add Payment Schedule</DialogTitle>
+          <DialogTitle>Agregar Lista de Pagos</DialogTitle>
           <DialogDescription>
-            Add a new payment schedule to your list.
+            Agregar un nuevo lista de pagos a tu lista.
           </DialogDescription>
         </DialogHeader>
         <FormPaymentSchedule

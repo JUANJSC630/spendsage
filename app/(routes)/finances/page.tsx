@@ -35,13 +35,13 @@ export default async function FinancesPage() {
           </div>
         </div>
         <div className="grid md:grid-cols-3 gap-8">
-          <CardTotal transactions={data} type="income" title="Total Income" />
+          <CardTotal transactions={data} type="income" title="Total de Ingresos" />
           <CardTotal
             transactions={data}
             type="expenses"
-            title="Total Expenses"
+            title="Total de Gastos"
           />
-          <CardTotal transactions={data} type="balance" title="Total Balance" />
+          <CardTotal transactions={data} type="balance" title="Balance Total" />
         </div>
       </div>
     </div>

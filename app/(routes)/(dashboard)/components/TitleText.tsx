@@ -10,13 +10,13 @@ export function TitleText() {
   const { colorTheme } = useColorThemeStore();
 
   if (!user) {
-    return <div>Loading...</div>;
+    return <div>Cargando...</div>;
   }
 
   return (
     <div>
       <h1 className="text-4xl">
-        Welcome,{" "}
+        Bienvenido,{" "}
         <span
           style={{ color: colorTheme }}
           className="font-bold transition-all duration-500"
@@ -25,7 +25,7 @@ export function TitleText() {
         </span>
       </h1>
       <p className="text-lg text-gray-500">
-        Here is a summary of your finances
+        Aquí tienes un resumen de tus finanzas
       </p>
     </div>
   );

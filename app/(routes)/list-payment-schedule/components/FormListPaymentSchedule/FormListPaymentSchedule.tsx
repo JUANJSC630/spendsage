@@ -36,11 +36,11 @@ function FormListPaymentSchedule(props: FormListPaymentScheduleProps) {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.post(`/api/list-payment-schedule`, values);
-      toast.success("List Payment schedule added! 🎉");
+      toast.success("¡Lista de lista de pagos agregada! 🎉");
       router.refresh();
       setOpenDialog(false);
     } catch (error) {
-      toast.error("An error occurred. Please try again. 😢");
+      toast.error("Ocurrió un error. Por favor intenta de nuevo. 😢");
     }
   };
 
@@ -57,7 +57,7 @@ function FormListPaymentSchedule(props: FormListPaymentScheduleProps) {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>Descripción</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -72,7 +72,7 @@ function FormListPaymentSchedule(props: FormListPaymentScheduleProps) {
               isValid === false ? "opacity-50" : "opacity-100"
             }`}
           >
-            Add List Payment Schedule
+            Agregar Lista de Lista de Pagos
           </Button>
         </form>
       </Form>

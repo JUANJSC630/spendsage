@@ -13,7 +13,7 @@ export function TitleColorTheme() {
         transition: "color 1s",
       }}
     >
-      Color Theme
+      Tema de Color
     </h2>
   );
 }

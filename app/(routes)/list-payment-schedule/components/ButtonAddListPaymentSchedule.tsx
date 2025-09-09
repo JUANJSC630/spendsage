@@ -21,14 +21,14 @@ export function ButtonAddListPaymentSchedule() {
       <DialogTrigger asChild>
         <Button className="space-x-2">
           <PlusCircle className="h-5 w-5" />
-          <span>Add</span>
+          <span>Agregar</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add Payment Schedule</DialogTitle>
+          <DialogTitle>Agregar Lista de Pagos</DialogTitle>
           <DialogDescription>
-            Add a new list payment schedule to your list.
+            Agregar una nueva lista de lista de pagos a tu lista.
           </DialogDescription>
         </DialogHeader>
         <FormListPaymentSchedule setOpenDialog={setIsOpenModalCreate} />

@@ -47,7 +47,7 @@ export default async function dashboardPage() {
               className=" justify-start text-left font-normal"
             >
               <CalendarClockIcon className="mr-2 h-4 w-4" />
-              {new Intl.DateTimeFormat("en-US", {
+              {new Intl.DateTimeFormat("es-ES", {
                 month: "long",
               }).format(new Date())}
             </Button>

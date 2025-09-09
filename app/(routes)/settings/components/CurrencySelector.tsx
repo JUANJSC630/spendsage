@@ -53,7 +53,7 @@ export const CurrencySelector = () => {
           transition: "color 1s",
         }}
       >
-        Pick Your Money! 💰
+¡Elige Tu Moneda! 💰
       </h1>
       <motion.div
         initial={{ scale: 0 }}
@@ -75,7 +75,7 @@ export const CurrencySelector = () => {
             >
               <span className="flex items-center gap-2">
                 <span>🇨🇴 COP</span>
-                <span className="text-gray-600">- Colombian Peso $</span>
+                <span className="text-gray-600">- Peso Colombiano $</span>
               </span>
             </SelectItem>
             <SelectItem
@@ -84,7 +84,7 @@ export const CurrencySelector = () => {
             >
               <span className="flex items-center gap-2">
                 <span>🇺🇸 USD</span>
-                <span className="text-gray-600">- United States Dollar $</span>
+                <span className="text-gray-600">- Dólar Estadounidense $</span>
               </span>
             </SelectItem>
             <SelectItem

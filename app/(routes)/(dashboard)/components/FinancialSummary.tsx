@@ -22,7 +22,7 @@ export default async function FinancialSummary(props: FinancialSummaryProps) {
         className={cardClass}
         classTitle={cardTitleClass}
         classText={cardTextClass}
-        title="Monthly Income"
+        title="Ingresos Mensuales"
         type="income"
         transactions={data}
       />
@@ -31,7 +31,7 @@ export default async function FinancialSummary(props: FinancialSummaryProps) {
         className={cardClass}
         classTitle={cardTitleClass}
         classText={cardTextClass}
-        title="Monthly Expenses"
+        title="Gastos Mensuales"
         type="expenses"
         transactions={data}
       />

@@ -17,7 +17,7 @@ export function CardTitleSettings() {
       }}
     >
       <Settings size={40} />
-      <h1 className="text-2xl font-bold text-white">Settings</h1>
+      <h1 className="text-2xl font-bold text-white">Configuración</h1>
     </div>
   );
 }

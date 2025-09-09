@@ -59,12 +59,12 @@ function FromTransaction() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.post(`/api/transactions`, values);
-      toast.success("Transaction added! 🎉");
+      toast.success("¡Transacción agregada! 🎉");
       form.reset();
       setFormattedAmount("");
       router.refresh();
     } catch (error) {
-      toast.error("An error occurred. Please try again. 😢");
+      toast.error("Ocurrió un error. Por favor intenta de nuevo. 😢");
     }
   };
 
@@ -78,7 +78,7 @@ function FromTransaction() {
   return (
     <div className="space-y-4">
       <Toaster position="top-right" reverseOrder={true} />
-      <h2 className="text-2xl font-bold mb-4">Add Transaction</h2>
+      <h2 className="text-2xl font-bold mb-4">Agregar Transacción</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 gap-4">
@@ -87,19 +87,19 @@ function FromTransaction() {
               name="category"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Transaction Type</FormLabel>
+                  <FormLabel>Tipo de Transacción</FormLabel>
                   <FormControl>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select Category" />
+                        <SelectValue placeholder="Selecciona Categoría" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value={"income"}>Income</SelectItem>
+                        <SelectItem value={"income"}>Ingresos</SelectItem>
                         <SelectItem value={"fixed_expenses"}>
-                          Fixed Expenses
+                          Gastos Fijos
                         </SelectItem>
                         <SelectItem value={"variable_expenses"}>
-                          Variable Expenses
+                          Gastos Variables
                         </SelectItem>
                       </SelectContent>
                     </Select>
@@ -113,7 +113,7 @@ function FromTransaction() {
               name="date"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Date</FormLabel>
+                  <FormLabel>Fecha</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -127,7 +127,7 @@ function FromTransaction() {
                           {field.value ? (
                             format(field.value, "PP")
                           ) : (
-                            <span>Pick a date</span>
+                            <span>Selecciona una fecha</span>
                           )}
                           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
@@ -173,7 +173,7 @@ function FromTransaction() {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>Descripción</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -187,7 +187,7 @@ function FromTransaction() {
               name="amount"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Amount</FormLabel>
+                  <FormLabel>Monto</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -207,7 +207,7 @@ function FromTransaction() {
               isValid === false ? "opacity-50" : "opacity-100"
             }`}
           >
-            Add Transaction
+            Agregar Transacción
           </Button>
         </form>
       </Form>

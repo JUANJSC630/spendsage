@@ -36,12 +36,12 @@ export default function PaymentScheduleItem(props: PaymentScheduleItemProps) {
         }
       );
       setChecked(data.check);
-      toast.success("Payment updated successfully ✅");
+      toast.success("¡Pago actualizado exitosamente! ✅");
       router.refresh();
     } catch (error) {
       console.error("Error updating checkbox:", error);
       setChecked(!newCheckedState);
-      toast.error("Error to update payment");
+      toast.error("Error al actualizar pago");
     }
   };
   return (

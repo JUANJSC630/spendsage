@@ -28,7 +28,7 @@ export function YearFilter({ availableYears, selectedYear, onYearChange }: YearF
           <SelectValue placeholder={currentYear.toString()} />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="all">All years</SelectItem>
+          <SelectItem value="all">Todos los años</SelectItem>
           {availableYears.map((year) => (
             <SelectItem key={year} value={year.toString()}>
               {year}

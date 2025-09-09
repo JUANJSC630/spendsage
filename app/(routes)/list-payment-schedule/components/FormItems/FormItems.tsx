@@ -50,11 +50,11 @@ export function FormItems(props: FormItemsProps) {
         `/api/payment-schedule/${paymentSchedule.id}/payment-item`,
         values
       );
-      toast.success("Payment item created! ✅");
+      toast.success("¡Item de pago creado! ✅");
       router.refresh();
       setOpen(false);
     } catch (error) {
-      toast.error("Error creating payment item");
+      toast.error("Error al crear item de pago");
     }
   };
 
@@ -76,7 +76,7 @@ export function FormItems(props: FormItemsProps) {
           name="check"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Status</FormLabel>
+              <FormLabel>Estado</FormLabel>
               <div className="flex flex-col gap-4">
                 <div className="flex flex-row justify-start gap-2 items-center">
                   <FormControl>
@@ -85,7 +85,7 @@ export function FormItems(props: FormItemsProps) {
                       onCheckedChange={() => field.onChange(true)}
                     />
                   </FormControl>
-                  <FormLabel>Paid</FormLabel>
+                  <FormLabel>Pagado</FormLabel>
                 </div>
                 <div className="flex flex-row justify-start gap-2 items-center">
                   <FormControl>
@@ -94,7 +94,7 @@ export function FormItems(props: FormItemsProps) {
                       onCheckedChange={() => field.onChange(false)}
                     />
                   </FormControl>
-                  <FormLabel>Not Paid</FormLabel>
+                  <FormLabel>No Pagado</FormLabel>
                 </div>
               </div>
               <FormMessage />
@@ -107,7 +107,7 @@ export function FormItems(props: FormItemsProps) {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>Descripción</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -121,7 +121,7 @@ export function FormItems(props: FormItemsProps) {
           name="amount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Amount</FormLabel>
+              <FormLabel>Monto</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -140,7 +140,7 @@ export function FormItems(props: FormItemsProps) {
           name="date"
           render={({ field }) => (
             <FormItem className="flex flex-col md:mt-2.5">
-              <FormLabel>Date</FormLabel>
+              <FormLabel>Fecha</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -154,7 +154,7 @@ export function FormItems(props: FormItemsProps) {
                       {field.value ? (
                         format(field.value, "PPP")
                       ) : (
-                        <span>Pick a date</span>
+                        <span>Selecciona una fecha</span>
                       )}
                       <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                     </Button>
@@ -173,7 +173,7 @@ export function FormItems(props: FormItemsProps) {
           )}
         />
         <div>
-          <Button type="submit">Create Payment Item</Button>
+          <Button type="submit">Crear Item de Pago</Button>
         </div>
       </form>
     </Form>

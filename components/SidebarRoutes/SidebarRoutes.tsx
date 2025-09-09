@@ -32,7 +32,7 @@ export function SidebarRoutes(props: SidebarRoutesProps) {
             setOpen ? "md:p-6" : "mt-8 flex flex-col"
           }`}
         >
-          {setOpen ? <p className="mb-2 text-gray-500">SETTINGS</p> : null}
+          {setOpen ? <p className="mb-2 text-gray-500">CONFIGURACIÓN</p> : null}
           {dataSettingsSidebar.map((item) => (
             <SidebarItem key={item.label} item={item} setOpen={setOpen} />
           ))}

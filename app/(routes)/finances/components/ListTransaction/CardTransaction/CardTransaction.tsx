@@ -25,10 +25,10 @@ export default function CardTransaction(props: CardTransactionProps) {
   const deleteTransaction = async () => {
     try {
       await axios.delete(`/api/transactions/${transaction.id}`);
-      toast.success("Transaction deleted successfully! ❌");
+      toast.success("¡Transacción eliminada exitosamente! ❌");
       router.refresh();
     } catch (error) {
-      toast.error("An error occurred while deleting the transaction 😢");
+      toast.error("Ocurrió un error al eliminar la transacción 😢");
     }
   };
 
@@ -45,9 +45,9 @@ export default function CardTransaction(props: CardTransactionProps) {
         <p>
           {
             {
-              income: "Income",
-              fixed_expenses: "Fixed Expenses",
-              variable_expenses: "Variable Expenses",
+              income: "Ingresos",
+              fixed_expenses: "Gastos Fijos",
+              variable_expenses: "Gastos Variables",
             }[transaction.category]
           }
         </p>

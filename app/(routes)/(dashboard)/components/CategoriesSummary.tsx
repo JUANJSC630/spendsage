@@ -46,10 +46,10 @@ export default function CategoriesSummary(props: CategoriesSummaryProps) {
   }, {} as Record<string, number>);
 
   const data = {
-    labels: ["Income", "Variable Expenses", "Fixed Expenses"],
+    labels: ["Ingresos", "Gastos Variables", "Gastos Fijos"],
     datasets: [
       {
-        label: "Categories",
+        label: "Categorías",
         data: [
           totals["income"] || 0,
           totals["variable_expenses"] || 0,

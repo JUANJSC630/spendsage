@@ -27,9 +27,9 @@ export default function AddItem(props: AddItemProps) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[625px]">
         <DialogHeader>
-          <DialogTitle>Add Item</DialogTitle>
+          <DialogTitle>Agregar Item</DialogTitle>
           <DialogDescription>
-            Add a new item to your payment schedule.
+            Agregar un nuevo item a tu cronograma de pagos.
           </DialogDescription>
         </DialogHeader>
         <FormItems setOpen={setOpen} paymentSchedule={paymentSchedule} />

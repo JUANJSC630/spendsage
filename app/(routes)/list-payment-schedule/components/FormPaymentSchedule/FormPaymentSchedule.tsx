@@ -42,11 +42,11 @@ function FormPaymentSchedule(props: FormPaymentScheduleProps) {
         listPaymentScheduleId: values.listPaymentScheduleId,
       };
       await axios.post(`/api/payment-schedule`, payload);
-      toast.success("Payment schedule added! 🎉");
+      toast.success("¡Lista de pagos agregado! 🎉");
       router.refresh();
       setOpenDialog(false);
     } catch (error) {
-      toast.error("An error occurred. Please try again. 😢");
+      toast.error("Ocurrió un error. Por favor intenta de nuevo. 😢");
     }
   };
 
@@ -63,12 +63,12 @@ function FormPaymentSchedule(props: FormPaymentScheduleProps) {
               name="dateRange"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Date Range</FormLabel>
+                  <FormLabel>Rango de Fechas</FormLabel>
                   <FormControl>
                     <DateRangePicker
                       value={field.value}
                       onChange={field.onChange}
-                      placeholder="Select date range"
+                      placeholder="Selecciona rango de fechas"
                     />
                   </FormControl>
                   <FormMessage />
@@ -80,7 +80,7 @@ function FormPaymentSchedule(props: FormPaymentScheduleProps) {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>Descripción</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -95,7 +95,7 @@ function FormPaymentSchedule(props: FormPaymentScheduleProps) {
               isValid === false ? "opacity-50" : "opacity-100"
             }`}
           >
-            Add Payment Schedule
+            Agregar Lista de Pagos
           </Button>
         </form>
       </Form>

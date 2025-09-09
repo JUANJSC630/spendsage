@@ -13,7 +13,7 @@ const nunito = Nunito({ subsets: ["latin"], weight: ["400", "700"] });
 export const metadata: Metadata = {
   title: "SpendSage",
   description:
-    "A simple budgeting app to help you keep track of your spending.",
+    "Una aplicación simple de presupuestos para ayudarte a controlar tus gastos.",
 };
 
 export default function RootLayout({
@@ -24,7 +24,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <ReactQueryProvider>
-        <html lang="en">
+        <html lang="es">
           <body className={nunito.className}>
             <NextTopLoader color="#000" />
             {children}

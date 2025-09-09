@@ -19,10 +19,10 @@ export default function ButtonDeletePaymentItem(
       await axios.delete(
         `/api/payment-schedule/${paymentSchedule.id}/payment-item/${paymentItem.id}`
       );
-      toast.success("Payment Item deleted! ❌");
+      toast.success("¡Item de pago eliminado! ❌");
       router.refresh();
     } catch (error) {
-      toast.error("Error deleting payment item ‼️");
+      toast.error("Error al eliminar item de pago ‼️");
     }
   };
 

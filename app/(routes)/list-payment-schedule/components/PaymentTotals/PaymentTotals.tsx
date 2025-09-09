@@ -39,8 +39,8 @@ export function PaymentTotals(props: PaymentTotalsProps) {
 
   return (
     <div>
-      <p className="font-bold text-lg">Total paid: {formattedTotalPaid}</p>
-      <p className="font-bold text-lg">Total debt: {formattedTotalPending}</p>
+      <p className="font-bold text-lg">Total pagado: {formattedTotalPaid}</p>
+      <p className="font-bold text-lg">Total pendiente: {formattedTotalPending}</p>
     </div>
   );
 }

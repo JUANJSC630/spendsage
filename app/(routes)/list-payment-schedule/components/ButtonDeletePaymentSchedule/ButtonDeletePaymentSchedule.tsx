@@ -17,10 +17,10 @@ export default function ButtonDeletePaymentSchedule(
   const onDeletePaymentSchedule = async () => {
     try {
       await axios.delete(`/api/payment-schedule/${paymentSchedule.id}`);
-      toast.success("Payment schedule deleted! ❌");
+      toast.success("¡Lista de pagos eliminado! ❌");
       router.refresh();
     } catch (error) {
-      toast.error("Error deleting payment schedule ‼️");
+      toast.error("Error al eliminar lista de pagos ‼️");
       console.error(error);
     }
   };

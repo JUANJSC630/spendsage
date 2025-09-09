@@ -28,7 +28,7 @@ export default async function ListPaymentSchedulePage() {
         {/* Header con filtro y botón */}
         <div className="bg-background py-4 px-6 mb-6">
           <div className="container mx-auto flex flex-row items-center justify-between gap-2 md:gap-8">
-            <h1 className="text-2xl font-bold">Payment Schedules</h1>
+            <h1 className="text-2xl font-bold">Listas de Pagos</h1>
             <div className="flex items-center gap-4">
               <FilterYear data={data} />
               <ButtonAddListPaymentSchedule />

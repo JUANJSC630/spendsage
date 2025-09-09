@@ -4,7 +4,7 @@ import React from 'react'
 export default function reportsPage() {
   return (
     <div className="flex flex-col items-center justify-center gap-8 bg-amber-50 p-8">
-      <h1 className="text-4xl font-bold">Dashboard Page</h1>
+      <h1 className="text-4xl font-bold">Página de Reportes</h1>
       <p className="text-center md:w-[50%]">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit quaerat
         dicta, minima, ut velit culpa porro voluptas officiis totam
@@ -16,7 +16,7 @@ export default function reportsPage() {
         aliquam ut nemo delectus dolor reprehenderit ullam ex quasi, libero
       </p>
       <Button>
-        <code>Send</code>
+        <code>Enviar</code>
       </Button>
     </div>
   )

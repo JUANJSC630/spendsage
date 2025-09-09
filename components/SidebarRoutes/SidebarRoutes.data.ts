@@ -9,17 +9,17 @@ import {
 export const dataGeneralSidebar = [
   {
     icon: LayoutDashboard,
-    label: "Home",
+    label: "Inicio",
     href: "/",
   },
   {
     icon: BadgeDollarSign,
-    label: "Finances",
+    label: "Finanzas",
     href: "/finances",
   },
   {
     icon: ListCheck,
-    label: "Payment Schedule",
+    label: "Lista de Pagos",
     href: "/list-payment-schedule",
   },
 ];
@@ -27,7 +27,7 @@ export const dataGeneralSidebar = [
 export const dataSettingsSidebar = [
   {
     icon: Settings,
-    label: "Settings",
+    label: "Configuración",
     href: "/settings",
   },
 ];

@@ -93,12 +93,12 @@ export default function ExpenseIncomeChart(props: ExpenseIncomeChartProps) {
     labels: sortedKeys,
     datasets: [
       {
-        label: "Expenses",
+        label: "Gastos",
         data: sortedKeys.map((key) => groupedData[key].expenses),
         backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
       {
-        label: "Income",
+        label: "Ingresos",
         data: sortedKeys.map((key) => groupedData[key].income),
         backgroundColor: "rgba(75, 192, 192, 0.5)",
       },
@@ -123,7 +123,7 @@ export default function ExpenseIncomeChart(props: ExpenseIncomeChartProps) {
       x: {
         title: {
           display: true,
-          text: "Month",
+          text: "Mes",
         },
       },
     },
@@ -132,7 +132,7 @@ export default function ExpenseIncomeChart(props: ExpenseIncomeChartProps) {
   return (
     <Card className={props.className}>
       <CardHeader>
-        <CardTitle>Expenses and Income (Monthly)</CardTitle>
+        <CardTitle>Gastos e Ingresos (Mensuales)</CardTitle>
       </CardHeader>
       <CardContent>
         {startDate && endDate ? (
@@ -143,11 +143,11 @@ export default function ExpenseIncomeChart(props: ExpenseIncomeChartProps) {
                 <div key={key} className="flex flex-row gap-2 mt-2">
                   <span className="text-xs md:text-lg">{key}:</span>
                   <span className="text-xs md:text-lg">
-                    <strong>Income:</strong> {symbol}{" "}
+                    <strong>Ingresos:</strong> {symbol}{" "}
                     {formatAmount(groupedData[key].income.toString())}
                   </span>
                   <span className="text-xs md:text-lg">
-                    <strong>Expenses:</strong> {symbol}{" "}
+                    <strong>Gastos:</strong> {symbol}{" "}
                     {formatAmount(groupedData[key].expenses.toString())}
                   </span>
                 </div>
@@ -155,7 +155,7 @@ export default function ExpenseIncomeChart(props: ExpenseIncomeChartProps) {
             </div>
           </>
         ) : (
-          <div>Loading...</div>
+          <div>Cargando...</div>
         )}
       </CardContent>
     </Card>

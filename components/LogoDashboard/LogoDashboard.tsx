@@ -17,7 +17,7 @@ export function LogoDashboard(props: propsLogoDashboard) {
       >
         <Image
           src="/spendsage-logo.png"
-          alt="Logo"
+          alt="SpendSage Logo"
           width={70}
           height={70}
           priority

@@ -21,7 +21,7 @@ export default async function PaymentSchedulePage({
     return (
       <div className="flex flex-col items-center justify-center py-16">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-400">
-          Payment schedule not found.
+          Listas de pagos no encontrado.
         </h1>
       </div>
     );
@@ -41,7 +41,7 @@ export default async function PaymentSchedulePage({
         {/* Botón de retroceso */}
         <Link href="/list-payment-schedule">
           <Button variant="outline" className="w-full">
-            <ArrowLeft className="w-4 h-4" /> Back
+            <ArrowLeft className="w-4 h-4" /> Volver
           </Button>
         </Link>
 
@@ -59,7 +59,7 @@ export default async function PaymentSchedulePage({
             />
           ))
         ) : (
-          <p className="text-gray-400">No payment schedules found.</p>
+          <p className="text-gray-400">No se encontraron listas de pagos.</p>
         )}
       </div>
     </div>

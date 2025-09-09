@@ -27,8 +27,8 @@ export function Content({ data }: ContentProps) {
         <div className="flex flex-col items-center justify-center gap-4 p-8">
           <h1 className="text-2xl md:text-3xl font-bold text-gray-400">
             {selectedYear 
-              ? `No payment schedules found for ${selectedYear}...`
-              : "No payment schedules yet...."
+              ? `No se encontraron listas de pagos para ${selectedYear}...`
+              : "Aún no hay listas de pagos..."
             }
           </h1>
         </div>
