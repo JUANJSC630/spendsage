@@ -32,9 +32,6 @@ export function ButtonAddPaymentSchedule(props: ButtonAddPaymentScheduleProps) {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Agregar Lista de Pagos</DialogTitle>
-          <DialogDescription>
-            Agregar un nuevo lista de pagos a tu lista.
-          </DialogDescription>
         </DialogHeader>
         <FormPaymentSchedule
           setOpenDialog={setIsOpenModalCreate}

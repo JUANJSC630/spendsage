@@ -26,10 +26,7 @@ export function ButtonAddListPaymentSchedule() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Agregar Lista de Pagos</DialogTitle>
-          <DialogDescription>
-            Agregar una nueva lista de lista de pagos a tu lista.
-          </DialogDescription>
+          <DialogTitle>Agregar Lista</DialogTitle>
         </DialogHeader>
         <FormListPaymentSchedule setOpenDialog={setIsOpenModalCreate} />
       </DialogContent>
