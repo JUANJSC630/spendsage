@@ -4,6 +4,8 @@ import {
   BadgeDollarSign,
   Settings,
   ListCheck,
+  Wallet,
+  Tags,
 } from "lucide-react";
 
 export const dataGeneralSidebar = [
@@ -16,6 +18,16 @@ export const dataGeneralSidebar = [
     icon: BadgeDollarSign,
     label: "Finanzas",
     href: "/finances",
+  },
+  {
+    icon: Wallet,
+    label: "Presupuestos",
+    href: "/budgets",
+  },
+  {
+    icon: Tags,
+    label: "Categorías",
+    href: "/categories",
   },
   {
     icon: ListCheck,

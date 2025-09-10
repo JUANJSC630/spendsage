@@ -3,7 +3,7 @@ import axios from "axios";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { z } from "zod";
@@ -39,12 +39,38 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { formSchema } from "./FormTransaction.form";
 import useFormatAmount from "@/hooks/useFormatAmount";
 
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  type: string;
+  color: string;
+  icon: string;
+}
+
 function FromTransaction() {
   const router = useRouter();
-
   const [formattedAmount, setFormattedAmount] = useState("");
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
 
   const formatAmount = useFormatAmount();
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get('/api/categories');
+        setCategories(response.data);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+        toast.error('Error al cargar las categorías');
+      } finally {
+        setLoadingCategories(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -87,20 +113,37 @@ function FromTransaction() {
               name="category"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Tipo de Transacción</FormLabel>
+                  <FormLabel>Categoría</FormLabel>
                   <FormControl>
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value} disabled={loadingCategories}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Selecciona Categoría" />
+                        <SelectValue placeholder={loadingCategories ? "Cargando categorías..." : "Selecciona una categoría"} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value={"income"}>Ingresos</SelectItem>
-                        <SelectItem value={"fixed_expenses"}>
-                          Gastos Fijos
-                        </SelectItem>
-                        <SelectItem value={"variable_expenses"}>
-                          Gastos Variables
-                        </SelectItem>
+                        {categories.length === 0 && !loadingCategories ? (
+                          <div className="p-2 text-sm text-gray-500">
+                            No hay categorías disponibles. 
+                            <br />
+                            Crea una en la sección Categorías.
+                          </div>
+                        ) : (
+                          categories.map((category) => (
+                            <SelectItem key={category.id} value={category.slug}>
+                              <div className="flex items-center gap-2">
+                                <div
+                                  className="w-3 h-3 rounded-full"
+                                  style={{ backgroundColor: category.color }}
+                                />
+                                <span>{category.name}</span>
+                                <span className="text-xs text-gray-500">
+                                  ({category.type === 'income' ? 'Ingreso' : 
+                                    category.type === 'expense' ? 'Gasto' : 
+                                    category.type})
+                                </span>
+                              </div>
+                            </SelectItem>
+                          ))
+                        )}
                       </SelectContent>
                     </Select>
                   </FormControl>

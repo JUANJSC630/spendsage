@@ -3,7 +3,7 @@ import { ButtonAddPaymentSchedule } from "../components/ButtonAddPaymentSchedule
 import { CardPaymentSchedule } from "../components/CardPaymentSchedule";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react"; // Importar un icono de Lucide (puedes usar otro)
+import { ArrowLeft } from "lucide-react";
 
 export default async function PaymentSchedulePage({
   params,

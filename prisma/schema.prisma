@@ -73,3 +73,39 @@ model BankAccount {
   Transactions_Transactions_fromAccountIdToBankAccount Transactions[] @relation("Transactions_fromAccountIdToBankAccount")
   Transactions_Transactions_toAccountIdToBankAccount   Transactions[] @relation("Transactions_toAccountIdToBankAccount")
 }
+
+model Budget {
+  id        String   @id @default(uuid())
+  userId    String   @db.Text
+  category  String   @db.Text
+  amount    String   @db.Text
+  period    String   @db.Text
+  month     Int
+  year      Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([userId, category])
+  @@index([userId, year, month])
+  @@unique([userId, category, month, year])
+}
+
+model Category {
+  id          String   @id @default(uuid())
+  userId      String   @db.Text
+  name        String   @db.Text
+  slug        String   @db.Text
+  description String?  @db.Text
+  color       String   @default("#3B82F6") @db.Text
+  icon        String   @default("Folder") @db.Text
+  type        String   @default("expense") @db.Text
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+  @@index([userId, slug])
+  @@index([userId, type])
+  @@unique([userId, slug])
+}

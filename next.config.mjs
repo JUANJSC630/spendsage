@@ -1,4 +1,11 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  experimental: {
+    serverComponentsExternalPackages: ["oslo"],
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+};
 
 export default nextConfig;

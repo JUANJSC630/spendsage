@@ -14,7 +14,7 @@ export async function GET() {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const listPaymentSchedule = await db.listPaymentSchedule.findMany({
+    const budgets = await db.budget.findMany({
       where: {
         userId,
       },
@@ -23,10 +23,10 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json(listPaymentSchedule);
+    return NextResponse.json(budgets);
   } catch (e) {
-    console.log("[LIST PAYMENT SCHEDULE]", e);
-    return new NextResponse("Interal Server Error", { status: 500 });
+    console.log("[BUDGET]", e);
+    return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
 
@@ -39,16 +39,16 @@ export async function POST(req: Request) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const listPaymentSchedule = await db.listPaymentSchedule.create({
+    const budget = await db.budget.create({
       data: {
         userId,
         ...data,
       },
     });
 
-    return NextResponse.json(listPaymentSchedule);
+    return NextResponse.json(budget);
   } catch (e) {
-    console.log("[LIST PAYMENT SCHEDULE]", e);
-    return new NextResponse("Interal Server Error", { status: 500 });
+    console.log("[BUDGET]", e);
+    return new NextResponse("Internal Server Error", { status: 500 });
   }
 }

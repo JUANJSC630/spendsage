@@ -4,6 +4,8 @@ import { auth } from "@clerk/nextjs/server";
 
 import { db } from "@/lib/db";
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const { userId } = auth();
