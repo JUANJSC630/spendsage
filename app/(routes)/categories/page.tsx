@@ -52,7 +52,7 @@ export default async function CategoriesPage() {
   const inactiveCategories = categories.filter(cat => !cat.isActive);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
       <CategoryNavbar />
       <div className="space-y-6 mt-6">
         <CategoryDashboard 

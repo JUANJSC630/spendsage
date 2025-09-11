@@ -73,7 +73,7 @@ export default async function BudgetsPage() {
 
   if (budgets.length === 0) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
         <div className="flex items-center gap-3 mb-6">
           <Wallet className="h-6 w-6 !text-gray-600" />
           <h1 className="text-2xl font-bold text-gray-900">Gestión de Presupuestos</h1>
@@ -180,7 +180,7 @@ export default async function BudgetsPage() {
   });
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
       <div className="flex items-center gap-3 mb-6">
         <Wallet className="h-6 w-6 !text-gray-600" />
         <h1 className="text-2xl font-bold text-gray-900">Gestión de Presupuestos</h1>
