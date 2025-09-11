@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { PlusCircle, AlertCircle, Clock, AlertTriangle, Calendar, TrendingUp } from "lucide-react";
+import { PlusCircle, AlertCircle, Clock, AlertTriangle, Calendar, TrendingUp, MoreVertical, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useCurrencyStore } from "@/hooks/useCurrencyStore";
@@ -10,6 +10,25 @@ import { Progress } from "@/components/ui/progress";
 import { format, isAfter, isBefore, addDays } from "date-fns";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 // Utility function for formatting amounts - will be replaced by hook
 
@@ -310,10 +329,44 @@ const BudgetList = ({ budgets }: { budgets: Budget[] }) => {
   const [symbol, setSymbol] = useState<string>("");
   const formatAmount = useFormatAmount();
   const [currentPage, setCurrentPage] = useState(1);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [budgetToDelete, setBudgetToDelete] = useState<Budget | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     setSymbol(getSymbol());
   }, [getSymbol]);
+
+  const handleDeleteBudget = async () => {
+    if (!budgetToDelete) return;
+    
+    setIsDeleting(true);
+    try {
+      await axios.delete(`/api/budgets/${budgetToDelete.id}`);
+      toast.success("Presupuesto eliminado correctamente");
+      
+      // Limpiar todos los estados
+      setDeleteDialogOpen(false);
+      setBudgetToDelete(null);
+      setOpenDropdownId(null);
+      
+      // Refresh the page to update the data
+      router.refresh();
+    } catch (error) {
+      console.error("Error deleting budget:", error);
+      toast.error("Error al eliminar el presupuesto");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const openDeleteDialog = (budget: Budget) => {
+    setBudgetToDelete(budget);
+    setDeleteDialogOpen(true);
+    setOpenDropdownId(null); // Cerrar dropdown al abrir dialog
+  };
   const itemsPerPage = 5;
   
   // Safety checks
@@ -392,11 +445,32 @@ const BudgetList = ({ budgets }: { budgets: Budget[] }) => {
                     {format(new Date(budget.startDate), 'dd/MM/yyyy')} - {format(new Date(budget.endDate), 'dd/MM/yyyy')}
                   </p>
                 </div>
-                {budget.category && (
-                  <Badge style={{ backgroundColor: budget.category.color }} className="text-white">
-                    {budget.category.name}
-                  </Badge>
-                )}
+                <div className="flex items-center gap-2">
+                  {budget.category && (
+                    <Badge style={{ backgroundColor: budget.category.color }} className="text-white">
+                      {budget.category.name}
+                    </Badge>
+                  )}
+                  <DropdownMenu 
+                    open={openDropdownId === budget.id} 
+                    onOpenChange={(open) => setOpenDropdownId(open ? budget.id : null)}
+                  >
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                        <MoreVertical className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem
+                        onClick={() => openDeleteDialog(budget)}
+                        className="text-red-600 focus:text-red-600"
+                      >
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        Eliminar
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
               </div>
               
               <div className="grid grid-cols-3 gap-4 mb-3">
@@ -489,6 +563,47 @@ const BudgetList = ({ budgets }: { budgets: Budget[] }) => {
           </Button>
         </div>
       )}
+
+      <AlertDialog 
+        open={deleteDialogOpen} 
+        onOpenChange={(open) => {
+          if (!open) {
+            // Limpiar estados cuando se cierre el dialog
+            setDeleteDialogOpen(false);
+            setBudgetToDelete(null);
+            setOpenDropdownId(null);
+          }
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción no se puede deshacer. Se eliminará permanentemente el presupuesto
+              {budgetToDelete && ` de "${budgetToDelete.name}"`}.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel 
+              disabled={isDeleting}
+              onClick={() => {
+                setDeleteDialogOpen(false);
+                setBudgetToDelete(null);
+                setOpenDropdownId(null);
+              }}
+            >
+              Cancelar
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteBudget}
+              disabled={isDeleting}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              {isDeleting ? "Eliminando..." : "Eliminar"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

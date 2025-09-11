@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss"
+import colors from "tailwindcss/colors"
 
 const config = {
   darkMode: ["class"],
@@ -19,6 +20,9 @@ const config = {
     },
     extend: {
       colors: {
+        // Importar todos los colores estándar de Tailwind
+        ...colors,
+        // Variables CSS para shadcn/ui
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

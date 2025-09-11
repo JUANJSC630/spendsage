@@ -1,7 +1,9 @@
-import { Wallet } from 'lucide-react';
+import { Wallet, PlusCircle } from 'lucide-react';
 import React from 'react';
+import Link from 'next/link';
 
 import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { db } from '@/lib/db';
 import { auth } from '@clerk/nextjs/server';
 import { BudgetsPageClient } from './components/BudgetsPageClient';
@@ -71,9 +73,9 @@ export default async function BudgetsPage() {
 
   if (budgets.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex items-center gap-3 mb-6">
-          <Wallet className="h-6 w-6 text-blue-600" />
+          <Wallet className="h-6 w-6 !text-gray-600" />
           <h1 className="text-2xl font-bold text-gray-900">Gestión de Presupuestos</h1>
         </div>
         <Card className="shadow-sm border border-slate-100">
@@ -82,9 +84,15 @@ export default async function BudgetsPage() {
             <h3 className="text-xl font-medium text-gray-900 mb-2">
               No hay presupuestos para este mes
             </h3>
-            <p className="text-gray-500 max-w-md mx-auto">
+            <p className="text-gray-500 max-w-md mx-auto mb-6">
               Crea tu primer presupuesto para comenzar a gestionar tus gastos y mantener tus finanzas bajo control.
             </p>
+            <Button asChild size="lg" className="mt-4">
+              <Link href="/budgets/create">
+                <PlusCircle className="mr-2 h-5 w-5" />
+                Crear mi primer presupuesto
+              </Link>
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -172,9 +180,9 @@ export default async function BudgetsPage() {
   });
 
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <div className="flex items-center gap-3 mb-6">
-        <Wallet className="h-6 w-6 text-blue-600" />
+        <Wallet className="h-6 w-6 !text-gray-600" />
         <h1 className="text-2xl font-bold text-gray-900">Gestión de Presupuestos</h1>
       </div>
       
