@@ -52,36 +52,32 @@ export default async function CategoriesPage() {
   const inactiveCategories = categories.filter(cat => !cat.isActive);
 
   return (
-    <div className="h-full flex flex-col overflow-hidden">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <CategoryNavbar />
-      <div className="flex-1 overflow-y-auto px-4 pb-4">
-        <div className="grid gap-6 py-4">
-          <div>
-            <CategoryDashboard 
-              categories={activeCategories} 
-              inactiveCount={inactiveCategories.length}
+      <div className="space-y-6 mt-6">
+        <CategoryDashboard 
+          categories={activeCategories} 
+          inactiveCount={inactiveCategories.length}
+        />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="border border-slate-100 p-4 rounded-md bg-white">
+            <CategoryForm />
+          </div>
+          <div className="border border-slate-100 p-4 rounded-md bg-white">
+            <CategoryList 
+              categories={activeCategories}
+              showInactive={false}
             />
           </div>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="border border-slate-100 p-4 rounded-md transition-colors duration-300 ease-in">
-              <CategoryForm />
-            </div>
-            <div className="border border-slate-100 p-4 rounded-md transition-colors duration-300 ease-in">
-              <CategoryList 
-                categories={activeCategories}
-                showInactive={false}
-              />
-            </div>
-          </div>
-          {inactiveCategories.length > 0 && (
-            <div className="border border-slate-100 p-4 rounded-md transition-colors duration-300 ease-in">
-              <CategoryList 
-                categories={inactiveCategories}
-                showInactive={true}
-              />
-            </div>
-          )}
         </div>
+        {inactiveCategories.length > 0 && (
+          <div className="border border-slate-100 p-4 rounded-md bg-white">
+            <CategoryList 
+              categories={inactiveCategories}
+              showInactive={true}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
