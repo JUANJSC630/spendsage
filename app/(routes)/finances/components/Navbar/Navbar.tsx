@@ -42,8 +42,19 @@ export function Navbar() {
                 </span>
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar mode="single" />
+            <PopoverContent
+              className="w-auto p-0 z-50"
+              align="start"
+              side="bottom"
+              sideOffset={4}
+              alignOffset={0}
+              avoidCollisions={true}
+              sticky="always"
+            >
+              <Calendar
+                mode="single"
+                className="rounded-md border shadow-md"
+              />
             </PopoverContent>
           </Popover>
         </div>

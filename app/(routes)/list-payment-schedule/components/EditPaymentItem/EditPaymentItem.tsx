@@ -146,7 +146,15 @@ export default function EditPaymentItem({ paymentItem, paymentSchedule }: EditPa
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
+                    <PopoverContent
+                      className="w-auto p-0 z-50"
+                      align="start"
+                      side="bottom"
+                      sideOffset={4}
+                      alignOffset={0}
+                      avoidCollisions={true}
+                      sticky="always"
+                    >
                       <Calendar
                         mode="single"
                         selected={field.value}
@@ -155,6 +163,7 @@ export default function EditPaymentItem({ paymentItem, paymentSchedule }: EditPa
                           date > new Date() || date < new Date("1900-01-01")
                         }
                         initialFocus
+                        className="rounded-md border shadow-md"
                       />
                     </PopoverContent>
                   </Popover>

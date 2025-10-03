@@ -52,8 +52,21 @@ export default async function dashboardPage() {
               }).format(new Date())}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="end">
-            <Calendar initialFocus mode="range" numberOfMonths={1} />
+          <PopoverContent
+            className="w-auto p-0 z-50"
+            align="end"
+            side="bottom"
+            sideOffset={4}
+            alignOffset={0}
+            avoidCollisions={true}
+            sticky="always"
+          >
+            <Calendar
+              initialFocus
+              mode="range"
+              numberOfMonths={1}
+              className="rounded-md border shadow-md"
+            />
           </PopoverContent>
         </Popover>
       </div>
