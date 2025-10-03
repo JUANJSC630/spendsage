@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { toast, Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 
 import ButtonDeletePaymentItem from "../ButtonDeletePaymentItem/ButtonDeletePaymentItem";
 import { CheckBoxUpdatePaymentItem } from "../CheckBoxUpdatePaymentItem/CheckBoxUpdatePaymentItem";
@@ -46,7 +46,6 @@ export default function PaymentScheduleItem(props: PaymentScheduleItemProps) {
   };
   return (
     <div className="flex justify-between items-center bg-slate-50 p-2">
-      <Toaster position="top-right" reverseOrder={true} />
       <div className="flex items-center space-x-4">
         <CheckBoxUpdatePaymentItem
           checked={checked}

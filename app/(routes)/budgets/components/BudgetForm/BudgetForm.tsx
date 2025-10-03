@@ -3,7 +3,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -126,7 +126,6 @@ function BudgetForm() {
 
   return (
     <div className="space-y-3">
-      <Toaster position="top-right" reverseOrder={true} />
       <h2 className="text-sm font-bold">Crear Presupuesto</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">

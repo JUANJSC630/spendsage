@@ -6,6 +6,7 @@ import NextTopLoader from "nextjs-toploader";
 import ReactQueryProvider from "@/utils/providers/ReactQueryProvider";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/react";
+import { Toaster } from "react-hot-toast";
 
 import type { Metadata } from "next";
 const nunito = Nunito({ subsets: ["latin"], weight: ["400", "700"] });
@@ -28,6 +29,7 @@ export default function RootLayout({
           <body className={nunito.className}>
             <NextTopLoader color="#000" />
             {children}
+            <Toaster position="top-right" reverseOrder={true} />
             <Analytics />
           </body>
         </html>

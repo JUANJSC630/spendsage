@@ -3,7 +3,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -48,7 +48,6 @@ function FormListPaymentSchedule(props: FormListPaymentScheduleProps) {
 
   return (
     <div className="space-y-4">
-      <Toaster position="top-right" reverseOrder={true}/>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 gap-4">

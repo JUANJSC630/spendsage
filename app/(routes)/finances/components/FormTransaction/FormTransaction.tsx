@@ -5,7 +5,7 @@ import { CalendarIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -103,7 +103,6 @@ function FromTransaction() {
 
   return (
     <div className="space-y-4">
-      <Toaster position="top-right" reverseOrder={true} />
       <h2 className="text-2xl font-bold mb-4">Agregar Transacción</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>

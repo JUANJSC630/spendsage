@@ -3,7 +3,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { z } from "zod";
 import { 
   Folder, 
@@ -124,7 +124,6 @@ function CategoryForm() {
 
   return (
     <div className="space-y-4">
-      <Toaster position="top-right" reverseOrder={true} />
       <h2 className="text-2xl font-bold mb-4">Crear Categoría</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>

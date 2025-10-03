@@ -2,7 +2,7 @@
 import axios from "axios";
 import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { toast, Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 
 import { Button } from "@/components/ui/button";
 
@@ -26,7 +26,6 @@ export default function ButtonDeletePaymentSchedule(
   };
   return (
     <div>
-      <Toaster position="top-right" reverseOrder={true} />
       <Button onClick={onDeletePaymentSchedule}>
         <Trash className="w-[20px] hover:text-red-500" />
       </Button>

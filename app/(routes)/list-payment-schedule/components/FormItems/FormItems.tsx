@@ -2,7 +2,7 @@
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { toast, Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -68,7 +68,6 @@ export function FormItems(props: FormItemsProps) {
 
   return (
     <Form {...form}>
-      <Toaster position="top-right" reverseOrder={true} />
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="md:grid-cols-2 grid gap-4"
