@@ -47,6 +47,43 @@ export async function GET(req: Request, { params }: Params) {
   }
 }
 
+export async function PUT(req: Request, { params }: Params) {
+  try {
+    const { userId } = auth();
+    const body = await req.json();
+
+    if (!userId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    if (!params || !params.listPaymentScheduleId) {
+      return new NextResponse("Bad Request", { status: 400 });
+    }
+
+    const { listPaymentScheduleId } = params;
+    const { name } = body;
+
+    if (!name || typeof name !== 'string') {
+      return new NextResponse("Name is required", { status: 400 });
+    }
+
+    const updatedListPaymentSchedule = await db.listPaymentSchedule.update({
+      where: {
+        id: listPaymentScheduleId,
+        userId,
+      },
+      data: {
+        name,
+      },
+    });
+
+    return NextResponse.json(updatedListPaymentSchedule);
+  } catch (e) {
+    console.error("[PUT LIST PAYMENT SCHEDULE]", e);
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
+}
+
 export async function DELETE(req: Request, { params }: Params) {
   try {
     const { userId } = auth();

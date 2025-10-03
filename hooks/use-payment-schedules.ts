@@ -128,6 +128,30 @@ const api = {
     if (!response.ok) throw new Error('Failed to duplicate payment schedule list');
     return response.json();
   },
+
+  updateListPaymentSchedule: async (data: { id: string; name: string }): Promise<ListPaymentSchedule> => {
+    const response = await fetch(`/api/list-payment-schedule/${data.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: data.name }),
+    });
+    if (!response.ok) throw new Error('Failed to update payment schedule list');
+    return response.json();
+  },
+
+  updatePaymentSchedule: async (data: { id: string; name: string; fromDate: Date; toDate: Date }): Promise<PaymentSchedule> => {
+    const response = await fetch(`/api/payment-schedule/${data.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: data.name,
+        fromDate: data.fromDate,
+        toDate: data.toDate
+      }),
+    });
+    if (!response.ok) throw new Error('Failed to update payment schedule');
+    return response.json();
+  },
 };
 
 // Hooks
@@ -255,6 +279,31 @@ export function useDuplicateListPaymentSchedule() {
     mutationFn: ({ id, name }: { id: string; name: string }) =>
       api.duplicateListPaymentSchedule(id, name),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: paymentScheduleKeys.lists() });
+    },
+  });
+}
+
+export function useUpdateListPaymentSchedule() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: api.updateListPaymentSchedule,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: paymentScheduleKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: paymentScheduleKeys.list(data.id) });
+    },
+  });
+}
+
+export function useUpdatePaymentSchedule() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: api.updatePaymentSchedule,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: paymentScheduleKeys.all });
+      // Invalidate the parent list to refresh the data
       queryClient.invalidateQueries({ queryKey: paymentScheduleKeys.lists() });
     },
   });

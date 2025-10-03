@@ -8,6 +8,7 @@ import { ListPaymentSchedule } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import CardList from "./CardList";
 import { DuplicateListModal } from "./DuplicateListModal";
+import { EditListModal } from "./EditListModal/EditListModal";
 
 interface CardListWithActionsProps {
   listPaymentSchedule: ListPaymentSchedule;
@@ -29,8 +30,9 @@ export function CardListWithActions({ listPaymentSchedule }: CardListWithActions
           <CardList listPaymentScheduleName={listPaymentSchedule.name} />
         </Link>
 
-        {/* Botón de duplicar que aparece en hover */}
-        <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        {/* Botones que aparecen en hover */}
+        <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex gap-2 z-10">
+          <EditListModal listPaymentSchedule={listPaymentSchedule} />
           <Button
             variant="secondary"
             size="sm"

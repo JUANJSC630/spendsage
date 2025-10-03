@@ -1,6 +1,7 @@
 import AddItem from "../AddItem/AddItem";
 import ButtonDeletePaymentSchedule from "../ButtonDeletePaymentSchedule/ButtonDeletePaymentSchedule";
 import ListPaymentItems from "../ListPaymentItems/ListPaymentItems";
+import { EditPaymentSchedule } from "../EditPaymentSchedule/EditPaymentSchedule";
 import { CardPaymentScheduleProps } from "./CardPaymentSchedule.types";
 
 
@@ -16,9 +17,12 @@ export function CardPaymentSchedule(props: CardPaymentScheduleProps) {
             {new Date(paymentSchedule.toDate).toLocaleDateString("es-ES")}
           </div>
         </div>
-        <div className="flex flex-col items-end gap-4">
-          <AddItem paymentSchedule={paymentSchedule} />
-          <ButtonDeletePaymentSchedule paymentSchedule={paymentSchedule} />
+        <div className="flex flex-col items-end gap-2">
+          <div className="flex items-center gap-2">
+            <EditPaymentSchedule paymentSchedule={paymentSchedule} />
+            <AddItem paymentSchedule={paymentSchedule} />
+            <ButtonDeletePaymentSchedule paymentSchedule={paymentSchedule} />
+          </div>
         </div>
       </div>
       <div>
