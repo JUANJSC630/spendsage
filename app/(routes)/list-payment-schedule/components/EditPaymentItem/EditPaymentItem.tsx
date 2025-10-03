@@ -31,6 +31,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { MobileDatePicker } from "@/components/ui/mobile-date-picker";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -127,46 +128,13 @@ export default function EditPaymentItem({ paymentItem, paymentSchedule }: EditPa
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Fecha</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-full pl-3 text-left font-normal",
-                            !field.value && "text-muted-foreground"
-                          )}
-                        >
-                          {field.value ? (
-                            format(field.value, "PPP")
-                          ) : (
-                            <span>Selecciona una fecha</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent
-                      className="w-auto p-0 z-50"
-                      align="start"
-                      side="bottom"
-                      sideOffset={4}
-                      alignOffset={0}
-                      avoidCollisions={true}
-                      sticky="always"
-                    >
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        disabled={(date) =>
-                          date > new Date() || date < new Date("1900-01-01")
-                        }
-                        initialFocus
-                        className="rounded-md border shadow-md"
-                      />
-                    </PopoverContent>
-                  </Popover>
+                  <FormControl>
+                    <MobileDatePicker
+                      value={field.value}
+                      onChange={field.onChange}
+                      placeholder="Selecciona una fecha"
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
