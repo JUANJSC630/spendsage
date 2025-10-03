@@ -33,7 +33,7 @@ import {
 } from "@/components/ui/popover";
 import { MobileDatePicker } from "@/components/ui/mobile-date-picker";
 import { cn } from "@/lib/utils";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "react-hot-toast";
 
 import { EditPaymentItemProps } from "./EditPaymentItem.types";
 import { editPaymentItemFormSchema, EditPaymentItemFormValues } from "./EditPaymentItem.form";
@@ -41,7 +41,6 @@ import { useUpdatePaymentItem } from "@/hooks/use-payment-schedules";
 
 export default function EditPaymentItem({ paymentItem, paymentSchedule }: EditPaymentItemProps) {
   const [open, setOpen] = useState(false);
-  const { toast } = useToast();
   const updatePaymentItemMutation = useUpdatePaymentItem();
 
   const form = useForm<EditPaymentItemFormValues>({
@@ -63,18 +62,11 @@ export default function EditPaymentItem({ paymentItem, paymentSchedule }: EditPa
         description: values.description,
       });
 
-      toast({
-        title: "Item actualizado",
-        description: "El item de pago ha sido actualizado exitosamente.",
-      });
+      toast.success("¡Pago actualizado exitosamente! ✅");
 
       setOpen(false);
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Hubo un error al actualizar el item de pago.",
-        variant: "destructive",
-      });
+      toast.error("Error al actualizar el item de pago");
     }
   };
 
