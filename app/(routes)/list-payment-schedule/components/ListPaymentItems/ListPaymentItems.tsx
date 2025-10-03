@@ -1,20 +1,31 @@
-import { db } from "@/lib/db";
+"use client";
+
 import { ListPaymentItemsProps } from "./ListPaymentItemsProps.types";
 import PaymentScheduleItem from "../PaymentScheduleItem/PaymentScheduleItem";
-
 import { PaymentTotals } from "../PaymentTotals/PaymentTotals";
+import { usePaymentItems } from "@/hooks/use-payment-schedules";
+import { Loader2 } from "lucide-react";
 
-export default async function ListPaymentItems(props: ListPaymentItemsProps) {
+export default function ListPaymentItems(props: ListPaymentItemsProps) {
   const { paymentSchedule } = props;
 
-  const items = await db.paymentItem.findMany({
-    where: {
-      paymentScheduleId: paymentSchedule.id,
-    },
-    orderBy: {
-      check: "asc",
-    },
-  });
+  const { data: items = [], isLoading, error } = usePaymentItems(paymentSchedule.id);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-8">
+        <Loader2 className="h-6 w-6 animate-spin" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-8 text-red-500">
+        Error al cargar los items de pago
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">

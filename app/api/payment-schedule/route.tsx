@@ -26,7 +26,7 @@ export async function GET() {
     return NextResponse.json(paymentSchedule);
   } catch (e) {
     console.log("[PAYMENT SCHEDULE]", e);
-    return new NextResponse("Interal Server Error", { status: 500 });
+    return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
 
@@ -49,6 +49,6 @@ export async function POST(req: Request) {
     return NextResponse.json(paymentSchedule);
   } catch (e) {
     console.log("[PAYMENT SCHEDULE]", e);
-    return new NextResponse("Interal Server Error", { status: 500 });
+    return new NextResponse("Internal Server Error", { status: 500 });
   }
 }

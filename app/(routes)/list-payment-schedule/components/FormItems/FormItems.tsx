@@ -1,8 +1,6 @@
 "use client";
-import axios from "axios";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast, Toaster } from "react-hot-toast";
 import { z } from "zod";
@@ -30,11 +28,13 @@ import { formSchema } from "./FormItems.form";
 import { FormItemsProps } from "./FormItems.types";
 import { Checkbox } from "@/components/ui/checkbox";
 import useFormatAmount from "@/hooks/useFormatAmount";
+import { useCreatePaymentItem } from "@/hooks/use-payment-schedules";
 
 export function FormItems(props: FormItemsProps) {
   const { setOpen, paymentSchedule } = props;
   const formatAmount = useFormatAmount();
-  const router = useRouter();
+  const createPaymentItemMutation = useCreatePaymentItem();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -46,13 +46,16 @@ export function FormItems(props: FormItemsProps) {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.post(
-        `/api/payment-schedule/${paymentSchedule.id}/payment-item`,
-        values
-      );
+      await createPaymentItemMutation.mutateAsync({
+        paymentScheduleId: paymentSchedule.id,
+        amount: values.amount,
+        date: values.date,
+        description: values.description,
+        check: values.check,
+      });
       toast.success("¡Item de pago creado! ✅");
-      router.refresh();
       setOpen(false);
+      form.reset();
     } catch (error) {
       toast.error("Error al crear item de pago");
     }
@@ -173,7 +176,12 @@ export function FormItems(props: FormItemsProps) {
           )}
         />
         <div>
-          <Button type="submit">Crear Item de Pago</Button>
+          <Button
+            type="submit"
+            disabled={createPaymentItemMutation.isPending}
+          >
+            {createPaymentItemMutation.isPending ? "Creando..." : "Crear Item de Pago"}
+          </Button>
         </div>
       </form>
     </Form>

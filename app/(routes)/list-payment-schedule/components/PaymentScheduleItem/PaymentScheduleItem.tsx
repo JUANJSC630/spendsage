@@ -1,43 +1,43 @@
 "use client";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
 
 import ButtonDeletePaymentItem from "../ButtonDeletePaymentItem/ButtonDeletePaymentItem";
 import { CheckBoxUpdatePaymentItem } from "../CheckBoxUpdatePaymentItem/CheckBoxUpdatePaymentItem";
 import { PaymentScheduleItemProps } from "./PaymentScheduleItem.types";
 import { useCurrencyStore } from "@/hooks/useCurrencyStore";
+import EditPaymentItem from "../EditPaymentItem";
+import { useUpdatePaymentItem } from "@/hooks/use-payment-schedules";
 
 export default function PaymentScheduleItem(props: PaymentScheduleItemProps) {
   const { paymentItem, paymentSchedule } = props;
   const { getSymbol } = useCurrencyStore();
   const [checked, setChecked] = useState(paymentItem.check);
+  const [symbol, setSymbol] = useState<string>("");
 
-  const [symbol, setSymbol] = useState<string>(""); // Nuevo estado para manejar el símbolo de la moneda
+  const updatePaymentItemMutation = useUpdatePaymentItem();
 
   useEffect(() => {
-    // Actualiza el símbolo después de la hidratación
     setSymbol(getSymbol());
   }, [getSymbol]);
 
-  const router = useRouter();
+  useEffect(() => {
+    setChecked(paymentItem.check);
+  }, [paymentItem.check]);
 
   const handleCheckboxChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const newCheckedState = event.target.checked;
     setChecked(newCheckedState);
+
     try {
-      const { data } = await axios.patch(
-        `/api/payment-schedule/${paymentSchedule.id}/payment-item/${paymentItem.id}`,
-        {
-          check: newCheckedState,
-        }
-      );
-      setChecked(data.check);
+      await updatePaymentItemMutation.mutateAsync({
+        id: paymentItem.id,
+        paymentScheduleId: paymentSchedule.id,
+        check: newCheckedState,
+      });
       toast.success("¡Pago actualizado exitosamente! ✅");
-      router.refresh();
     } catch (error) {
       console.error("Error updating checkbox:", error);
       setChecked(!newCheckedState);
@@ -67,10 +67,16 @@ export default function PaymentScheduleItem(props: PaymentScheduleItemProps) {
           </div>
         </div>
       </div>
-      <ButtonDeletePaymentItem
-        paymentSchedule={paymentSchedule}
-        paymentItem={paymentItem}
-      />
+      <div className="flex items-center gap-2">
+        <EditPaymentItem
+          paymentItem={paymentItem}
+          paymentSchedule={paymentSchedule}
+        />
+        <ButtonDeletePaymentItem
+          paymentSchedule={paymentSchedule}
+          paymentItem={paymentItem}
+        />
+      </div>
     </div>
   );
 }
