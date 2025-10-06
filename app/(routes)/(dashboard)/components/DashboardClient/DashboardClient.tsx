@@ -136,7 +136,7 @@ export function DashboardClient({ transactions, categories }: DashboardClientPro
       <div className="w-full">
         <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-700 text-sm font-medium rounded-full">
           <CalendarIcon className="h-4 w-4" />
-          {selectedMonthName} {selectedYear} • {filteredTransactions.length} transacciones
+          {selectedMonthName} {selectedYear} • {filteredTransactions.length} Movimientos
         </div>
       </div>
 
