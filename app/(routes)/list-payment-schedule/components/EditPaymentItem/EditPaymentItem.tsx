@@ -38,10 +38,12 @@ import { toast } from "react-hot-toast";
 import { EditPaymentItemProps } from "./EditPaymentItem.types";
 import { editPaymentItemFormSchema, EditPaymentItemFormValues } from "./EditPaymentItem.form";
 import { useUpdatePaymentItem } from "@/hooks/use-payment-schedules";
+import useFormatAmount from "@/hooks/useFormatAmount";
 
 export default function EditPaymentItem({ paymentItem, paymentSchedule }: EditPaymentItemProps) {
   const [open, setOpen] = useState(false);
   const updatePaymentItemMutation = useUpdatePaymentItem();
+  const formatAmount = useFormatAmount();
 
   const form = useForm<EditPaymentItemFormValues>({
     resolver: zodResolver(editPaymentItemFormSchema),
@@ -51,6 +53,11 @@ export default function EditPaymentItem({ paymentItem, paymentSchedule }: EditPa
       description: paymentItem.description,
     },
   });
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, "");
+    form.setValue("amount", value);
+  };
 
   const onSubmit = async (values: EditPaymentItemFormValues) => {
     try {
@@ -107,7 +114,13 @@ export default function EditPaymentItem({ paymentItem, paymentSchedule }: EditPa
                 <FormItem>
                   <FormLabel>Monto</FormLabel>
                   <FormControl>
-                    <Input placeholder="Monto del pago" {...field} />
+                    <Input
+                      {...field}
+                      type="text"
+                      placeholder="Monto del pago"
+                      value={formatAmount(form.watch("amount"))}
+                      onChange={handleAmountChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

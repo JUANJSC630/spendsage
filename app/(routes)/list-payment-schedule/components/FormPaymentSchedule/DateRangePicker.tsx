@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { DateRange } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
+import { formatDateColombian, formatDateRangeColombian } from "@/lib/date-utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -53,12 +54,9 @@ export function DateRangePicker({
             <CalendarIcon className="mr-2 h-4 w-4" />
             {date?.from ? (
               date.to ? (
-                <>
-                  {format(date.from, "LLL dd, y")} -{" "}
-                  {format(date.to, "LLL dd, y")}
-                </>
+                formatDateRangeColombian(date.from, date.to)
               ) : (
-                format(date.from, "LLL dd, y")
+                formatDateColombian(date.from)
               )
             ) : (
               <span>{placeholder}</span>
