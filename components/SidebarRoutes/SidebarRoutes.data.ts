@@ -19,6 +19,11 @@ export const dataGeneralSidebar = [
     label: "Finanzas",
     href: "/finances",
   },
+    {
+    icon: ListCheck,
+    label: "Lista de Pagos",
+    href: "/list-payment-schedule",
+  },
   {
     icon: Wallet,
     label: "Presupuestos",
@@ -28,11 +33,6 @@ export const dataGeneralSidebar = [
     icon: Tags,
     label: "Categorías",
     href: "/categories",
-  },
-  {
-    icon: ListCheck,
-    label: "Lista de Pagos",
-    href: "/list-payment-schedule",
   },
 ];
 

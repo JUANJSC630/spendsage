@@ -26,13 +26,22 @@ ChartJS.register(
   Legend
 );
 
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  color: string;
+  type: string;
+}
+
 interface ExpenseIncomeChartProps {
   transactions: Transactions[];
+  categories: Category[];
   className?: string;
 }
 
 export default function ExpenseIncomeChart(props: ExpenseIncomeChartProps) {
-  const { transactions } = props;
+  const { transactions, categories } = props;
 
   const formatAmount = useFormatAmount();
   const { getSymbol } = useCurrencyStore();
@@ -49,6 +58,21 @@ export default function ExpenseIncomeChart(props: ExpenseIncomeChartProps) {
   const [groupedData, setGroupedData] = useState<
     Record<string, { income: number; expenses: number }>
   >({});
+
+  // Create category map for type lookup
+  const [categoryMap, setCategoryMap] = useState(new Map());
+
+  useEffect(() => {
+    const map = new Map();
+    categories.forEach(category => {
+      map.set(category.slug, {
+        name: category.name,
+        color: category.color,
+        type: category.type
+      });
+    });
+    setCategoryMap(map);
+  }, [categories]);
 
   useEffect(() => {
     const now = new Date();
@@ -75,17 +99,21 @@ export default function ExpenseIncomeChart(props: ExpenseIncomeChartProps) {
       }
 
       const amount = parseFloat(transaction.amount);
-      if (transaction.category === "income") {
-        acc[key].income += amount;
-      } else {
-        acc[key].expenses += amount;
+      const categoryInfo = categoryMap.get(transaction.category);
+
+      if (categoryInfo) {
+        if (categoryInfo.type === "income") {
+          acc[key].income += amount;
+        } else if (categoryInfo.type === "expense") {
+          acc[key].expenses += amount;
+        }
       }
 
       return acc;
     }, {} as Record<string, { income: number; expenses: number }>);
 
     setGroupedData(grouped);
-  }, [startDate, endDate, transactions]);
+  }, [startDate, endDate, transactions, categoryMap]);
 
   const sortedKeys = Object.keys(groupedData).sort();
 

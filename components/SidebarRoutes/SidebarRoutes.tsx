@@ -8,10 +8,11 @@ import { UserButton, UserProfile } from "@clerk/nextjs";
 
 type SidebarRoutesProps = {
   setOpen: boolean;
+  onItemClick?: () => void;
 };
 
 export function SidebarRoutes(props: SidebarRoutesProps) {
-  const { setOpen } = props;
+  const { setOpen, onItemClick } = props;
 
   return (
     <div className="flex flex-col justify-between h-full">
@@ -23,7 +24,7 @@ export function SidebarRoutes(props: SidebarRoutesProps) {
         >
           {setOpen ? <p className="mb-2 text-gray-500">GENERAL</p> : null}
           {dataGeneralSidebar.map((item) => (
-            <SidebarItem key={item.label} item={item} setOpen={setOpen} />
+            <SidebarItem key={item.label} item={item} setOpen={setOpen} onItemClick={onItemClick} />
           ))}
         </div>
 
@@ -34,7 +35,7 @@ export function SidebarRoutes(props: SidebarRoutesProps) {
         >
           {setOpen ? <p className="mb-2 text-gray-500">CONFIGURACIÓN</p> : null}
           {dataSettingsSidebar.map((item) => (
-            <SidebarItem key={item.label} item={item} setOpen={setOpen} />
+            <SidebarItem key={item.label} item={item} setOpen={setOpen} onItemClick={onItemClick} />
           ))}
         </div>
       </div>

@@ -24,23 +24,23 @@ model Transactions {
 
 model ListPaymentSchedule {
   id               String            @id @default(uuid())
-  userId           String            @db.Text
-  paymentSchedules PaymentSchedule[]
-  name             String            @db.Text
+  userId           String
+  name             String
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
+  paymentSchedules PaymentSchedule[]
 }
 
 model PaymentSchedule {
-  id                    String               @id @default(uuid())
-  userId                String               @db.Text
-  listPaymentScheduleId String               @db.Text
+  id                    String              @id @default(uuid())
+  userId                String
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+  name                  String
   fromDate              DateTime
   toDate                DateTime
-  name                  String               @db.Text
+  listPaymentScheduleId String
   paymentItems          PaymentItem[]
-  createdAt             DateTime             @default(now())
-  updatedAt             DateTime             @updatedAt
   listPaymentSchedule   ListPaymentSchedule @relation(fields: [listPaymentScheduleId], references: [id], onDelete: Cascade)
 
   @@index([listPaymentScheduleId])
@@ -49,12 +49,12 @@ model PaymentSchedule {
 
 model PaymentItem {
   id                String          @id @default(uuid())
-  userId            String          @db.Text
-  paymentScheduleId String          @db.Text
+  userId            String
+  paymentScheduleId String
   check             Boolean
-  amount            String          @db.Text
+  amount            String
   date              DateTime
-  description       String          @db.Text
+  description       String
   createdAt         DateTime        @default(now())
   updatedAt         DateTime        @updatedAt
   paymentSchedule   PaymentSchedule @relation(fields: [paymentScheduleId], references: [id], onDelete: Cascade)
@@ -76,36 +76,36 @@ model BankAccount {
 
 model Budget {
   id        String   @id @default(uuid())
-  userId    String   @db.Text
-  category  String   @db.Text
-  amount    String   @db.Text
-  period    String   @db.Text
+  userId    String
+  category  String
+  amount    String
+  period    String
   month     Int
   year      Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@unique([userId, category, month, year])
   @@index([userId])
   @@index([userId, category])
   @@index([userId, year, month])
-  @@unique([userId, category, month, year])
 }
 
 model Category {
   id          String   @id @default(uuid())
-  userId      String   @db.Text
-  name        String   @db.Text
-  slug        String   @db.Text
-  description String?  @db.Text
-  color       String   @default("#3B82F6") @db.Text
-  icon        String   @default("Folder") @db.Text
-  type        String   @default("expense") @db.Text
+  userId      String
+  name        String
+  slug        String
+  description String?
+  color       String   @default("#3B82F6")
+  icon        String   @default("Folder")
+  type        String   @default("expense")
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  @@unique([userId, slug])
   @@index([userId])
   @@index([userId, slug])
   @@index([userId, type])
-  @@unique([userId, slug])
 }

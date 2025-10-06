@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 
 export function SidebarItem(props: SidebarItemProps) {
-  const { item, setOpen } = props;
+  const { item, setOpen, onItemClick } = props;
   const { href, icon: Icon, label } = item;
 
   const pathname = usePathname();
@@ -14,9 +14,10 @@ export function SidebarItem(props: SidebarItemProps) {
   return (
     <Link
       href={href}
+      onClick={onItemClick}
       className={cn(
         `flex gap-x-2 mt-2 text-slate-700 text-sm items-center p-2 rounded-lg cursor-pointer hover:bg-slate-400/20`,
-        activePath && "bg-slate-400/10 ",
+        activePath && "bg-slate-400/20 ",
       )}
     >
       <Icon

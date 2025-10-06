@@ -103,7 +103,7 @@ function FromTransaction() {
   const { isValid } = form.formState;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       <h2 className="text-2xl font-bold mb-4">Agregar Transacción</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>

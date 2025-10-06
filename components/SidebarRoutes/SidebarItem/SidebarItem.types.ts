@@ -8,4 +8,5 @@ export type SidebarItemProps = {
   };
   key: string;
   setOpen: boolean;
+  onItemClick?: () => void;
 };
