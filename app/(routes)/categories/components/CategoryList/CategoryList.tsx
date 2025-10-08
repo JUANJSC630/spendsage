@@ -168,61 +168,55 @@ export function CategoryList({ categories, showInactive = false }: CategoryListP
         )}
       </div>
       
-      <div className="space-y-3 max-h-[500px] overflow-y-auto">
+      <div className="space-y-2 sm:space-y-3 max-h-[500px] overflow-y-auto pb-2">
         {sortedCategories.map((category) => {
           const IconComponent = iconComponents[category.icon as keyof typeof iconComponents] || Folder;
           
           return (
             <Card key={category.id} className="hover:shadow-md transition-shadow">
-              <CardContent className="p-4">
+              <CardContent className="p-3 sm:p-4">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3 flex-1">
+                  <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
                     <div
-                      className="w-10 h-10 rounded-full flex items-center justify-center"
+                      className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center flex-shrink-0"
                       style={{ backgroundColor: category.color + "20" }}
                     >
                       <IconComponent 
-                        className="h-5 w-5" 
-                        style={{ color: category.color }}
+                        className="h-4 w-4 sm:h-5 sm:w-5" 
+                        style={{ color: category.color }} 
                       />
-                    </div>
-                    
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-medium text-lg">{category.name}</h3>
-                        <Badge className={typeColors[category.type] || typeColors.other}>
+                    </div>                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap items-center gap-1 sm:gap-2 mb-0.5 sm:mb-1">
+                        <h3 className="font-medium text-base sm:text-lg truncate">{category.name}</h3>
+                        <Badge className={`text-xs ${typeColors[category.type] || typeColors.other}`}>
                           {typeLabels[category.type] || category.type}
                         </Badge>
                         {category.isDefault && (
-                          <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                          <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 text-xs">
                             Por defecto
                           </Badge>
                         )}
                         {showInactive && (
-                          <Badge variant="outline" className="bg-gray-50">
+                          <Badge variant="outline" className="bg-gray-50 text-xs">
                             Archivada
                           </Badge>
                         )}
                       </div>
                       {category.description && (
-                        <p className="text-sm text-gray-600">{category.description}</p>
+                        <p className="text-xs sm:text-sm text-gray-600 truncate">{category.description}</p>
                       )}
-                      <div className="flex items-center gap-4 text-xs text-gray-500 mt-1">
-                        <span>Slug: {category.slug}</span>
-                        <span>Color: {category.color}</span>
-                      </div>
                     </div>
                   </div>
                   
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1 sm:gap-2 ml-1">
                     {showInactive && !category.isDefault ? (
                       <Button
                         variant="outline"
-                        size="sm"
-                        className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                        size="icon"
+                        className="h-7 w-7 sm:h-8 sm:w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
                         onClick={() => handleRestoreCategory(category.id)}
                       >
-                        <ArchiveRestore className="h-4 w-4" />
+                        <ArchiveRestore className="h-3 w-3 sm:h-4 sm:w-4" />
                       </Button>
                     ) : null}
 
@@ -231,11 +225,11 @@ export function CategoryList({ categories, showInactive = false }: CategoryListP
                         <AlertDialogTrigger asChild>
                           <Button
                             variant="outline"
-                            size="sm"
-                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                            size="icon"
+                            className="h-7 w-7 sm:h-8 sm:w-8 text-red-600 hover:text-red-700 hover:bg-red-50"
                             disabled={deletingCategoryId === category.id}
                           >
-                            {showInactive ? <Trash2 className="h-4 w-4" /> : <Archive className="h-4 w-4" />}
+                            {showInactive ? <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" /> : <Archive className="h-3 w-3 sm:h-4 sm:w-4" />}
                           </Button>
                         </AlertDialogTrigger>
                       <AlertDialogContent>

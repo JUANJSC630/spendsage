@@ -42,18 +42,18 @@ export default async function CategoriesPage() {
   const inactiveCategories = categories.filter(cat => !cat.isActive);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
+    <div className="max-w-7xl mx-auto px-0 sm:px-6 lg:px-8 py-0 sm:py-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
       <CategoryNavbar />
-      <div className="space-y-6 mt-6">
+      <div className="space-y-3 sm:space-y-6 mt-3 sm:mt-6 px-3 sm:px-0">
         <CategoryDashboard 
           categories={activeCategories} 
           inactiveCount={inactiveCategories.length}
         />
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="border border-slate-100 p-4 rounded-md bg-white">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+          <div className="border border-slate-100 p-3 sm:p-4 rounded-md bg-white">
             <CategoryForm />
           </div>
-          <div className="border border-slate-100 p-4 rounded-md bg-white">
+          <div className="border border-slate-100 p-3 sm:p-4 rounded-md bg-white">
             <CategoryList 
               categories={activeCategories}
               showInactive={false}

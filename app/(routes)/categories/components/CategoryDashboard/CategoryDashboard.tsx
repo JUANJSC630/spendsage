@@ -27,53 +27,53 @@ export function CategoryDashboard({ categories, inactiveCount }: CategoryDashboa
 
   return (
     <div className="space-y-4">
-      <div className="grid md:grid-cols-4 gap-3">
-        <Card className="shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between py-2 px-4">
-            <CardTitle className="text-xs font-medium">Total Categorías</CardTitle>
-            <Tags className="h-4 w-4 text-muted-foreground" />
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3">
+        <Card className="shadow-sm bg-white border">
+          <CardHeader className="flex flex-row items-center justify-between py-2 px-3 sm:px-4">
+            <CardTitle className="text-xs font-medium text-gray-600">Total Categorías</CardTitle>
+            <Tags className="h-4 w-4 text-blue-500" />
           </CardHeader>
-          <CardContent className="py-2 px-4">
-            <div className="text-xl font-bold">{categories.length}</div>
+          <CardContent className="py-1 sm:py-2 px-3 sm:px-4">
+            <div className="text-2xl font-bold">{categories.length}</div>
             <div className="text-xs text-muted-foreground">
               Categorías activas
             </div>
           </CardContent>
         </Card>
 
-        <Card className="shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between py-2 px-4">
-            <CardTitle className="text-xs font-medium">Gastos</CardTitle>
+        <Card className="shadow-sm bg-white border">
+          <CardHeader className="flex flex-row items-center justify-between py-2 px-3 sm:px-4">
+            <CardTitle className="text-xs font-medium text-gray-600">Gastos</CardTitle>
             <TrendingUp className="h-4 w-4 text-red-500" />
           </CardHeader>
-          <CardContent className="py-2 px-4">
-            <div className="text-xl font-bold text-red-600">{expenseCategories.length}</div>
+          <CardContent className="py-1 sm:py-2 px-3 sm:px-4">
+            <div className="text-2xl font-bold text-red-600">{expenseCategories.length}</div>
             <div className="text-xs text-muted-foreground">
               Categorías de gastos
             </div>
           </CardContent>
         </Card>
 
-        <Card className="shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between py-2 px-4">
-            <CardTitle className="text-xs font-medium">Ingresos</CardTitle>
+        <Card className="shadow-sm bg-white border">
+          <CardHeader className="flex flex-row items-center justify-between py-2 px-3 sm:px-4">
+            <CardTitle className="text-xs font-medium text-gray-600">Ingresos</CardTitle>
             <DollarSign className="h-4 w-4 text-green-500" />
           </CardHeader>
-          <CardContent className="py-2 px-4">
-            <div className="text-xl font-bold text-green-600">{incomeCategories.length}</div>
+          <CardContent className="py-1 sm:py-2 px-3 sm:px-4">
+            <div className="text-2xl font-bold text-green-600">{incomeCategories.length}</div>
             <div className="text-xs text-muted-foreground">
               Categorías de ingresos
             </div>
           </CardContent>
         </Card>
 
-        <Card className="shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between py-2 px-4">
-            <CardTitle className="text-xs font-medium">Archivadas</CardTitle>
+        <Card className="shadow-sm bg-white border">
+          <CardHeader className="flex flex-row items-center justify-between py-2 px-3 sm:px-4">
+            <CardTitle className="text-xs font-medium text-gray-600">Archivadas</CardTitle>
             <Archive className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent className="py-2 px-4">
-            <div className="text-xl font-bold text-gray-600">{inactiveCount}</div>
+          <CardContent className="py-1 sm:py-2 px-3 sm:px-4">
+            <div className="text-2xl font-bold text-gray-600">{inactiveCount}</div>
             <div className="text-xs text-muted-foreground">
               Categorías inactivas
             </div>
