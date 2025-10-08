@@ -3,9 +3,10 @@ import React, { useState, useEffect, useMemo } from "react";
 import { CardTotalProps } from "./CardTotal.types";
 import { useCurrencyStore } from "@/hooks/useCurrencyStore";
 import useFormatAmount from "@/hooks/useFormatAmount";
+import { getCategoryInfo } from "@/lib/categoryMapping";
 
 export default function CardTotal(props: CardTotalProps) {
-  const { transactions } = props;
+  const { transactions, categories } = props;
   const { getSymbol } = useCurrencyStore();
   const [symbol, setSymbol] = useState<string>(""); // Nuevo estado para manejar el símbolo de la moneda
 
@@ -15,23 +16,30 @@ export default function CardTotal(props: CardTotalProps) {
   }, [getSymbol]);
   const formatAmount = useFormatAmount();
 
-  // Procesar los datos para sumar montos por categoría
-  const totals = transactions.reduce((acc, item) => {
-    const category = item.category;
-    const amount = parseFloat(item.amount);
+  // Calculate totals using category mapping for compatibility
+  const { totalIncome, totalExpenses, totalBalance } = useMemo(() => {
+    let income = 0;
+    let expenses = 0;
 
-    if (!acc[category]) {
-      acc[category] = 0;
-    }
+    transactions.forEach((transaction) => {
+      const amount = parseFloat(transaction.amount);
+      const categoryInfo = getCategoryInfo(categories, transaction.category);
 
-    acc[category] += amount;
-    return acc;
-  }, {} as Record<string, number>);
+      if (categoryInfo.category) {
+        if (categoryInfo.category.type === 'income') {
+          income += amount;
+        } else if (categoryInfo.category.type === 'expense') {
+          expenses += amount;
+        }
+      }
+    });
 
-  const totalIncome = totals["income"] || 0;
-  const totalExpenses =
-    (totals["variable_expenses"] || 0) + (totals["fixed_expenses"] || 0);
-  const totalBalance = totalIncome - totalExpenses;
+    return {
+      totalIncome: income,
+      totalExpenses: expenses,
+      totalBalance: income - expenses,
+    };
+  }, [transactions, categories]);
 
   return (
     <div

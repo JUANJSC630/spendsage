@@ -31,7 +31,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { MobileDatePicker } from "@/components/ui/mobile-date-picker";
+import { DatePicker } from "@/components/ui/date-picker";
 import { cn } from "@/lib/utils";
 import { toast } from "react-hot-toast";
 
@@ -134,9 +134,9 @@ export default function EditPaymentItem({ paymentItem, paymentSchedule }: EditPa
                 <FormItem className="flex flex-col">
                   <FormLabel>Fecha</FormLabel>
                   <FormControl>
-                    <MobileDatePicker
-                      value={field.value}
-                      onChange={field.onChange}
+                    <DatePicker
+                      date={field.value}
+                      onDateChange={field.onChange}
                       placeholder="Selecciona una fecha"
                     />
                   </FormControl>

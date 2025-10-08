@@ -48,6 +48,7 @@ interface Category {
   icon: string;
   type: CategoryType;
   isActive: boolean;
+  isDefault: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -96,8 +97,15 @@ export function CategoryList({ categories, showInactive = false }: CategoryListP
       await axios.delete(`/api/categories/${categoryId}`);
       toast.success(showInactive ? "Categoría eliminada permanentemente" : "Categoría archivada correctamente");
       router.refresh();
-    } catch (error) {
-      toast.error("Error al procesar la categoría");
+    } catch (error: any) {
+      if (error.response?.status === 403) {
+        toast.error("No se pueden eliminar las categorías por defecto del sistema");
+      } else if (error.response?.status === 400) {
+        toast.error("No se puede eliminar esta categoría porque está siendo utilizada");
+      } else {
+        toast.error("Error al procesar la categoría");
+      }
+      console.error("Error deleting category:", error);
     } finally {
       setDeletingCategoryId(null);
     }
@@ -110,8 +118,13 @@ export function CategoryList({ categories, showInactive = false }: CategoryListP
       });
       toast.success("Categoría restaurada correctamente");
       router.refresh();
-    } catch (error) {
-      toast.error("Error al restaurar la categoría");
+    } catch (error: any) {
+      if (error.response?.status === 403) {
+        toast.error("No se pueden modificar las categorías por defecto del sistema");
+      } else {
+        toast.error("Error al restaurar la categoría");
+      }
+      console.error("Error restoring category:", error);
     }
   };
 
@@ -180,6 +193,11 @@ export function CategoryList({ categories, showInactive = false }: CategoryListP
                         <Badge className={typeColors[category.type] || typeColors.other}>
                           {typeLabels[category.type] || category.type}
                         </Badge>
+                        {category.isDefault && (
+                          <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                            Por defecto
+                          </Badge>
+                        )}
                         {showInactive && (
                           <Badge variant="outline" className="bg-gray-50">
                             Archivada
@@ -197,7 +215,7 @@ export function CategoryList({ categories, showInactive = false }: CategoryListP
                   </div>
                   
                   <div className="flex items-center gap-2">
-                    {showInactive ? (
+                    {showInactive && !category.isDefault ? (
                       <Button
                         variant="outline"
                         size="sm"
@@ -207,18 +225,19 @@ export function CategoryList({ categories, showInactive = false }: CategoryListP
                         <ArchiveRestore className="h-4 w-4" />
                       </Button>
                     ) : null}
-                    
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                          disabled={deletingCategoryId === category.id}
-                        >
-                          {showInactive ? <Trash2 className="h-4 w-4" /> : <Archive className="h-4 w-4" />}
-                        </Button>
-                      </AlertDialogTrigger>
+
+                    {!category.isDefault && (
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                            disabled={deletingCategoryId === category.id}
+                          >
+                            {showInactive ? <Trash2 className="h-4 w-4" /> : <Archive className="h-4 w-4" />}
+                          </Button>
+                        </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>
                           <AlertDialogTitle>
@@ -249,6 +268,13 @@ export function CategoryList({ categories, showInactive = false }: CategoryListP
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>
+                    )}
+
+                    {category.isDefault && (
+                      <div className="flex items-center gap-2 text-xs text-gray-500">
+                        <span>Categoría del sistema</span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </CardContent>

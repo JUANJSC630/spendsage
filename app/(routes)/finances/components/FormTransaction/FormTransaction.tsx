@@ -25,7 +25,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { MobileDatePicker } from "@/components/ui/mobile-date-picker";
+import { DatePicker } from "@/components/ui/date-picker";
 import {
   Select,
   SelectContent,
@@ -129,17 +129,24 @@ function FromTransaction() {
                         ) : (
                           categories.map((category) => (
                             <SelectItem key={category.id} value={category.slug}>
-                              <div className="flex items-center gap-2">
-                                <div
-                                  className="w-3 h-3 rounded-full"
-                                  style={{ backgroundColor: category.color }}
-                                />
-                                <span>{category.name}</span>
-                                <span className="text-xs text-gray-500">
-                                  ({category.type === 'income' ? 'Ingreso' : 
-                                    category.type === 'expense' ? 'Gasto' : 
-                                    category.type})
-                                </span>
+                              <div className="flex items-center justify-between w-full">
+                                <div className="flex items-center gap-2">
+                                  <div
+                                    className="w-3 h-3 rounded-full"
+                                    style={{ backgroundColor: category.color }}
+                                  />
+                                  <span>{category.name}</span>
+                                  <span className="text-xs text-gray-500">
+                                    ({category.type === 'income' ? 'Ingreso' :
+                                      category.type === 'expense' ? 'Gasto' :
+                                      category.type})
+                                  </span>
+                                </div>
+                                {category.isDefault && (
+                                  <span className="text-xs rounded ml-2">
+                                    Por defecto
+                                  </span>
+                                )}
                               </div>
                             </SelectItem>
                           ))
@@ -158,9 +165,9 @@ function FromTransaction() {
                 <FormItem className="flex flex-col">
                   <FormLabel>Fecha</FormLabel>
                   <FormControl>
-                    <MobileDatePicker
-                      value={field.value}
-                      onChange={(date) => {
+                    <DatePicker
+                      date={field.value}
+                      onDateChange={(date) => {
                         if (date) {
                           const newDate = new Date(date.setHours(0, 0, 0, 0));
                           field.onChange(newDate);

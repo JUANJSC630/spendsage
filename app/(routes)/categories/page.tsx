@@ -5,6 +5,7 @@ import { CategoryDashboard } from "./components/CategoryDashboard/CategoryDashbo
 import { CategoryForm } from "./components/CategoryForm/CategoryForm";
 import { CategoryList } from "./components/CategoryList/CategoryList";
 import { CategoryNavbar } from "./components/CategoryNavbar/CategoryNavbar";
+import { getAllCategories } from "@/lib/categoryQueries";
 
 export default async function CategoriesPage() {
   const { userId } = auth();
@@ -22,19 +23,8 @@ export default async function CategoriesPage() {
       console.error('🔧 Solution: Stop the dev server (Ctrl+C) and run yarn dev again');
       hasError = true;
     } else {
-      categories = await db.category.findMany({
-        where: {
-          userId,
-        },
-        orderBy: [
-          {
-            type: "asc",
-          },
-          {
-            name: "asc",
-          },
-        ],
-      });
+      // Use deduplication function to get all categories without duplicates
+      categories = await getAllCategories(userId);
     }
   } catch (error) {
     console.error('❌ Error fetching categories:', error);

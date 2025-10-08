@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 
 import { db } from "@/lib/db";
+import { getActiveCategories } from "@/lib/categoryQueries";
 
 export const dynamic = 'force-dynamic';
 
@@ -14,20 +15,8 @@ export async function GET() {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const categories = await db.category.findMany({
-      where: {
-        userId,
-        isActive: true,
-      },
-      orderBy: [
-        {
-          type: "asc",
-        },
-        {
-          name: "asc",
-        },
-      ],
-    });
+    // Use deduplication function to get categories without duplicates
+    const categories = await getActiveCategories(userId);
 
     return NextResponse.json(categories);
   } catch (e) {

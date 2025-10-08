@@ -312,11 +312,11 @@ export function TrendsChart({ transactions, categories, className }: TrendsChart
                       <div className="space-y-1 text-sm">
                         <div className="flex justify-between">
                           <span className="text-gray-600">Ingresos:</span>
-                          <span className="font-medium text-green-700">{symbol}{new Intl.NumberFormat("de-DE").format(Math.round(avgIncome))}</span>
+                          <span className="font-medium text-green-700">{symbol}{formatAmount(Math.round(avgIncome))}</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-600">Gastos:</span>
-                          <span className="font-medium text-red-700">{symbol}{new Intl.NumberFormat("de-DE").format(Math.round(avgExpenses))}</span>
+                          <span className="font-medium text-red-700">{symbol}{formatAmount(Math.round(avgExpenses))}</span>
                         </div>
                         <div className="text-xs text-gray-500 pt-1 border-t">
                           {currentMonth.income > avgIncome ?
@@ -355,16 +355,16 @@ export function TrendsChart({ transactions, categories, className }: TrendsChart
                         <div className="space-y-1">
                           <div className="flex justify-between">
                             <span className="text-gray-600">Total ingresos:</span>
-                            <span className="font-medium text-green-700">{symbol}{new Intl.NumberFormat("de-DE").format(Math.round(totalIncome))}</span>
+                            <span className="font-medium text-green-700">{symbol}{formatAmount(Math.round(totalIncome))}</span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-gray-600">Total gastos:</span>
-                            <span className="font-medium text-red-700">{symbol}{new Intl.NumberFormat("de-DE").format(Math.round(totalExpenses))}</span>
+                            <span className="font-medium text-red-700">{symbol}{formatAmount(Math.round(totalExpenses))}</span>
                           </div>
                           <div className="flex justify-between border-t pt-1">
                             <span className="text-gray-600">Balance neto:</span>
                             <span className={`font-bold ${overallBalance >= 0 ? 'text-green-700' : 'text-red-700'}`}>
-                              {overallBalance >= 0 ? '+' : ''}{symbol}{new Intl.NumberFormat("de-DE").format(Math.round(Math.abs(overallBalance)))}
+                              {overallBalance >= 0 ? '+' : ''}{symbol}{formatAmount(Math.round(Math.abs(overallBalance)))}
                             </span>
                           </div>
                         </div>
@@ -375,19 +375,19 @@ export function TrendsChart({ transactions, categories, className }: TrendsChart
                         <div className="space-y-1">
                           <div className="flex justify-between">
                             <span className="text-gray-600">Mayor ingreso:</span>
-                            <span className="font-medium text-green-700">{symbol}{new Intl.NumberFormat("de-DE").format(Math.round(highestIncome))}</span>
+                            <span className="font-medium text-green-700">{symbol}{formatAmount(Math.round(highestIncome))}</span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-gray-600">Menor ingreso:</span>
-                            <span className="font-medium text-green-600">{symbol}{new Intl.NumberFormat("de-DE").format(Math.round(lowestIncome))}</span>
+                            <span className="font-medium text-green-600">{symbol}{formatAmount(Math.round(lowestIncome))}</span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-gray-600">Mayor gasto:</span>
-                            <span className="font-medium text-red-700">{symbol}{new Intl.NumberFormat("de-DE").format(Math.round(highestExpenses))}</span>
+                            <span className="font-medium text-red-700">{symbol}{formatAmount(Math.round(highestExpenses))}</span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-gray-600">Menor gasto:</span>
-                            <span className="font-medium text-red-600">{symbol}{new Intl.NumberFormat("de-DE").format(Math.round(lowestExpenses))}</span>
+                            <span className="font-medium text-red-600">{symbol}{formatAmount(Math.round(lowestExpenses))}</span>
                           </div>
                         </div>
                       </div>

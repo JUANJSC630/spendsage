@@ -8,9 +8,10 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useCurrencyStore } from "@/hooks/useCurrencyStore";
 import useFormatAmount from "@/hooks/useFormatAmount";
+import { getCategoryInfo } from "@/lib/categoryMapping";
 
 export default function CardTransaction(props: CardTransactionProps) {
-  const { transaction } = props;
+  const { transaction, categories } = props;
 
   const formatAmount = useFormatAmount();
   const { getSymbol } = useCurrencyStore();
@@ -32,6 +33,11 @@ export default function CardTransaction(props: CardTransactionProps) {
     }
   };
 
+  // Get category info using mapping
+  const categoryInfo = getCategoryInfo(categories, transaction.category);
+  const categoryName = categoryInfo.category?.name || transaction.category;
+  const isIncome = categoryInfo.category?.type === 'income';
+
   return (
     <div
       key={transaction.id}
@@ -43,24 +49,18 @@ export default function CardTransaction(props: CardTransactionProps) {
           {new Date(transaction.date).toLocaleDateString("es-ES")}
         </p>
         <p>
-          {
-            {
-              income: "Ingresos",
-              fixed_expenses: "Gastos Fijos",
-              variable_expenses: "Gastos Variables",
-            }[transaction.category]
-          }
+          {categoryName}
         </p>
       </div>
       <div className="col-span-2 md:col-span-1 flex flex-col gap-2 items-end">
         <p
           className={`text-lg ${
-            transaction.category === "income"
+            isIncome
               ? "text-green-500"
               : "text-red-500"
           }`}
         >
-          {transaction.category === "income" ? "+" : "-"}
+          {isIncome ? "+" : "-"}
           {symbol}
           {formatAmount(transaction.amount)}
         </p>

@@ -6,6 +6,7 @@ import "chart.js/auto";
 import { Doughnut } from "react-chartjs-2";
 import { useCurrencyStore } from "@/hooks/useCurrencyStore";
 import { Transactions } from "@prisma/client";
+import { getCategoryInfo } from "@/lib/categoryMapping";
 
 interface Category {
   id: string;
@@ -41,15 +42,18 @@ export default function CategoriesSummaryDynamic(props: CategoriesSummaryDynamic
     });
   });
 
-  // Calculate totals by category slug
+  // Calculate totals by category slug with legacy support
   const totals = transactions.reduce((acc, item) => {
-    const categorySlug = item.category;
+    const categoryInfo = getCategoryInfo(categories, item.category);
     const amount = parseFloat(item.amount);
 
-    if (!acc[categorySlug]) {
-      acc[categorySlug] = 0;
+    if (!categoryInfo.category) return acc;
+
+    const resolvedSlug = categoryInfo.resolvedSlug;
+    if (!acc[resolvedSlug]) {
+      acc[resolvedSlug] = 0;
     }
-    acc[categorySlug] += amount;
+    acc[resolvedSlug] += amount;
     return acc;
   }, {} as Record<string, number>);
 

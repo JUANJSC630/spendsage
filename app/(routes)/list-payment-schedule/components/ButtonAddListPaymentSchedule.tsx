@@ -27,6 +27,9 @@ export function ButtonAddListPaymentSchedule() {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Agregar Lista</DialogTitle>
+          <DialogDescription>
+            Crea una nueva lista de pagos para organizar tus gastos programados.
+          </DialogDescription>
         </DialogHeader>
         <FormListPaymentSchedule setOpenDialog={setIsOpenModalCreate} />
       </DialogContent>

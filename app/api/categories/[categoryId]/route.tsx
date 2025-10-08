@@ -21,6 +21,16 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
+    // Check if it's a default category (cannot be modified)
+    const existingCategory = await db.category.findUnique({
+      where: { id: categoryId },
+      select: { isDefault: true, userId: true }
+    });
+
+    if (existingCategory?.isDefault) {
+      return new NextResponse("Cannot modify default categories", { status: 403 });
+    }
+
     // Generate new slug if name is being updated
     const updateData: any = { ...data };
     if (data.name) {
@@ -62,6 +72,16 @@ export async function DELETE(
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    // Check if it's a default category (cannot be deleted)
+    const existingCategory = await db.category.findUnique({
+      where: { id: categoryId },
+      select: { isDefault: true, userId: true, slug: true }
+    });
+
+    if (existingCategory?.isDefault) {
+      return new NextResponse("Cannot delete default categories", { status: 403 });
     }
 
     // Check if category is being used in transactions or budgets

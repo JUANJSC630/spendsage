@@ -93,7 +93,7 @@ model Budget {
 
 model Category {
   id          String   @id @default(uuid())
-  userId      String
+  userId      String?  // nullable for default categories
   name        String
   slug        String
   description String?
@@ -101,6 +101,7 @@ model Category {
   icon        String   @default("Folder")
   type        String   @default("expense")
   isActive    Boolean  @default(true)
+  isDefault   Boolean  @default(false) // true for global default categories
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -108,4 +109,6 @@ model Category {
   @@index([userId])
   @@index([userId, slug])
   @@index([userId, type])
+  @@index([isDefault])
+  @@index([slug, isDefault])
 }

@@ -19,6 +19,7 @@ import CategoriesSummaryDynamic from "../CategoriesSummaryDynamic";
 import { AdvancedMetrics } from "../AdvancedMetrics";
 import { TrendsChart } from "../TrendsChart";
 import { TitleText } from "../TitleText";
+import { useColorThemeStore } from "@/hooks/useColorThemeStore";
 
 interface Category {
   id: string;
@@ -56,7 +57,7 @@ export function DashboardClient({ transactions, categories }: DashboardClientPro
   const [selectedMonth, setSelectedMonth] = useState(currentMonth.toString());
   const [selectedYear, setSelectedYear] = useState(currentYear.toString());
   const [filteredTransactions, setFilteredTransactions] = useState<Transactions[]>([]);
-
+  const { colorTheme } = useColorThemeStore();
   // Generate years array (current year and previous 5 years)
   const years = Array.from({ length: 6 }, (_, i) => {
     const year = currentYear - i;
@@ -134,7 +135,7 @@ export function DashboardClient({ transactions, categories }: DashboardClientPro
 
       {/* Period indicator */}
       <div className="w-full">
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-700 text-sm font-medium rounded-full">
+        <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-sm font-medium rounded-full" style={{ color: colorTheme }}>
           <CalendarIcon className="h-4 w-4" />
           {selectedMonthName} {selectedYear} • {filteredTransactions.length} Movimientos
         </div>
@@ -148,39 +149,44 @@ export function DashboardClient({ transactions, categories }: DashboardClientPro
         selectedYear={parseInt(selectedYear)}
       />
 
-      {/* Main Financial Summary */}
-      <FinancialSummaryDynamic
-        data={filteredTransactions}
-        categories={categories}
-        className="w-full grid grid-cols-1 md:grid-cols-3 gap-4"
-      />
+      {/* Show other components only if there are transactions */}
+      {filteredTransactions.length > 0 && (
+        <>
+          {/* Main Financial Summary */}
+          <FinancialSummaryDynamic
+            data={filteredTransactions}
+            categories={categories}
+            className="w-full grid grid-cols-1 md:grid-cols-3 gap-4"
+          />
 
-      {/* Charts Section */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        {/* Categories Summary */}
-        <div className="xl:col-span-1">
-          <Card className="h-full">
-            <CardHeader>
-              <CardTitle>Distribución por Categorías</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CategoriesSummaryDynamic transactions={filteredTransactions} categories={categories} />
-            </CardContent>
-          </Card>
-        </div>
+          {/* Charts Section */}
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+            {/* Categories Summary */}
+            <div className="xl:col-span-1">
+              <Card className="h-full">
+                <CardHeader>
+                  <CardTitle>Distribución por Categorías</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CategoriesSummaryDynamic transactions={filteredTransactions} categories={categories} />
+                </CardContent>
+              </Card>
+            </div>
 
-        {/* Monthly Chart */}
-        <div className="xl:col-span-2">
-          <ExpenseIncomeChart transactions={filteredTransactions} categories={categories} className="h-full" />
-        </div>
-      </div>
+            {/* Monthly Chart */}
+            <div className="xl:col-span-2">
+              <ExpenseIncomeChart transactions={filteredTransactions} categories={categories} className="h-full" />
+            </div>
+          </div>
 
-      {/* Trends Section */}
-      <TrendsChart
-        transactions={transactions}
-        categories={categories}
-        className="w-full"
-      />
+          {/* Trends Section */}
+          <TrendsChart
+            transactions={transactions}
+            categories={categories}
+            className="w-full"
+          />
+        </>
+      )}
     </div>
   );
 }

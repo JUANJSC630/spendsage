@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 
 import { Navbar } from "./components/Navbar/Navbar";
 import { FinancesPageClient } from "./components/FinancesPageClient";
+import { getActiveCategories } from "@/lib/categoryQueries";
 
 export default async function FinancesPage() {
   const { userId } = auth();
@@ -20,9 +21,12 @@ export default async function FinancesPage() {
     },
   });
 
+  // Load categories for mapping
+  const categories = await getActiveCategories(userId);
+
   return (
     <div className="flex flex-col w-full h-full">
-      <FinancesPageClient transactions={data} />
+      <FinancesPageClient transactions={data} categories={categories} />
     </div>
   );
 }

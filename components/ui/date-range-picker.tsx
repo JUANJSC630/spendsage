@@ -1,49 +1,42 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import { CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
-import { DateRange } from "react-day-picker";
+import * as React from "react"
+import { CalendarIcon } from "lucide-react"
+import { DateRange } from "react-day-picker"
+import { format } from "date-fns"
 
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@/components/ui/popover"
 
 interface DateRangePickerProps {
-  value?: DateRange;
-  onChange?: (date: DateRange | undefined) => void;
-  placeholder?: string;
-  className?: string;
+  date?: DateRange
+  onDateChange?: (date: DateRange | undefined) => void
+  placeholder?: string
+  className?: string
+  disabled?: boolean
 }
 
 export function DateRangePicker({
-  value,
-  onChange,
+  date,
+  onDateChange,
   placeholder = "Selecciona un rango de fechas",
   className,
+  disabled = false,
 }: DateRangePickerProps) {
-  const [date, setDate] = React.useState<DateRange | undefined>(value);
   const [isClient, setIsClient] = React.useState(false);
 
   React.useEffect(() => {
     setIsClient(true);
   }, []);
 
-  React.useEffect(() => {
-    setDate(value);
-  }, [value]);
-
-  const handleSelect = (selectedDate: DateRange | undefined) => {
-    setDate(selectedDate);
-    onChange?.(selectedDate);
-  };
-
   const formatDateSafe = (date: Date) => {
+    // Use simple format to avoid locale issues during hydration
     return format(date, "dd/MM/yyyy");
   };
 
@@ -68,6 +61,7 @@ export function DateRangePicker({
               "w-full justify-start text-left font-normal",
               !date?.from && "text-muted-foreground"
             )}
+            disabled={disabled}
             suppressHydrationWarning
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
@@ -80,12 +74,12 @@ export function DateRangePicker({
           <Calendar
             mode="range"
             selected={date}
-            onSelect={handleSelect}
+            onSelect={onDateChange}
             numberOfMonths={2}
             initialFocus
           />
         </PopoverContent>
       </Popover>
     </div>
-  );
+  )
 }

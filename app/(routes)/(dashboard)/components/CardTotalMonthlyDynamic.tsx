@@ -4,6 +4,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useCurrencyStore } from "@/hooks/useCurrencyStore";
 import useFormatAmount from "@/hooks/useFormatAmount";
 import { Transactions } from "@prisma/client";
+import { getCategoryInfo } from "@/lib/categoryMapping";
 
 interface Category {
   id: string;
@@ -49,21 +50,21 @@ export default function CardTotalMonthlyDynamic(props: CardTotalMonthlyDynamicPr
   }, [categories]);
 
   useEffect(() => {
-    // Calculate the total based on category types
+    // Calculate the total based on category types with legacy support
     const total = transactions.reduce((acc, item) => {
       const amount = parseFloat(item.amount);
-      const categoryInfo = categoryMap.get(item.category);
+      const categoryInfo = getCategoryInfo(categories, item.category);
 
-      if (!categoryInfo) return acc;
+      if (!categoryInfo.category) return acc;
 
-      if (props.type === "income" && categoryInfo.type === "income") {
+      if (props.type === "income" && categoryInfo.category.type === "income") {
         acc += amount;
-      } else if (props.type === "expenses" && categoryInfo.type === "expense") {
+      } else if (props.type === "expenses" && categoryInfo.category.type === "expense") {
         acc += amount;
       } else if (props.type === "balance") {
-        if (categoryInfo.type === "income") {
+        if (categoryInfo.category.type === "income") {
           acc += amount;
-        } else if (categoryInfo.type === "expense") {
+        } else if (categoryInfo.category.type === "expense") {
           acc -= amount;
         }
       }
@@ -72,7 +73,7 @@ export default function CardTotalMonthlyDynamic(props: CardTotalMonthlyDynamicPr
     }, 0);
 
     setMonthlyTotal(total);
-  }, [transactions, props.type, categoryMap]);
+  }, [transactions, props.type, categories]);
 
   return (
     <div
