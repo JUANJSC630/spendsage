@@ -80,14 +80,20 @@ function BudgetForm() {
       month: currentMonth,
       year: currentYear,
     },
+    mode: "onChange",
   });
 
   const onSubmit = async (values: z.infer<typeof budgetFormSchema>) => {
     try {
+      const numericAmount = parseInt(values.amount);
+      if (!numericAmount || numericAmount <= 0) {
+        toast.error("El monto debe ser mayor que 0");
+        return;
+      }
+      
       await axios.post(`/api/budgets`, values);
       toast.success("¡Presupuesto creado! 🎯");
       
-      // Redirect to budgets page after successful creation
       setTimeout(() => {
         router.push("/budgets");
       }, 1000);
@@ -103,9 +109,17 @@ function BudgetForm() {
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/\D/g, "");
     form.setValue("amount", value);
+    form.trigger("amount");
+    
+    if (value === "0") {
+      form.setError("amount", { 
+        type: "manual", 
+        message: "El monto debe ser mayor que 0" 
+      });
+    }
   };
 
-  const { isValid } = form.formState;
+  const { isValid, errors } = form.formState;
 
   const months = [
     { value: 1, label: "Enero" },
@@ -137,7 +151,14 @@ function BudgetForm() {
                 <FormItem className="space-y-1.5">
                   <FormLabel>Categoría</FormLabel>
                   <FormControl>
-                    <Select onValueChange={field.onChange} value={field.value} disabled={loadingCategories}>
+                    <Select 
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                        form.trigger("category");
+                      }} 
+                      value={field.value} 
+                      disabled={loadingCategories}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder={loadingCategories ? "Cargando categorías..." : "Selecciona una categoría"} />
                       </SelectTrigger>
