@@ -52,13 +52,15 @@ export const MobileDatePicker = ({
       selected={date}
       onChange={onDateChange}
       customInput={<CustomInput />}
-      dateFormat="PPP"
+      dateFormat="dd/MM/yyyy"
       disabled={disabled}
-      withPortal // This helps with mobile support
+      withPortal={false} // Disable portal for better mobile interaction
       showYearDropdown
       showMonthDropdown
       dropdownMode="select"
-      className="w-full"
+      fixedHeight
+      calendarClassName="shadow-lg border rounded-lg"
+      wrapperClassName="w-full"
     />
   );
 };
@@ -95,7 +97,9 @@ export const MobileDateRangePicker = ({
 
   // Display formatted date range or placeholder
   const displayValue = startDate && endDate
-    ? `${format(startDate, "PPP")} - ${format(endDate, "PPP")}`
+    ? `${format(startDate, "dd/MM/yyyy")} - ${format(endDate, "dd/MM/yyyy")}`
+    : startDate
+    ? format(startDate, "dd/MM/yyyy")
     : placeholder;
 
   // Custom input component for range picker
@@ -118,7 +122,7 @@ export const MobileDateRangePicker = ({
       </Button>
     )
   );
-  
+
   CustomInput.displayName = "CustomDateRangeInput";
 
   return (
@@ -129,12 +133,16 @@ export const MobileDateRangePicker = ({
       endDate={endDate}
       selectsRange
       customInput={<CustomInput />}
-      dateFormat="PPP"
+      dateFormat="dd/MM/yyyy"
       disabled={disabled}
-      withPortal // This helps with mobile support
+      withPortal={false} // Disable portal for better mobile interaction
       showYearDropdown
       showMonthDropdown
       dropdownMode="select"
+      monthsShown={1}
+      fixedHeight
+      calendarClassName="shadow-lg border rounded-lg"
+      wrapperClassName="w-full"
     />
   );
 };
