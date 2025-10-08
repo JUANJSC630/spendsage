@@ -20,7 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { formSchema } from "./FormPaymentSchedule.form";
 import { FormPaymentScheduleProps } from "./FormPaymentSchedule.types";
-import { DateRangePicker } from "@/components/ui/date-range-picker";
+import { AdaptiveDateRangePicker } from "@/components/ui/adaptive-date-range-picker";
 
 function FormPaymentSchedule(props: FormPaymentScheduleProps) {
   const { setOpenDialog } = props;
@@ -64,7 +64,7 @@ function FormPaymentSchedule(props: FormPaymentScheduleProps) {
                 <FormItem className="flex flex-col">
                   <FormLabel>Rango de Fechas</FormLabel>
                   <FormControl>
-                    <DateRangePicker
+                    <AdaptiveDateRangePicker
                       date={field.value}
                       onDateChange={field.onChange}
                       placeholder="Selecciona rango de fechas"

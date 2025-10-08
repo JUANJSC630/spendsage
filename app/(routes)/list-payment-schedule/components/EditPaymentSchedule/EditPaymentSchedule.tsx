@@ -27,7 +27,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { DateRangePicker } from "../FormPaymentSchedule/DateRangePicker";
+import { AdaptiveDateRangePicker } from "@/components/ui/adaptive-date-range-picker";
 import { useUpdatePaymentSchedule } from "@/hooks/use-payment-schedules";
 
 const editPaymentScheduleFormSchema = z.object({
@@ -125,9 +125,9 @@ export function EditPaymentSchedule({ paymentSchedule }: EditPaymentScheduleProp
                 <FormItem className="flex flex-col">
                   <FormLabel>Rango de Fechas</FormLabel>
                   <FormControl>
-                    <DateRangePicker
-                      value={field.value}
-                      onChange={field.onChange}
+                    <AdaptiveDateRangePicker
+                      date={field.value}
+                      onDateChange={field.onChange}
                       placeholder="Selecciona rango de fechas"
                     />
                   </FormControl>

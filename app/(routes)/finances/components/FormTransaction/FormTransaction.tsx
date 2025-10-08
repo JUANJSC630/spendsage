@@ -25,7 +25,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { DatePicker } from "@/components/ui/date-picker";
+import { AdaptiveDatePicker } from "@/components/ui/adaptive-date-picker";
 import {
   Select,
   SelectContent,
@@ -165,7 +165,7 @@ function FromTransaction() {
                 <FormItem className="flex flex-col">
                   <FormLabel>Fecha</FormLabel>
                   <FormControl>
-                    <DatePicker
+                    <AdaptiveDatePicker
                       date={field.value}
                       onDateChange={(date) => {
                         if (date) {

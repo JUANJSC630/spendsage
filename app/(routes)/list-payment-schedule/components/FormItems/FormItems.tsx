@@ -21,7 +21,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { DatePicker } from "@/components/ui/date-picker";
+import { AdaptiveDatePicker } from "@/components/ui/adaptive-date-picker";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -145,7 +145,7 @@ export function FormItems(props: FormItemsProps) {
             <FormItem className="flex flex-col md:mt-2.5">
               <FormLabel>Fecha</FormLabel>
               <FormControl>
-                <DatePicker
+                <AdaptiveDatePicker
                   date={field.value}
                   onDateChange={field.onChange}
                   placeholder="Selecciona una fecha"

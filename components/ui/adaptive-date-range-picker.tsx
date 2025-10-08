@@ -3,13 +3,21 @@
 import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { MobileDateRangePicker } from "@/components/ui/react-datepicker";
 import useIsMobile from "@/hooks/useIsMobile";
+import { DateRange } from "react-day-picker";
 
+// Props para compatibilidad con los dos formatos diferentes
 interface AdaptiveDateRangePickerProps {
-  dateRange: {
+  // Formato nuevo (Mobile)
+  dateRange?: {
     from: Date | null;
     to: Date | null;
   };
-  onDateRangeChange: (range: { from: Date | null; to: Date | null }) => void;
+  onDateRangeChange?: (range: { from: Date | null; to: Date | null }) => void;
+
+  // Formato original (Shadcn DateRangePicker)
+  date?: DateRange;
+  onDateChange?: (date: DateRange | undefined) => void;
+
   placeholder?: string;
   className?: string;
   disabled?: boolean;
@@ -17,19 +25,37 @@ interface AdaptiveDateRangePickerProps {
 
 export function AdaptiveDateRangePicker(props: AdaptiveDateRangePickerProps) {
   const isMobile = useIsMobile();
-  
+
   if (isMobile) {
-    return <MobileDateRangePicker {...props} />;
+    // Para móvil, usar formato de dateRange
+    const mobileProps = {
+      dateRange: props.dateRange || { from: props.date?.from || null, to: props.date?.to || null },
+      onDateRangeChange: props.onDateRangeChange || ((range: { from: Date | null; to: Date | null }) => {
+        props.onDateChange?.({
+          from: range.from || undefined,
+          to: range.to || undefined
+        });
+      }),
+      placeholder: props.placeholder,
+      className: props.className,
+      disabled: props.disabled
+    };
+    return <MobileDateRangePicker {...mobileProps} />;
   }
-  
-  // Adaptar el formato para el DateRangePicker original
-  const adaptedProps = {
-    date: props.dateRange,
-    onDateChange: props.onDateRangeChange,
+
+  // Para desktop, usar formato original de Shadcn
+  const desktopProps = {
+    date: props.date || { from: props.dateRange?.from || undefined, to: props.dateRange?.to || undefined },
+    onDateChange: props.onDateChange || ((date: DateRange | undefined) => {
+      props.onDateRangeChange?.({
+        from: date?.from || null,
+        to: date?.to || null
+      });
+    }),
     placeholder: props.placeholder,
     className: props.className,
     disabled: props.disabled
   };
-  
-  return <DateRangePicker {...adaptedProps} />;
+
+  return <DateRangePicker {...desktopProps} />;
 }
