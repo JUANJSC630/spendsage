@@ -65,7 +65,7 @@ export function PaymentScheduleDetailPage({ listPaymentId }: PaymentScheduleDeta
           ))
         ) : (
           <div className="col-span-full py-8 text-center text-slate-400 text-sm">
-            No hay sub-listas de pagos. Usa el botón "Agregar" para crear una.
+            No hay sub-listas de pagos. Usa el botón &quot;Agregar&quot; para crear una.
           </div>
         )}
       </div>
