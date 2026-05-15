@@ -11,7 +11,7 @@ import { useUpdatePaymentItem } from "@/hooks/use-payment-schedules";
 import { cn } from "@/lib/utils";
 
 export default function PaymentScheduleItem(props: PaymentScheduleItemProps) {
-  const { paymentItem, paymentSchedule } = props;
+  const { paymentSchedule, paymentItem } = props;
   const { getSymbol } = useCurrencyStore();
   const [checked, setChecked] = useState(paymentItem.check);
   const [symbol, setSymbol] = useState<string>("");
@@ -70,7 +70,7 @@ export default function PaymentScheduleItem(props: PaymentScheduleItemProps) {
               checked ? "text-slate-500" : "text-slate-900"
             )}>
               <span className="mr-0.5 text-slate-400 font-normal">{symbol}</span>
-              {new Intl.NumberFormat("es-ES", {
+              {new Intl.NumberFormat("de-DE", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               }).format(parseFloat(paymentItem.amount))}
