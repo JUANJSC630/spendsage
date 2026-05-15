@@ -28,17 +28,26 @@ export default function ListPaymentItems(props: ListPaymentItemsProps) {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-col gap-4 overscroll-y-contain overflow-auto max-h-[350px]">
-        {items.map((paymentItem) => (
-          <PaymentScheduleItem
-            paymentItem={paymentItem}
-            paymentSchedule={paymentSchedule}
-            key={paymentItem.id}
-          />
-        ))}
+    <div className="space-y-4 flex flex-col flex-1">
+      {items.length === 0 ? (
+        <div className="flex-1 flex flex-col items-center justify-center py-8 text-center bg-slate-50/50 rounded-lg border border-dashed border-slate-200">
+          <p className="text-slate-400 text-sm">No hay pagos registrados</p>
+        </div>
+      ) : (
+        <div className="flex flex-col overscroll-y-contain overflow-auto max-h-[350px] pr-1">
+          {items.map((paymentItem) => (
+            <PaymentScheduleItem
+              paymentItem={paymentItem}
+              paymentSchedule={paymentSchedule}
+              key={paymentItem.id}
+            />
+          ))}
+        </div>
+      )}
+      
+      <div className="mt-auto pt-2">
+        <PaymentTotals items={items} />
       </div>
-      <PaymentTotals items={items} />
     </div>
   );
 }

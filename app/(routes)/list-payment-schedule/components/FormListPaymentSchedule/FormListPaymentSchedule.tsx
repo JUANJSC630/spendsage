@@ -22,9 +22,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { formSchema } from "./FormListPaymentSchedule.form";
 import { FormListPaymentScheduleProps } from "./FormListPaymentSchedule.types";
 
+import { useCreateListPaymentSchedule } from "@/hooks/use-payment-schedules";
+
 function FormListPaymentSchedule(props: FormListPaymentScheduleProps) {
   const { setOpenDialog } = props;
   const router = useRouter();
+  const createMutation = useCreateListPaymentSchedule();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -35,9 +38,8 @@ function FormListPaymentSchedule(props: FormListPaymentScheduleProps) {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.post(`/api/list-payment-schedule`, values);
-      toast.success("¡Lista de lista de pagos agregada! 🎉");
-      router.refresh();
+      await createMutation.mutateAsync(values);
+      toast.success("¡Lista de pagos agregada! 🎉");
       setOpenDialog(false);
     } catch (error) {
       toast.error("Ocurrió un error. Por favor intenta de nuevo. 😢");

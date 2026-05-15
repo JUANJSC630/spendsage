@@ -21,10 +21,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { formSchema } from "./FormPaymentSchedule.form";
 import { FormPaymentScheduleProps } from "./FormPaymentSchedule.types";
 import { AdaptiveDateRangePicker } from "@/components/ui/adaptive-date-range-picker";
+import { useCreatePaymentSchedule } from "@/hooks/use-payment-schedules";
 
 function FormPaymentSchedule(props: FormPaymentScheduleProps) {
   const { setOpenDialog } = props;
   const router = useRouter();
+
+  const createMutation = useCreatePaymentSchedule();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -35,15 +38,13 @@ function FormPaymentSchedule(props: FormPaymentScheduleProps) {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const payload = {
+      await createMutation.mutateAsync({
         fromDate: values.dateRange.from,
         toDate: values.dateRange.to,
         name: values.name,
         listPaymentScheduleId: values.listPaymentScheduleId,
-      };
-      await axios.post(`/api/payment-schedule`, payload);
-      toast.success("¡Lista de pagos agregado! 🎉");
-      router.refresh();
+      });
+      toast.success("¡Lista de pagos agregada! 🎉");
       setOpenDialog(false);
     } catch (error) {
       toast.error("Ocurrió un error. Por favor intenta de nuevo. 😢");
