@@ -43,24 +43,28 @@ ListPaymentScheduleClient.Content = function Content({ data }: ListPaymentSchedu
   const { filteredData, selectedYear } = useYearContext();
 
   return (
-    <div className="flex-wrap flex flex-row justify-center gap-8">
-      {filteredData.map((listPaymentSchedule) => (
-        <Link
-          key={listPaymentSchedule.id}
-          href={`/list-payment-schedule/${listPaymentSchedule.id}`}
-        >
-          <CardList listPaymentScheduleName={listPaymentSchedule.name} />
-        </Link>
-      ))}
+    <div className="w-full max-w-5xl mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        {filteredData.map((listPaymentSchedule) => (
+          <Link
+            key={listPaymentSchedule.id}
+            href={`/list-payment-schedule/${listPaymentSchedule.id}`}
+            className="block w-full"
+          >
+            <CardList listPaymentScheduleName={listPaymentSchedule.name} />
+          </Link>
+        ))}
+      </div>
 
       {filteredData.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-4 p-8">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-400">
+        <div className="flex flex-col items-center justify-center gap-4 py-16 px-8 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-300 mt-8">
+          <h1 className="text-2xl font-bold text-slate-500">
             {selectedYear 
-              ? `No payment schedules found for ${selectedYear}...`
-              : "No payment schedules yet...."
+              ? `No se encontraron listas para ${selectedYear}`
+              : "Aún no tienes listas de pagos"
             }
           </h1>
+          <p className="text-slate-400">Comienza creando tu primera lista de pagos arriba.</p>
         </div>
       ) : null}
     </div>

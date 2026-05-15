@@ -8,6 +8,7 @@ import { PaymentScheduleItemProps } from "./PaymentScheduleItem.types";
 import { useCurrencyStore } from "@/hooks/useCurrencyStore";
 import EditPaymentItem from "../EditPaymentItem";
 import { useUpdatePaymentItem } from "@/hooks/use-payment-schedules";
+import { cn } from "@/lib/utils";
 
 export default function PaymentScheduleItem(props: PaymentScheduleItemProps) {
   const { paymentItem, paymentSchedule } = props;
@@ -45,28 +46,46 @@ export default function PaymentScheduleItem(props: PaymentScheduleItemProps) {
     }
   };
   return (
-    <div className="flex justify-between items-center bg-slate-50 p-2">
-      <div className="flex items-center space-x-4">
+    <div 
+      className={cn(
+        "group flex justify-between items-center py-2 px-1 border-b border-slate-100 last:border-0 transition-colors",
+        checked ? "opacity-60" : "hover:bg-slate-50/50"
+      )}
+    >
+      <div className="flex items-center space-x-3 flex-1 overflow-hidden">
         <CheckBoxUpdatePaymentItem
           checked={checked}
           onChange={handleCheckboxChange}
         />
-        <div className="flex flex-col">
-          <div className="text-gray-500">{paymentItem.description}</div>
-          <div className="font-semibold">
-            {symbol}
-
-            {new Intl.NumberFormat("es-ES", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            }).format(parseFloat(paymentItem.amount))}
+        <div className="flex flex-col min-w-0 flex-1">
+          <div className="flex items-center justify-between gap-2">
+            <span className={cn(
+              "text-sm font-medium text-slate-800 truncate transition-all",
+              checked && "text-slate-500 line-through"
+            )}>
+              {paymentItem.description}
+            </span>
+            <span className={cn(
+              "text-sm font-semibold flex items-center shrink-0",
+              checked ? "text-slate-500" : "text-slate-900"
+            )}>
+              <span className="mr-0.5 text-slate-400 font-normal">{symbol}</span>
+              {new Intl.NumberFormat("es-ES", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              }).format(parseFloat(paymentItem.amount))}
+            </span>
           </div>
-          <div className="text-gray-500 text-xs">
-            {new Date(paymentItem.date).toLocaleDateString("es-ES")}
+          <div className="text-slate-400 text-[11px] mt-0.5">
+            {new Date(paymentItem.date).toLocaleDateString("es-ES", {
+              day: 'numeric',
+              month: 'short',
+              year: 'numeric'
+            })}
           </div>
         </div>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ml-2">
         <EditPaymentItem
           paymentItem={paymentItem}
           paymentSchedule={paymentSchedule}
