@@ -20,9 +20,10 @@ export async function GET(
         paymentScheduleId: params.paymentScheduleId,
         userId,
       },
-      orderBy: {
-        check: "asc",
-      },
+      orderBy: [
+        { check: "asc" },
+        { date: "asc" },
+      ],
     });
 
     return NextResponse.json(paymentItems);

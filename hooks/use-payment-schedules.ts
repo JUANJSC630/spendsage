@@ -228,7 +228,56 @@ export function useUpdatePaymentItem() {
 
   return useMutation({
     mutationFn: api.updatePaymentItem,
-    onSuccess: (_, variables) => {
+    onMutate: async (updatedItem) => {
+      // Cancel any outgoing refetches so they don't overwrite our optimistic update
+      await queryClient.cancelQueries({
+        queryKey: paymentScheduleKeys.items(updatedItem.paymentScheduleId)
+      });
+
+      // Snapshot the previous value
+      const previousItems = queryClient.getQueryData<PaymentItem[]>(
+        paymentScheduleKeys.items(updatedItem.paymentScheduleId)
+      );
+
+      // Optimistically update to the new value
+      if (previousItems) {
+        queryClient.setQueryData<PaymentItem[]>(
+          paymentScheduleKeys.items(updatedItem.paymentScheduleId),
+          (old) => {
+            if (!old) return old;
+            
+            // Map to update the item
+            const newItems = old.map((item) =>
+              item.id === updatedItem.id ? { ...item, ...updatedItem } : item
+            );
+            
+            // Re-sort the array exactly like the server does: first by 'check' (false first), then by 'date'
+            return newItems.sort((a, b) => {
+              // 1. Sort by check
+              if (a.check !== b.check) {
+                return a.check ? 1 : -1;
+              }
+              // 2. Sort by date
+              return new Date(a.date).getTime() - new Date(b.date).getTime();
+            });
+          }
+        );
+      }
+
+      // Return a context object with the snapshotted value
+      return { previousItems, paymentScheduleId: updatedItem.paymentScheduleId };
+    },
+    // If the mutation fails, use the context returned from onMutate to roll back
+    onError: (err, variables, context) => {
+      if (context?.previousItems) {
+        queryClient.setQueryData(
+          paymentScheduleKeys.items(context.paymentScheduleId),
+          context.previousItems
+        );
+      }
+    },
+    // Always refetch after error or success to ensure data is in sync
+    onSettled: (_, __, variables) => {
       queryClient.invalidateQueries({
         queryKey: paymentScheduleKeys.items(variables.paymentScheduleId)
       });
