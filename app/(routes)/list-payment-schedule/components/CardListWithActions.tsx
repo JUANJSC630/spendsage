@@ -25,8 +25,8 @@ export function CardListWithActions({ listPaymentSchedule }: CardListWithActions
 
   return (
     <>
-      <div className="relative group">
-        <Link href={`/list-payment-schedule/${listPaymentSchedule.id}`}>
+      <div className="relative group w-full">
+        <Link href={`/list-payment-schedule/${listPaymentSchedule.id}`} className="block w-full">
           <CardList listPaymentScheduleName={listPaymentSchedule.name} />
         </Link>
 

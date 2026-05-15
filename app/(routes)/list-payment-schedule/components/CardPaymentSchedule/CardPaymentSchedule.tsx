@@ -9,7 +9,7 @@ export function CardPaymentSchedule(props: CardPaymentScheduleProps) {
   return (
     <div className="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col h-full">
       {/* Minimal Card Header */}
-      <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between gap-4">
+      <div className="px-4 py-3 border-b border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
         <div>
           <h2 className="text-base font-semibold text-slate-800">{paymentSchedule.name}</h2>
           <div className="text-slate-400 text-xs mt-0.5">
@@ -17,7 +17,7 @@ export function CardPaymentSchedule(props: CardPaymentScheduleProps) {
             {new Date(paymentSchedule.toDate).toLocaleDateString("es-ES")}
           </div>
         </div>
-        <div className="flex items-center gap-1 shrink-0">
+        <div className="flex items-center gap-1 shrink-0 self-end sm:self-auto">
           <EditPaymentSchedule paymentSchedule={paymentSchedule} />
           <AddItem paymentSchedule={paymentSchedule} />
           <ButtonDeletePaymentSchedule paymentSchedule={paymentSchedule} />
@@ -25,7 +25,7 @@ export function CardPaymentSchedule(props: CardPaymentScheduleProps) {
       </div>
       
       {/* Card Body */}
-      <div className="p-4 flex-1 flex flex-col">
+      <div className="p-3 sm:p-4 flex-1 flex flex-col">
         <ListPaymentItems paymentSchedule={paymentSchedule} />
       </div>
     </div>

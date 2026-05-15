@@ -12,22 +12,25 @@ export function Content({ data }: ContentProps) {
   const { filteredData, selectedYear } = useYearContext();
 
   return (
-    <div className="flex-wrap flex flex-row justify-center gap-8">
-      {filteredData.map((listPaymentSchedule) => (
-        <CardListWithActions
-          key={listPaymentSchedule.id}
-          listPaymentSchedule={listPaymentSchedule}
-        />
-      ))}
+    <div className="w-full max-w-5xl mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        {filteredData.map((listPaymentSchedule) => (
+          <CardListWithActions
+            key={listPaymentSchedule.id}
+            listPaymentSchedule={listPaymentSchedule}
+          />
+        ))}
+      </div>
 
       {filteredData.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-4 p-8">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-400">
+        <div className="flex flex-col items-center justify-center gap-4 py-16 px-8 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-300 mt-8">
+          <h1 className="text-2xl font-bold text-slate-500">
             {selectedYear
-              ? `No se encontraron listas de pagos para ${selectedYear}...`
-              : "Aún no hay listas de pagos..."
+              ? `No se encontraron listas para ${selectedYear}`
+              : "Aún no tienes listas de pagos"
             }
           </h1>
+          <p className="text-slate-400">Comienza creando tu primera lista de pagos arriba.</p>
         </div>
       ) : null}
     </div>
