@@ -1,12 +1,12 @@
 "use client";
 
 import { createContext, useContext, useState, useMemo, ReactNode } from "react";
-import { ListPaymentSchedule } from "@prisma/client";
+import { ListPaymentScheduleWithStats } from "@/hooks/use-payment-schedules";
 
 interface YearContextType {
   selectedYear: number | null;
   setSelectedYear: (year: number | null) => void;
-  filteredData: ListPaymentSchedule[];
+  filteredData: ListPaymentScheduleWithStats[];
 }
 
 const YearContext = createContext<YearContextType | null>(null);
@@ -21,7 +21,7 @@ export function useYearContext() {
 
 interface YearProviderProps {
   children: ReactNode;
-  data: ListPaymentSchedule[];
+  data: ListPaymentScheduleWithStats[];
 }
 
 export function YearProvider({ children, data }: YearProviderProps) {

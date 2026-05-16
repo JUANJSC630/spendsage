@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient, useQueries } from '@tanstack/react-query';
 import { useAuth } from '@clerk/nextjs';
 import { ListPaymentSchedule, PaymentSchedule, PaymentItem } from '@prisma/client';
 
@@ -8,6 +8,18 @@ type PaymentScheduleWithItems = PaymentSchedule & {
 
 type ListPaymentScheduleWithSchedules = ListPaymentSchedule & {
   paymentSchedules: PaymentScheduleWithItems[];
+};
+
+export type ListPaymentScheduleStats = {
+  totalItems: number;
+  paidItems: number;
+  totalAmount: number;
+  paidAmount: number;
+  progress: number;
+};
+
+export type ListPaymentScheduleWithStats = ListPaymentSchedule & {
+  _stats: ListPaymentScheduleStats;
 };
 
 // Query Keys
@@ -22,7 +34,7 @@ export const paymentScheduleKeys = {
 
 // API Functions
 const api = {
-  getListPaymentSchedules: async (): Promise<ListPaymentSchedule[]> => {
+  getListPaymentSchedules: async (): Promise<ListPaymentScheduleWithStats[]> => {
     const response = await fetch('/api/list-payment-schedule');
     if (!response.ok) throw new Error('Failed to fetch payment schedule lists');
     return response.json();
@@ -158,7 +170,7 @@ const api = {
 export function useListPaymentSchedules() {
   const { isSignedIn } = useAuth();
 
-  return useQuery({
+  return useQuery<ListPaymentScheduleWithStats[]>({
     queryKey: paymentScheduleKeys.lists(),
     queryFn: api.getListPaymentSchedules,
     enabled: isSignedIn,
@@ -173,6 +185,17 @@ export function useListPaymentSchedule(id: string) {
     queryFn: () => api.getListPaymentScheduleById(id),
     enabled: isSignedIn && !!id,
   });
+}
+
+export function usePrefetchListPaymentSchedule() {
+  const queryClient = useQueryClient();
+  
+  return (id: string) => {
+    queryClient.prefetchQuery({
+      queryKey: paymentScheduleKeys.list(id),
+      queryFn: () => api.getListPaymentScheduleById(id),
+    });
+  };
 }
 
 export function usePaymentItems(scheduleId: string) {
@@ -343,6 +366,34 @@ export function useUpdateListPaymentSchedule() {
       queryClient.invalidateQueries({ queryKey: paymentScheduleKeys.list(data.id) });
     },
   });
+}
+
+export function useGlobalPaymentSummary(scheduleIds: string[]) {
+  const { isSignedIn } = useAuth();
+
+  const results = useQueries({
+    queries: scheduleIds.map((id) => ({
+      queryKey: paymentScheduleKeys.items(id),
+      queryFn: () => api.getPaymentItems(id),
+      enabled: isSignedIn && !!id,
+    })),
+  });
+
+  const isLoading = results.some((r) => r.isLoading && !r.data);
+  const allItems: PaymentItem[] = results.flatMap((r) => r.data ?? []);
+
+  const totalPaid = allItems.reduce((acc, item) => {
+    return item.check ? acc + parseFloat(item.amount.replace(/\./g, "")) : acc;
+  }, 0);
+
+  const totalPending = allItems.reduce((acc, item) => {
+    return !item.check ? acc + parseFloat(item.amount.replace(/\./g, "")) : acc;
+  }, 0);
+
+  const totalAmount = totalPaid + totalPending;
+  const progress = totalAmount === 0 ? 0 : Math.round((totalPaid / totalAmount) * 100);
+
+  return { isLoading, totalPaid, totalPending, totalAmount, progress, totalItems: allItems.length };
 }
 
 export function useUpdatePaymentSchedule() {

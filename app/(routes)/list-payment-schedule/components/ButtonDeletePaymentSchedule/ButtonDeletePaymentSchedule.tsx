@@ -23,17 +23,18 @@ export default function ButtonDeletePaymentSchedule(
   };
 
   return (
-    <div>
-      <Button 
-        onClick={onDeletePaymentSchedule} 
-        disabled={deleteMutation.isPending}
-      >
-        {deleteMutation.isPending ? (
-          <Loader2 className="w-[20px] animate-spin" />
-        ) : (
-          <Trash className="w-[20px] hover:text-red-500 transition-colors" />
-        )}
-      </Button>
-    </div>
+    <Button
+      variant="ghost"
+      size="sm"
+      className="h-10 w-10 sm:h-8 sm:w-8 p-0 text-slate-500 hover:text-red-500"
+      onClick={onDeletePaymentSchedule}
+      disabled={deleteMutation.isPending}
+    >
+      {deleteMutation.isPending ? (
+        <Loader2 className="w-4 h-4 animate-spin" />
+      ) : (
+        <Trash className="w-4 h-4" />
+      )}
+    </Button>
   );
 }

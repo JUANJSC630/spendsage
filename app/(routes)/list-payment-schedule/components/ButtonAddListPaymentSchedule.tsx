@@ -19,9 +19,9 @@ export function ButtonAddListPaymentSchedule() {
   return (
     <Dialog open={isOpenModalCreate} onOpenChange={setIsOpenModalCreate}>
       <DialogTrigger asChild>
-        <Button className="space-x-2">
-          <PlusCircle className="h-5 w-5" />
-          <span>Agregar</span>
+        <Button className="gap-2">
+          <PlusCircle className="h-5 w-5 shrink-0" />
+          <span className="hidden sm:inline">Agregar</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">

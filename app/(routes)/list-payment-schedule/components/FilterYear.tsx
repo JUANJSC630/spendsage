@@ -2,11 +2,11 @@
 
 import { useMemo } from "react";
 import { YearFilter } from "@/app/(routes)/list-payment-schedule/components/YearFilter";
-import { ListPaymentSchedule } from "@prisma/client";
+import { ListPaymentScheduleWithStats } from "@/hooks/use-payment-schedules";
 import { useYearContext } from "@/app/(routes)/list-payment-schedule/components/YearContext";
 
 interface FilterYearProps {
-  data: ListPaymentSchedule[];
+  data: ListPaymentScheduleWithStats[];
 }
 
 export function FilterYear({ data }: FilterYearProps) {

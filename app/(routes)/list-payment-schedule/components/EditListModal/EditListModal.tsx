@@ -35,14 +35,16 @@ const editListFormSchema = z.object({
 type EditListFormValues = z.infer<typeof editListFormSchema>;
 
 interface EditListModalProps {
-  listPaymentSchedule: {
-    id: string;
-    name: string;
-  };
+  listPaymentSchedule: { id: string; name: string };
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
-export function EditListModal({ listPaymentSchedule }: EditListModalProps) {
-  const [open, setOpen] = useState(false);
+export function EditListModal({ listPaymentSchedule, open: controlledOpen, onOpenChange: controlledOnOpenChange }: EditListModalProps) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen : internalOpen;
+  const setOpen = isControlled ? (controlledOnOpenChange ?? (() => {})) : setInternalOpen;
   const updateListMutation = useUpdateListPaymentSchedule();
 
   const form = useForm<EditListFormValues>({
@@ -77,16 +79,18 @@ export function EditListModal({ listPaymentSchedule }: EditListModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>
-        <Button
-          variant="secondary"
-          size="sm"
-          className="h-8 w-8 p-0 bg-white/90 hover:bg-white shadow-md"
-          title="Editar lista"
-        >
-          <Edit className="h-3 w-3" />
-        </Button>
-      </DialogTrigger>
+      {!isControlled && (
+        <DialogTrigger asChild>
+          <Button
+            variant="secondary"
+            size="sm"
+            className="h-8 w-8 p-0 bg-white/90 hover:bg-white shadow-md"
+            title="Editar lista"
+          >
+            <Edit className="h-3 w-3" />
+          </Button>
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Editar Lista de Pagos</DialogTitle>

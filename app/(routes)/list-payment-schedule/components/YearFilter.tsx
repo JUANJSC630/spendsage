@@ -24,7 +24,7 @@ export function YearFilter({ availableYears, selectedYear, onYearChange }: YearF
         value={value}
         onValueChange={(value) => onYearChange(value === "all" ? null : parseInt(value))}
       >
-        <SelectTrigger className="w-32">
+        <SelectTrigger className="w-24 sm:w-32">
           <SelectValue placeholder={currentYear.toString()} />
         </SelectTrigger>
         <SelectContent>

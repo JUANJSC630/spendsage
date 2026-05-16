@@ -1,5 +1,7 @@
 import { PaymentSchedule } from "@prisma/client";
 
 export type ListPaymentItemsProps = {
-    paymentSchedule: PaymentSchedule;
+  paymentSchedule: PaymentSchedule;
+  showAddForm?: boolean;
+  onAddFormClose?: () => void;
 }

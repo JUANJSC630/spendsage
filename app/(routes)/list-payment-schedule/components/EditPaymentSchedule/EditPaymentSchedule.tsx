@@ -91,8 +91,8 @@ export function EditPaymentSchedule({ paymentSchedule }: EditPaymentScheduleProp
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button>
-          <Edit className="w-[20px]" />
+        <Button variant="ghost" size="sm" className="h-10 w-10 sm:h-8 sm:w-8 p-0 text-slate-500 hover:text-slate-900">
+          <Edit className="w-4 h-4" />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
