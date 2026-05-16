@@ -1,39 +1,63 @@
 "use client";
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { LogoDashboard } from "../LogoDashboard";
 import { SidebarRoutes } from "../SidebarRoutes";
 import { Button } from "../ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import Image from "next/image";
 import { useSyncColorTheme } from "@/hooks/useColorThemeStore";
 import { hexToRgba } from "@/hooks/useHexToRgba";
 
+const SIDEBAR_KEY = "spendsage-sidebar-open";
+const EXPANDED_WIDTH = 220;
+const COLLAPSED_WIDTH = 64;
+
 export function Sidebar() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const { colorTheme } = useSyncColorTheme();
 
+  // Persist state across reloads
+  useEffect(() => {
+    const saved = localStorage.getItem(SIDEBAR_KEY);
+    if (saved !== null) setOpen(saved === "true");
+  }, []);
+
+  const toggle = () => {
+    setOpen((v) => {
+      localStorage.setItem(SIDEBAR_KEY, String(!v));
+      return !v;
+    });
+  };
+
   return (
-    <div
-      className={`relative flex flex-col h-screen ${
-        sidebarOpen ? "w-[300px]" : "w-[80px]"
-      } transition-transform duration-300`}
-      style={{
-        backgroundColor: hexToRgba(colorTheme, 0.08),
-        transition: "background-color 1s",
-      }}
+    <motion.div
+      animate={{ width: open ? EXPANDED_WIDTH : COLLAPSED_WIDTH }}
+      transition={{ duration: 0.25, ease: "easeInOut" }}
+      className="relative flex flex-col h-screen shrink-0 border-r border-slate-100"
+      style={{ backgroundColor: hexToRgba(colorTheme, 0.06) }}
     >
-      <div className="flex flex-col items-center pt-6">
-        <LogoDashboard open={sidebarOpen} />
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute top-5 right-5 transform translate-x-full rounded-full bg-slate-50 text-gray-500 hover:bg-slate-100"
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-        >
-          {sidebarOpen ? <ChevronRight /> : <ChevronLeft />}
-        </Button>
+      {/* Top accent line */}
+      <div className="h-0.5 w-full" style={{ backgroundColor: colorTheme }} />
+
+      {/* Logo */}
+      <LogoDashboard open={open} />
+
+      {/* Nav */}
+      <div className="flex-1 overflow-hidden">
+        <SidebarRoutes setOpen={open} />
       </div>
-      <SidebarRoutes setOpen={sidebarOpen} />
-    </div>
+
+      {/* Collapse toggle — integrated at bottom edge */}
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={toggle}
+        className="absolute -right-3 top-16 h-6 w-6 rounded-full border border-slate-200 bg-white shadow-sm hover:bg-slate-50 text-slate-500 z-10"
+        title={open ? "Colapsar" : "Expandir"}
+      >
+        {open ? <ChevronLeft className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
+      </Button>
+    </motion.div>
   );
 }
