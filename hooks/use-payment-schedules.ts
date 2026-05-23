@@ -282,7 +282,19 @@ export function useCreatePaymentItem() {
 
   return useMutation({
     mutationFn: api.createPaymentItem,
-    onSuccess: (_, variables) => {
+    onSuccess: (newItem, variables) => {
+      // Update cache immediately so the UI reflects the new item without waiting for a refetch
+      queryClient.setQueryData<PaymentItem[]>(
+        paymentScheduleKeys.items(variables.paymentScheduleId),
+        (old) => {
+          const updated = old ? [...old, newItem] : [newItem];
+          return updated.sort((a, b) => {
+            if (a.check !== b.check) return a.check ? 1 : -1;
+            return new Date(a.date).getTime() - new Date(b.date).getTime();
+          });
+        }
+      );
+      // Also invalidate to sync with server in the background
       queryClient.invalidateQueries({
         queryKey: paymentScheduleKeys.items(variables.paymentScheduleId),
       });
