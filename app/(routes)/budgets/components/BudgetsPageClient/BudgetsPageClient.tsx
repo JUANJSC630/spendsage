@@ -2,7 +2,15 @@
 
 import { useState, useMemo, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Trash2, Wallet, Pencil, Check, X } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Trash2,
+  Wallet,
+  Pencil,
+  Check,
+  X,
+} from "lucide-react";
 import toast from "react-hot-toast";
 import {
   AlertDialog,
@@ -70,8 +78,14 @@ function BudgetItem({
   month,
   year,
 }: BudgetItemProps) {
-  const { mutate: deleteBudget, isPending: isDeleting } = useDeleteBudget(month, year);
-  const { mutate: updateBudget, isPending: isUpdating } = useUpdateBudget(month, year);
+  const { mutate: deleteBudget, isPending: isDeleting } = useDeleteBudget(
+    month,
+    year,
+  );
+  const { mutate: updateBudget, isPending: isUpdating } = useUpdateBudget(
+    month,
+    year,
+  );
   const formatAmount = useFormatAmount();
   const { getSymbol } = useCurrencyStore();
   const symbol = getSymbol();
@@ -87,7 +101,11 @@ function BudgetItem({
   const isOver = budget.isOverBudget;
   const isNear = !isOver && budget.percentage >= 80;
 
-  const barColor = isOver ? "#ef4444" : isNear ? "#f59e0b" : categoryColor || "#3b82f6";
+  const barColor = isOver
+    ? "#ef4444"
+    : isNear
+      ? "#f59e0b"
+      : categoryColor || "#3b82f6";
 
   useEffect(() => {
     if (editing && inputRef.current) {
@@ -366,14 +384,8 @@ export function BudgetsPageClient() {
 
   const { totalBudget, totalSpent, totalRemaining, overallPct } =
     useMemo(() => {
-      const totalBudget = budgets.reduce(
-        (s, b) => s + parseFloat(b.amount),
-        0,
-      );
-      const totalSpent = budgets.reduce(
-        (s, b) => s + parseFloat(b.spent),
-        0,
-      );
+      const totalBudget = budgets.reduce((s, b) => s + parseFloat(b.amount), 0);
+      const totalSpent = budgets.reduce((s, b) => s + parseFloat(b.spent), 0);
       const totalRemaining = totalBudget - totalSpent;
       const overallPct =
         totalBudget > 0

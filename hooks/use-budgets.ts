@@ -113,8 +113,7 @@ export function useUpdateBudget(month: number, year: number) {
             if (b.id !== id) return b;
             const newAmount = parseFloat(amount);
             const spent = parseFloat(b.spent);
-            const percentage =
-              newAmount > 0 ? (spent / newAmount) * 100 : 0;
+            const percentage = newAmount > 0 ? (spent / newAmount) * 100 : 0;
             return {
               ...b,
               amount,

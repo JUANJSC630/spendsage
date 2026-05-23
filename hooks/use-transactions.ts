@@ -118,8 +118,9 @@ export function useUpdateTransaction() {
       const previous = queryClient.getQueryData<Transactions[]>(
         transactionKeys.list(),
       );
-      queryClient.setQueryData<Transactions[]>(transactionKeys.list(), (old) =>
-        old?.map((t) => (t.id === id ? { ...t, ...patch } : t)) ?? [],
+      queryClient.setQueryData<Transactions[]>(
+        transactionKeys.list(),
+        (old) => old?.map((t) => (t.id === id ? { ...t, ...patch } : t)) ?? [],
       );
       return { previous };
     },

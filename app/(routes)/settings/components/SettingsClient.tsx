@@ -115,7 +115,9 @@ export function SettingsClient() {
                           <Check
                             className="w-4 h-4 text-white"
                             strokeWidth={3}
-                            style={{ filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.2))" }}
+                            style={{
+                              filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.2))",
+                            }}
                           />
                         </motion.span>
                       )}

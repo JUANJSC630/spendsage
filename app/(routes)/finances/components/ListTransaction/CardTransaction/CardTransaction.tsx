@@ -120,7 +120,9 @@ export default function CardTransaction({
       <div className="flex items-center gap-3 px-4 py-3">
         <div
           className="w-1.5 h-8 rounded-full flex-shrink-0"
-          style={{ backgroundColor: editing ? editCategoryColor : categoryColor }}
+          style={{
+            backgroundColor: editing ? editCategoryColor : categoryColor,
+          }}
         />
 
         <div className="flex-1 min-w-0">

@@ -292,7 +292,7 @@ export function useCreatePaymentItem() {
             if (a.check !== b.check) return a.check ? 1 : -1;
             return new Date(a.date).getTime() - new Date(b.date).getTime();
           });
-        }
+        },
       );
       // Also invalidate to sync with server in the background
       queryClient.invalidateQueries({

@@ -59,8 +59,7 @@ function HealthRing({ score }: { score: number }) {
   const r = 38;
   const circ = 2 * Math.PI * r;
   const offset = circ * (1 - score / 100);
-  const color =
-    score >= 71 ? "#10b981" : score >= 41 ? "#f59e0b" : "#ef4444";
+  const color = score >= 71 ? "#10b981" : score >= 41 ? "#f59e0b" : "#ef4444";
   const label =
     score >= 71 ? "Excelente" : score >= 41 ? "En camino" : "Atención";
 
@@ -247,9 +246,7 @@ export function DashboardClient() {
     month === now.getMonth() + 1 && year === now.getFullYear();
   const daysInMonth = new Date(year, month, 0).getDate();
   const daysElapsed = isCurrentMonth ? now.getDate() : daysInMonth;
-  const daysRemaining = isCurrentMonth
-    ? daysInMonth - now.getDate()
-    : 0;
+  const daysRemaining = isCurrentMonth ? daysInMonth - now.getDate() : 0;
   const dailyExpenses = daysElapsed > 0 ? expenses / daysElapsed : 0;
   const projectedExpenses = dailyExpenses * daysInMonth;
   const dailyBudget =
@@ -257,9 +254,7 @@ export function DashboardClient() {
 
   // Month-over-month
   const expenseMoM =
-    prevExpenses > 0
-      ? ((expenses - prevExpenses) / prevExpenses) * 100
-      : null;
+    prevExpenses > 0 ? ((expenses - prevExpenses) / prevExpenses) * 100 : null;
 
   // Health score
   const healthScore = useMemo(() => {
@@ -354,7 +349,9 @@ export function DashboardClient() {
   }
 
   // 4. Projection — only mid-month with real expenses and income, not when already doing great
-  const savingsInsightIsGood = insights.some((i) => i.type === "success" && i.text.includes("ahorro"));
+  const savingsInsightIsGood = insights.some(
+    (i) => i.type === "success" && i.text.includes("ahorro"),
+  );
   if (
     isCurrentMonth &&
     income > 0 &&
@@ -370,7 +367,13 @@ export function DashboardClient() {
   }
 
   // 5. Daily budget — only when there's real margin and income registered
-  if (isCurrentMonth && income > 0 && balance > 0 && daysRemaining > 1 && dailyBudget > 0) {
+  if (
+    isCurrentMonth &&
+    income > 0 &&
+    balance > 0 &&
+    daysRemaining > 1 &&
+    dailyBudget > 0
+  ) {
     insights.push({
       type: "info",
       text: `Quedan ${daysRemaining} días. Presupuesto diario disponible: ${symbol}${formatAmount(Math.round(dailyBudget))}.`,
@@ -413,9 +416,7 @@ export function DashboardClient() {
   const recentTxs = useMemo(
     () =>
       [...currentTxs]
-        .sort(
-          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-        )
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
         .slice(0, 5),
     [currentTxs],
   );
@@ -605,7 +606,9 @@ export function DashboardClient() {
           </div>
           {isCurrentMonth ? (
             <>
-              <p className="text-lg font-bold text-slate-800">{daysRemaining}d</p>
+              <p className="text-lg font-bold text-slate-800">
+                {daysRemaining}d
+              </p>
               <p className="text-[10px] text-slate-400 mt-0.5">
                 {dailyBudget > 0
                   ? `${symbol}${formatAmount(Math.round(dailyBudget))}/día disp.`
@@ -728,8 +731,7 @@ export function DashboardClient() {
           ) : (
             <div className="space-y-3.5">
               {categoryBreakdown.slice(0, 5).map((cat, i) => {
-                const pct =
-                  expenses > 0 ? (cat.amount / expenses) * 100 : 0;
+                const pct = expenses > 0 ? (cat.amount / expenses) * 100 : 0;
                 return (
                   <div key={i}>
                     <div className="flex items-center justify-between mb-1">
