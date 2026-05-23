@@ -251,7 +251,7 @@ function BudgetItem({
               ref={inputRef}
               type="text"
               inputMode="numeric"
-              value={editValue}
+              value={formatAmount(editValue)}
               onChange={(e) => setEditValue(e.target.value.replace(/\D/g, ""))}
               onKeyDown={(e) => {
                 if (e.key === "Enter") confirmEdit();

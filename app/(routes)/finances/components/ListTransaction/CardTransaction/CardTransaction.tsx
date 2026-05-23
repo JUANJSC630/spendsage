@@ -232,7 +232,7 @@ export default function CardTransaction({
                 <input
                   type="text"
                   inputMode="numeric"
-                  value={editAmount}
+                  value={formatAmount(editAmount)}
                   onChange={(e) =>
                     setEditAmount(e.target.value.replace(/\D/g, ""))
                   }
