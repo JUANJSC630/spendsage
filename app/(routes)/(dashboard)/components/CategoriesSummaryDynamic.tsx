@@ -22,7 +22,9 @@ type CategoriesSummaryDynamicProps = {
   className?: string;
 };
 
-export default function CategoriesSummaryDynamic(props: CategoriesSummaryDynamicProps) {
+export default function CategoriesSummaryDynamic(
+  props: CategoriesSummaryDynamicProps,
+) {
   const { transactions, categories, className } = props;
   const formatAmount = useFormatAmount();
   const { getSymbol } = useCurrencyStore();
@@ -34,28 +36,31 @@ export default function CategoriesSummaryDynamic(props: CategoriesSummaryDynamic
 
   // Create a map of category slugs to category info
   const categoryMap = new Map();
-  categories.forEach(category => {
+  categories.forEach((category) => {
     categoryMap.set(category.slug, {
       name: category.name,
       color: category.color,
-      type: category.type
+      type: category.type,
     });
   });
 
   // Calculate totals by category slug with legacy support
-  const totals = transactions.reduce((acc, item) => {
-    const categoryInfo = getCategoryInfo(categories, item.category);
-    const amount = parseFloat(item.amount);
+  const totals = transactions.reduce(
+    (acc, item) => {
+      const categoryInfo = getCategoryInfo(categories, item.category);
+      const amount = parseFloat(item.amount);
 
-    if (!categoryInfo.category) return acc;
+      if (!categoryInfo.category) return acc;
 
-    const resolvedSlug = categoryInfo.resolvedSlug;
-    if (!acc[resolvedSlug]) {
-      acc[resolvedSlug] = 0;
-    }
-    acc[resolvedSlug] += amount;
-    return acc;
-  }, {} as Record<string, number>);
+      const resolvedSlug = categoryInfo.resolvedSlug;
+      if (!acc[resolvedSlug]) {
+        acc[resolvedSlug] = 0;
+      }
+      acc[resolvedSlug] += amount;
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
 
   // Prepare data for chart using actual categories
   const categoryEntries = Object.entries(totals)
@@ -116,9 +121,12 @@ export default function CategoriesSummaryDynamic(props: CategoriesSummaryDynamic
         enabled: true,
         callbacks: {
           label: (context: any) => {
-            const label = context.label || '';
+            const label = context.label || "";
             const value = `${symbol} ${formatAmount(context.raw.toString())}`;
-            const total = context.dataset.data.reduce((sum: number, val: number) => sum + val, 0);
+            const total = context.dataset.data.reduce(
+              (sum: number, val: number) => sum + val,
+              0,
+            );
             const percentage = ((context.raw / total) * 100).toFixed(1);
             return `${label}: ${value} (${percentage}%)`;
           },
@@ -135,23 +143,33 @@ export default function CategoriesSummaryDynamic(props: CategoriesSummaryDynamic
 
       {/* Summary stats */}
       <div className="mt-4 space-y-2">
-        <h4 className="text-sm font-medium text-gray-700 mb-3">Distribución por categorías:</h4>
+        <h4 className="text-sm font-medium text-gray-700 mb-3">
+          Distribución por categorías:
+        </h4>
         {categoryEntries.slice(0, 5).map(([slug, amount]) => {
           const categoryInfo = categoryMap.get(slug);
           const total = dataValues.reduce((sum, val) => sum + val, 0);
           const percentage = ((amount / total) * 100).toFixed(1);
 
           return (
-            <div key={slug} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-2 text-xs">
+            <div
+              key={slug}
+              className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-2 text-xs"
+            >
               <div className="flex items-center gap-2">
                 <div
                   className="w-3 h-3 rounded-full flex-shrink-0"
                   style={{ backgroundColor: categoryInfo?.color || "#94A3B8" }}
                 />
-                <span className="text-gray-600 truncate">{categoryInfo?.name || slug}</span>
+                <span className="text-gray-600 truncate">
+                  {categoryInfo?.name || slug}
+                </span>
               </div>
               <div className="flex items-center gap-2 sm:flex-shrink-0">
-                <span className="font-medium">{symbol}{formatAmount(amount.toString())}</span>
+                <span className="font-medium">
+                  {symbol}
+                  {formatAmount(amount.toString())}
+                </span>
                 <span className="text-gray-400">({percentage}%)</span>
               </div>
             </div>

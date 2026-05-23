@@ -1,4 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
@@ -10,7 +10,7 @@ const defaultCategories = [
     type: "expense",
     color: "#8B5CF6",
     icon: "UtensilsCrossed",
-    description: "Gastos en comida y bebidas"
+    description: "Gastos en comida y bebidas",
   },
   {
     name: "Educación",
@@ -18,7 +18,7 @@ const defaultCategories = [
     type: "expense",
     color: "#3B82F6",
     icon: "GraduationCap",
-    description: "Gastos en educación y capacitación"
+    description: "Gastos en educación y capacitación",
   },
   {
     name: "Entretenimiento",
@@ -26,7 +26,7 @@ const defaultCategories = [
     type: "expense",
     color: "#EC4899",
     icon: "Gamepad2",
-    description: "Gastos en entretenimiento y diversión"
+    description: "Gastos en entretenimiento y diversión",
   },
   {
     name: "Gastos Fijos",
@@ -34,7 +34,7 @@ const defaultCategories = [
     type: "expense",
     color: "#EF4444",
     icon: "Home",
-    description: "Gastos fijos mensuales (renta, servicios, etc.)"
+    description: "Gastos fijos mensuales (renta, servicios, etc.)",
   },
   {
     name: "Gastos Variables",
@@ -42,7 +42,7 @@ const defaultCategories = [
     type: "expense",
     color: "#F97316",
     icon: "TrendingUp",
-    description: "Gastos variables del mes"
+    description: "Gastos variables del mes",
   },
   {
     name: "Impuestos",
@@ -50,7 +50,7 @@ const defaultCategories = [
     type: "expense",
     color: "#84CC16",
     icon: "Receipt",
-    description: "Pagos de impuestos y tasas"
+    description: "Pagos de impuestos y tasas",
   },
   {
     name: "Salud",
@@ -58,7 +58,7 @@ const defaultCategories = [
     type: "expense",
     color: "#10B981",
     icon: "Heart",
-    description: "Gastos médicos y de salud"
+    description: "Gastos médicos y de salud",
   },
   {
     name: "Transporte",
@@ -66,7 +66,7 @@ const defaultCategories = [
     type: "expense",
     color: "#06B6D4",
     icon: "Car",
-    description: "Gastos en transporte y combustible"
+    description: "Gastos en transporte y combustible",
   },
   // Ingresos
   {
@@ -75,21 +75,21 @@ const defaultCategories = [
     type: "income",
     color: "#10B981",
     icon: "DollarSign",
-    description: "Ingresos principales"
-  }
+    description: "Ingresos principales",
+  },
 ];
 
 async function seedDefaultCategories() {
   try {
-    console.log('🌱 Iniciando seed de categorías por defecto...');
+    console.log("🌱 Iniciando seed de categorías por defecto...");
 
     for (const category of defaultCategories) {
       // Verificar si ya existe
       const existing = await prisma.category.findFirst({
         where: {
           slug: category.slug,
-          isDefault: true
-        }
+          isDefault: true,
+        },
       });
 
       if (!existing) {
@@ -98,8 +98,8 @@ async function seedDefaultCategories() {
             ...category,
             isDefault: true,
             userId: null, // Sin usuario específico
-            isActive: true
-          }
+            isActive: true,
+          },
         });
         console.log(`✅ Creada categoría por defecto: ${category.name}`);
       } else {
@@ -107,9 +107,9 @@ async function seedDefaultCategories() {
       }
     }
 
-    console.log('🎉 Seed completado exitosamente');
+    console.log("🎉 Seed completado exitosamente");
   } catch (error) {
-    console.error('❌ Error en seed:', error);
+    console.error("❌ Error en seed:", error);
     throw error;
   } finally {
     await prisma.$disconnect();
@@ -118,11 +118,10 @@ async function seedDefaultCategories() {
 
 // Ejecutar si se llama directamente
 if (require.main === module) {
-  seedDefaultCategories()
-    .catch((e) => {
-      console.error(e);
-      process.exit(1);
-    });
+  seedDefaultCategories().catch((e) => {
+    console.error(e);
+    process.exit(1);
+  });
 }
 
 module.exports = { seedDefaultCategories };

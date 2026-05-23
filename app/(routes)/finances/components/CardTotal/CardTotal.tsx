@@ -26,9 +26,9 @@ export default function CardTotal(props: CardTotalProps) {
       const categoryInfo = getCategoryInfo(categories, transaction.category);
 
       if (categoryInfo.category) {
-        if (categoryInfo.category.type === 'income') {
+        if (categoryInfo.category.type === "income") {
           income += amount;
-        } else if (categoryInfo.category.type === 'expense') {
+        } else if (categoryInfo.category.type === "expense") {
           expenses += amount;
         }
       }
@@ -65,8 +65,8 @@ export default function CardTotal(props: CardTotalProps) {
           props.type === "income"
             ? totalIncome.toString()
             : props.type === "expenses"
-            ? totalExpenses.toString()
-            : totalBalance.toString()
+              ? totalExpenses.toString()
+              : totalBalance.toString(),
         )}
       </p>
     </div>

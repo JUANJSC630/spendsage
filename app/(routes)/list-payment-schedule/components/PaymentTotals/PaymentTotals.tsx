@@ -24,7 +24,8 @@ export function PaymentTotals(props: PaymentTotalsProps) {
   }, 0);
 
   const totalAmount = totalPaid + totalPending;
-  const progressPercentage = totalAmount === 0 ? 0 : Math.round((totalPaid / totalAmount) * 100);
+  const progressPercentage =
+    totalAmount === 0 ? 0 : Math.round((totalPaid / totalAmount) * 100);
 
   const formattedTotalPaid = new Intl.NumberFormat("es-CO", {
     style: "currency",
@@ -47,15 +48,19 @@ export function PaymentTotals(props: PaymentTotalsProps) {
         <span className="text-slate-500">{progressPercentage}%</span>
       </div>
       <Progress value={progressPercentage} className="h-2" />
-      
+
       <div className="flex flex-col sm:flex-row justify-between gap-1 sm:gap-4 text-sm mt-3 pt-3 border-t border-slate-100">
         <div className="flex justify-between sm:flex-col sm:justify-start gap-1">
           <span className="text-slate-400">Total pagado</span>
-          <span className="font-semibold text-emerald-600">{formattedTotalPaid}</span>
+          <span className="font-semibold text-emerald-600">
+            {formattedTotalPaid}
+          </span>
         </div>
         <div className="flex justify-between sm:flex-col sm:justify-start sm:text-right gap-1">
           <span className="text-slate-400">Total pendiente</span>
-          <span className="font-semibold text-rose-600">{formattedTotalPending}</span>
+          <span className="font-semibold text-rose-600">
+            {formattedTotalPending}
+          </span>
         </div>
       </div>
     </div>

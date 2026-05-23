@@ -4,4 +4,3 @@ export type FormPaymentScheduleProps = {
   setOpenDialog: Dispatch<SetStateAction<boolean>>;
   listPaymentScheduleId: string;
 };
-

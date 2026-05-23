@@ -7,7 +7,7 @@ import { ButtonDeletePaymentScheduleProps } from "./ButtonDeletePaymentSchedule.
 import { useDeletePaymentSchedule } from "@/hooks/use-payment-schedules";
 
 export default function ButtonDeletePaymentSchedule(
-  props: ButtonDeletePaymentScheduleProps
+  props: ButtonDeletePaymentScheduleProps,
 ) {
   const { paymentSchedule } = props;
   const deleteMutation = useDeletePaymentSchedule();

@@ -1,9 +1,9 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 async function checkData() {
-  console.log('🔍 Checking database data...\n');
+  console.log("🔍 Checking database data...\n");
 
   try {
     // Check categories
@@ -14,15 +14,17 @@ async function checkData() {
         slug: true,
         color: true,
         type: true,
-        userId: true
+        userId: true,
       },
-      take: 10
+      take: 10,
     });
 
-    console.log('📁 Categories:');
+    console.log("📁 Categories:");
     console.log(`Found ${categories.length} categories`);
-    categories.forEach(cat => {
-      console.log(`  - ${cat.name} (${cat.slug}) - ${cat.type} - ${cat.color} - User: ${cat.userId.slice(0, 8)}...`);
+    categories.forEach((cat) => {
+      console.log(
+        `  - ${cat.name} (${cat.slug}) - ${cat.type} - ${cat.color} - User: ${cat.userId?.slice(0, 8) ?? "N/A"}...`,
+      );
     });
 
     // Check budgets
@@ -33,15 +35,17 @@ async function checkData() {
         amount: true,
         month: true,
         year: true,
-        userId: true
+        userId: true,
       },
-      take: 10
+      take: 10,
     });
 
-    console.log('\n💰 Budgets:');
+    console.log("\n💰 Budgets:");
     console.log(`Found ${budgets.length} budgets`);
-    budgets.forEach(budget => {
-      console.log(`  - Category: ${budget.category}, Amount: ${budget.amount}, Period: ${budget.month}/${budget.year} - User: ${budget.userId.slice(0, 8)}...`);
+    budgets.forEach((budget) => {
+      console.log(
+        `  - Category: ${budget.category}, Amount: ${budget.amount}, Period: ${budget.month}/${budget.year} - User: ${budget.userId.slice(0, 8)}...`,
+      );
     });
 
     // Check transactions
@@ -51,30 +55,31 @@ async function checkData() {
         category: true,
         amount: true,
         description: true,
-        userId: true
+        userId: true,
       },
-      take: 5
+      take: 5,
     });
 
-    console.log('\n💳 Transactions:');
+    console.log("\n💳 Transactions:");
     console.log(`Found ${transactions.length} transactions`);
-    transactions.forEach(tx => {
-      console.log(`  - ${tx.description} - Category: ${tx.category}, Amount: ${tx.amount} - User: ${tx.userId.slice(0, 8)}...`);
+    transactions.forEach((tx) => {
+      console.log(
+        `  - ${tx.description} - Category: ${tx.category}, Amount: ${tx.amount} - User: ${tx.userId.slice(0, 8)}...`,
+      );
     });
 
     // Check users
     const uniqueUsers = await prisma.category.findMany({
       select: { userId: true },
-      distinct: ['userId']
+      distinct: ["userId"],
     });
 
     console.log(`\n👥 Unique users: ${uniqueUsers.length}`);
-    uniqueUsers.forEach(user => {
-      console.log(`  - ${user.userId.slice(0, 8)}...`);
+    uniqueUsers.forEach((user) => {
+      console.log(`  - ${user.userId?.slice(0, 8) ?? "N/A"}...`);
     });
-
   } catch (error) {
-    console.error('❌ Error checking data:', error);
+    console.error("❌ Error checking data:", error);
   } finally {
     await prisma.$disconnect();
   }

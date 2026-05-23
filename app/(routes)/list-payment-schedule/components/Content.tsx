@@ -53,12 +53,30 @@ export function Content({ data }: ContentProps) {
               viewBox="0 0 64 64"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <rect x="8" y="16" width="48" height="36" rx="5" stroke="currentColor" strokeWidth="2.5" />
-              <path d="M8 24h48" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+              <rect
+                x="8"
+                y="16"
+                width="48"
+                height="36"
+                rx="5"
+                stroke="currentColor"
+                strokeWidth="2.5"
+              />
+              <path
+                d="M8 24h48"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+              />
               <circle cx="20" cy="36" r="3" fill="currentColor" opacity="0.4" />
               <circle cx="32" cy="36" r="3" fill="currentColor" opacity="0.4" />
               <circle cx="44" cy="36" r="3" fill="currentColor" opacity="0.4" />
-              <path d="M20 12v8M32 12v8M44 12v8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+              <path
+                d="M20 12v8M32 12v8M44 12v8"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+              />
             </svg>
             <div>
               <h1 className="text-xl font-semibold text-slate-500">

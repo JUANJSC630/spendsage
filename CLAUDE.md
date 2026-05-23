@@ -25,6 +25,7 @@ yarn prisma db push      # Push schema changes to database
 **Authentication**: Clerk handles user authentication with userId available throughout the app.
 
 **Database**: PostgreSQL with Prisma ORM. Core models include:
+
 - `Transactions`: Financial transactions with category, amount, date, and optional bank account relations
 - `ListPaymentSchedule`: Container for payment schedule groups
 - `PaymentSchedule`: Scheduled payment periods with date ranges
@@ -32,6 +33,7 @@ yarn prisma db push      # Push schema changes to database
 - `BankAccount`: User bank accounts with balance tracking
 
 **Key Directories**:
+
 - `app/(routes)/` - Main application pages using App Router
   - `(dashboard)` - Dashboard overview
   - `finances` - Transaction management
@@ -44,12 +46,14 @@ yarn prisma db push      # Push schema changes to database
 - `lib/` - Utilities including database connection (`db.ts`) and query helpers
 - `utils/` - Icon components and data utilities
 
-**State Management**: 
+**State Management**:
+
 - Zustand for global state (currency, color themes)
 - React Query for server state management
 - React Hook Form with Zod validation for forms
 
-**UI Stack**: 
+**UI Stack**:
+
 - Shadcn UI components built on Radix UI
 - Chart.js and Recharts for data visualization
 - Tailwind CSS for styling

@@ -14,10 +14,18 @@ interface AdaptiveDatePickerProps {
 
 export function AdaptiveDatePicker(props: AdaptiveDatePickerProps) {
   const isMobile = useIsMobile();
-  
+
   if (isMobile) {
     return <MobileDatePicker {...props} />;
   }
-  
-  return <DatePicker {...props} />;
+
+  return (
+    <DatePicker
+      date={props.date ?? undefined}
+      onDateChange={(d) => props.onDateChange(d ?? null)}
+      placeholder={props.placeholder}
+      className={props.className}
+      disabled={props.disabled}
+    />
+  );
 }

@@ -40,11 +40,17 @@ interface EditListModalProps {
   onOpenChange?: (open: boolean) => void;
 }
 
-export function EditListModal({ listPaymentSchedule, open: controlledOpen, onOpenChange: controlledOnOpenChange }: EditListModalProps) {
+export function EditListModal({
+  listPaymentSchedule,
+  open: controlledOpen,
+  onOpenChange: controlledOnOpenChange,
+}: EditListModalProps) {
   const [internalOpen, setInternalOpen] = useState(false);
   const isControlled = controlledOpen !== undefined;
   const open = isControlled ? controlledOpen : internalOpen;
-  const setOpen = isControlled ? (controlledOnOpenChange ?? (() => {})) : setInternalOpen;
+  const setOpen = isControlled
+    ? (controlledOnOpenChange ?? (() => {}))
+    : setInternalOpen;
   const updateListMutation = useUpdateListPaymentSchedule();
 
   const form = useForm<EditListFormValues>({
@@ -123,11 +129,10 @@ export function EditListModal({ listPaymentSchedule, open: controlledOpen, onOpe
               >
                 Cancelar
               </Button>
-              <Button
-                type="submit"
-                disabled={updateListMutation.isPending}
-              >
-                {updateListMutation.isPending ? "Actualizando..." : "Actualizar"}
+              <Button type="submit" disabled={updateListMutation.isPending}>
+                {updateListMutation.isPending
+                  ? "Actualizando..."
+                  : "Actualizar"}
               </Button>
             </DialogFooter>
           </form>

@@ -29,32 +29,42 @@ export function AdaptiveDateRangePicker(props: AdaptiveDateRangePickerProps) {
   if (isMobile) {
     // Para móvil, usar formato de dateRange
     const mobileProps = {
-      dateRange: props.dateRange || { from: props.date?.from || null, to: props.date?.to || null },
-      onDateRangeChange: props.onDateRangeChange || ((range: { from: Date | null; to: Date | null }) => {
-        props.onDateChange?.({
-          from: range.from || undefined,
-          to: range.to || undefined
-        });
-      }),
+      dateRange: props.dateRange || {
+        from: props.date?.from || null,
+        to: props.date?.to || null,
+      },
+      onDateRangeChange:
+        props.onDateRangeChange ||
+        ((range: { from: Date | null; to: Date | null }) => {
+          props.onDateChange?.({
+            from: range.from || undefined,
+            to: range.to || undefined,
+          });
+        }),
       placeholder: props.placeholder,
       className: props.className,
-      disabled: props.disabled
+      disabled: props.disabled,
     };
     return <MobileDateRangePicker {...mobileProps} />;
   }
 
   // Para desktop, usar formato original de Shadcn
   const desktopProps = {
-    date: props.date || { from: props.dateRange?.from || undefined, to: props.dateRange?.to || undefined },
-    onDateChange: props.onDateChange || ((date: DateRange | undefined) => {
-      props.onDateRangeChange?.({
-        from: date?.from || null,
-        to: date?.to || null
-      });
-    }),
+    date: props.date || {
+      from: props.dateRange?.from || undefined,
+      to: props.dateRange?.to || undefined,
+    },
+    onDateChange:
+      props.onDateChange ||
+      ((date: DateRange | undefined) => {
+        props.onDateRangeChange?.({
+          from: date?.from || null,
+          to: date?.to || null,
+        });
+      }),
     placeholder: props.placeholder,
     className: props.className,
-    disabled: props.disabled
+    disabled: props.disabled,
   };
 
   return <DateRangePicker {...desktopProps} />;

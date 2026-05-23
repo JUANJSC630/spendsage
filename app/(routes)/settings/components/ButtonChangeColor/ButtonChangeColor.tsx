@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useSyncColorTheme } from "@/hooks/useColorThemeStore";
 import React from "react";
 

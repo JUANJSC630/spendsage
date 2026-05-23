@@ -3,13 +3,13 @@ import { z } from "zod";
 export const budgetFormSchema = z.object({
   category: z.string().min(1, "La categoría es requerida"),
   amount: z.string().refine(
-    value => {
+    (value) => {
       const numericValue = parseInt(value);
       return value !== "" && !isNaN(numericValue) && numericValue > 0;
-    }, 
+    },
     {
-      message: "El monto debe ser mayor que 0"
-    }
+      message: "El monto debe ser mayor que 0",
+    },
   ),
   period: z.string().min(1, "El período es requerido"),
   month: z.number().min(1, "Mes inválido").max(12, "Mes inválido"),

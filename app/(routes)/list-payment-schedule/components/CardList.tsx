@@ -11,7 +11,10 @@ type CardListProps = {
   stats: ListPaymentScheduleStats;
 };
 
-export default function CardList({ listPaymentScheduleName, stats }: CardListProps) {
+export default function CardList({
+  listPaymentScheduleName,
+  stats,
+}: CardListProps) {
   const { colorTheme } = useSyncColorTheme();
   const { currency } = useCurrencyStore();
 
@@ -50,19 +53,30 @@ export default function CardList({ listPaymentScheduleName, stats }: CardListPro
       {hasItems ? (
         <div className="space-y-2">
           <div className="flex justify-between items-center text-xs text-slate-500">
-            <span>{stats.paidItems} de {stats.totalItems} pagados</span>
-            <span className="font-medium" style={{ color: colorTheme }}>{stats.progress}%</span>
+            <span>
+              {stats.paidItems} de {stats.totalItems} pagados
+            </span>
+            <span className="font-medium" style={{ color: colorTheme }}>
+              {stats.progress}%
+            </span>
           </div>
           {/* Mini progress bar */}
           <div className="w-full h-1.5 rounded-full bg-slate-200/70 overflow-hidden">
             <div
               className="h-full rounded-full transition-all duration-500"
-              style={{ width: `${stats.progress}%`, backgroundColor: colorTheme }}
+              style={{
+                width: `${stats.progress}%`,
+                backgroundColor: colorTheme,
+              }}
             />
           </div>
           <div className="flex justify-between text-xs">
-            <span className="text-emerald-600 font-medium">{fmt(stats.paidAmount)}</span>
-            <span className="text-slate-400">{fmt(stats.totalAmount - stats.paidAmount)} pendiente</span>
+            <span className="text-emerald-600 font-medium">
+              {fmt(stats.paidAmount)}
+            </span>
+            <span className="text-slate-400">
+              {fmt(stats.totalAmount - stats.paidAmount)} pendiente
+            </span>
           </div>
         </div>
       ) : (

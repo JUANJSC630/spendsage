@@ -16,10 +16,7 @@ export const categoryFormSchema = z.object({
     .string()
     .regex(/^#[0-9A-F]{6}$/i, "El color debe ser un código hexadecimal válido")
     .default("#3B82F6"),
-  icon: z
-    .string()
-    .min(1, "El ícono es requerido")
-    .default("Folder"),
+  icon: z.string().min(1, "El ícono es requerido").default("Folder"),
   type: z
     .enum(["income", "expense", "transfer", "other"], {
       required_error: "El tipo es requerido",

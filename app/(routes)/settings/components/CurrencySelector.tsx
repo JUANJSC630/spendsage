@@ -53,7 +53,7 @@ export const CurrencySelector = () => {
           transition: "color 1s",
         }}
       >
-¡Elige Tu Moneda! 💰
+        ¡Elige Tu Moneda! 💰
       </h1>
       <motion.div
         initial={{ scale: 0 }}

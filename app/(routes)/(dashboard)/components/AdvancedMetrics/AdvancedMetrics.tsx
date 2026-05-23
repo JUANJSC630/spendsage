@@ -12,12 +12,18 @@ import {
   BarChart3,
   AlertTriangle,
   Plus,
-  TrendingUpIcon
+  TrendingUpIcon,
 } from "lucide-react";
 import { Transactions } from "@prisma/client";
 import { useCurrencyStore } from "@/hooks/useCurrencyStore";
 import useFormatAmount from "@/hooks/useFormatAmount";
-import { startOfMonth, endOfMonth, subMonths, getDaysInMonth, format } from "date-fns";
+import {
+  startOfMonth,
+  endOfMonth,
+  subMonths,
+  getDaysInMonth,
+  format,
+} from "date-fns";
 import { getCategoryInfo } from "@/lib/categoryMapping";
 
 interface Category {
@@ -39,7 +45,7 @@ export function AdvancedMetrics({
   transactions,
   categories,
   selectedMonth,
-  selectedYear
+  selectedYear,
 }: AdvancedMetricsProps) {
   const { getSymbol } = useCurrencyStore();
   const formatAmount = useFormatAmount();
@@ -51,11 +57,11 @@ export function AdvancedMetrics({
 
   const categoryMap = useMemo(() => {
     const map = new Map();
-    categories.forEach(category => {
+    categories.forEach((category) => {
       map.set(category.slug, {
         name: category.name,
         color: category.color,
-        type: category.type
+        type: category.type,
       });
     });
     return map;
@@ -85,21 +91,21 @@ export function AdvancedMetrics({
     const parseAmount = (amount: string): number => {
       if (!amount) return 0;
       // Remove all non-numeric characters except dots and commas
-      const cleaned = amount.replace(/[^\d.,]/g, '');
+      const cleaned = amount.replace(/[^\d.,]/g, "");
       // Handle European format (1.234,56) vs US format (1,234.56)
-      if (cleaned.includes(',') && cleaned.includes('.')) {
+      if (cleaned.includes(",") && cleaned.includes(".")) {
         // European format: 1.234,56
-        const value = cleaned.replace(/\./g, '').replace(',', '.');
+        const value = cleaned.replace(/\./g, "").replace(",", ".");
         return parseFloat(value) || 0;
-      } else if (cleaned.includes(',')) {
+      } else if (cleaned.includes(",")) {
         // Could be decimal separator or thousands separator
-        const parts = cleaned.split(',');
+        const parts = cleaned.split(",");
         if (parts.length === 2 && parts[1].length <= 2) {
           // Decimal separator: 1234,56
-          return parseFloat(cleaned.replace(',', '.')) || 0;
+          return parseFloat(cleaned.replace(",", ".")) || 0;
         } else {
           // Thousands separator: 1,234
-          return parseFloat(cleaned.replace(/,/g, '')) || 0;
+          return parseFloat(cleaned.replace(/,/g, "")) || 0;
         }
       } else {
         // Simple number or dot as decimal separator
@@ -108,66 +114,84 @@ export function AdvancedMetrics({
     };
 
     const currentIncome = currentMonthTransactions
-      .filter(t => {
+      .filter((t) => {
         const categoryInfo = getCategoryInfo(categories, t.category);
-        return categoryInfo.category?.type === 'income';
+        return categoryInfo.category?.type === "income";
       })
       .reduce((sum, t) => sum + parseAmount(t.amount), 0);
 
     const currentExpenses = currentMonthTransactions
-      .filter(t => {
+      .filter((t) => {
         const categoryInfo = getCategoryInfo(categories, t.category);
-        return categoryInfo.category?.type === 'expense';
+        return categoryInfo.category?.type === "expense";
       })
       .reduce((sum, t) => sum + parseAmount(t.amount), 0);
 
     const previousIncome = previousMonthTransactions
-      .filter(t => {
+      .filter((t) => {
         const categoryInfo = getCategoryInfo(categories, t.category);
-        return categoryInfo.category?.type === 'income';
+        return categoryInfo.category?.type === "income";
       })
       .reduce((sum, t) => sum + parseAmount(t.amount), 0);
 
     const previousExpenses = previousMonthTransactions
-      .filter(t => {
+      .filter((t) => {
         const categoryInfo = getCategoryInfo(categories, t.category);
-        return categoryInfo.category?.type === 'expense';
+        return categoryInfo.category?.type === "expense";
       })
       .reduce((sum, t) => sum + parseAmount(t.amount), 0);
 
     // Calculate changes
-    const incomeChange = previousIncome > 0 ? ((currentIncome - previousIncome) / previousIncome) * 100 : 0;
-    const expenseChange = previousExpenses > 0 ? ((currentExpenses - previousExpenses) / previousExpenses) * 100 : 0;
+    const incomeChange =
+      previousIncome > 0
+        ? ((currentIncome - previousIncome) / previousIncome) * 100
+        : 0;
+    const expenseChange =
+      previousExpenses > 0
+        ? ((currentExpenses - previousExpenses) / previousExpenses) * 100
+        : 0;
 
     // Daily averages - fix calculation logic
     const daysInCurrentMonth = getDaysInMonth(currentDate);
     const currentDay = new Date().getDate();
-    const isCurrentMonth = selectedMonth === new Date().getMonth() + 1 && selectedYear === new Date().getFullYear();
-    const daysToCalculate = isCurrentMonth ? Math.max(currentDay, 1) : daysInCurrentMonth;
+    const isCurrentMonth =
+      selectedMonth === new Date().getMonth() + 1 &&
+      selectedYear === new Date().getFullYear();
+    const daysToCalculate = isCurrentMonth
+      ? Math.max(currentDay, 1)
+      : daysInCurrentMonth;
 
-    const dailyExpenseAverage = daysToCalculate > 0 ? currentExpenses / daysToCalculate : 0;
-    const projectedMonthlyExpenses = isCurrentMonth ? dailyExpenseAverage * daysInCurrentMonth : currentExpenses;
+    const dailyExpenseAverage =
+      daysToCalculate > 0 ? currentExpenses / daysToCalculate : 0;
+    const projectedMonthlyExpenses = isCurrentMonth
+      ? dailyExpenseAverage * daysInCurrentMonth
+      : currentExpenses;
 
     // Most expensive category - fix parsing and use category mapping
     const expensesByCategory = currentMonthTransactions
-      .filter(t => {
+      .filter((t) => {
         const categoryInfo = getCategoryInfo(categories, t.category);
-        return categoryInfo.category?.type === 'expense';
+        return categoryInfo.category?.type === "expense";
       })
-      .reduce((acc, t) => {
-        const categoryInfo = getCategoryInfo(categories, t.category);
-        const categoryName = categoryInfo.category?.name || t.category;
-        acc[categoryName] = (acc[categoryName] || 0) + parseAmount(t.amount);
-        return acc;
-      }, {} as Record<string, number>);
+      .reduce(
+        (acc, t) => {
+          const categoryInfo = getCategoryInfo(categories, t.category);
+          const categoryName = categoryInfo.category?.name || t.category;
+          acc[categoryName] = (acc[categoryName] || 0) + parseAmount(t.amount);
+          return acc;
+        },
+        {} as Record<string, number>,
+      );
 
-    const topExpenseCategory = Object.entries(expensesByCategory)
-      .sort(([,a], [,b]) => b - a)[0];
+    const topExpenseCategory = Object.entries(expensesByCategory).sort(
+      ([, a], [, b]) => b - a,
+    )[0];
 
     // Balance and remaining budget logic
     const currentBalance = currentIncome - currentExpenses;
     const remainingDays = isCurrentMonth ? daysInCurrentMonth - currentDay : 0;
-    const dailyBudgetRemaining = remainingDays > 0 ? currentBalance / remainingDays : 0;
+    const dailyBudgetRemaining =
+      remainingDays > 0 ? currentBalance / remainingDays : 0;
 
     return {
       currentIncome,
@@ -181,7 +205,7 @@ export function AdvancedMetrics({
       remainingDays,
       dailyBudgetRemaining,
       transactionCount: currentMonthTransactions.length,
-      isCurrentMonth
+      isCurrentMonth,
     };
   }, [transactions, selectedMonth, selectedYear, categories]);
 
@@ -197,8 +221,20 @@ export function AdvancedMetrics({
     return <BarChart3 className="h-3 w-3" />;
   };
 
-  const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-                  "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+  const months = [
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre",
+  ];
 
   // Show empty state if no transactions for the selected period
   if (metrics.transactionCount === 0) {
@@ -212,11 +248,13 @@ export function AdvancedMetrics({
               </div>
               <div className="space-y-2">
                 <h3 className="text-lg font-semibold text-gray-900">
-                  No hay transacciones en {months[selectedMonth - 1]} {selectedYear}
+                  No hay transacciones en {months[selectedMonth - 1]}{" "}
+                  {selectedYear}
                 </h3>
                 <p className="text-sm text-gray-600 max-w-md">
-                  Para ver analíticas y métricas, necesitas agregar transacciones.
-                  Registra tus ingresos y gastos para comenzar a visualizar tu situación financiera.
+                  Para ver analíticas y métricas, necesitas agregar
+                  transacciones. Registra tus ingresos y gastos para comenzar a
+                  visualizar tu situación financiera.
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-2 mt-2">
@@ -248,7 +286,8 @@ export function AdvancedMetrics({
         </CardHeader>
         <CardContent className="py-2 px-4">
           <div className="text-lg font-bold">
-            {symbol}{formatAmount(metrics.dailyExpenseAverage)}
+            {symbol}
+            {formatAmount(metrics.dailyExpenseAverage)}
           </div>
           <div className="text-xs text-muted-foreground">
             Gasto promedio por día
@@ -259,19 +298,23 @@ export function AdvancedMetrics({
       {/* Income Change */}
       <Card className="shadow-sm">
         <CardHeader className="flex flex-row items-center justify-between py-2 px-4">
-          <CardTitle className="text-xs font-medium">Ingresos vs Mes Anterior</CardTitle>
+          <CardTitle className="text-xs font-medium">
+            Ingresos vs Mes Anterior
+          </CardTitle>
           <DollarSign className="h-4 w-4 text-green-500" />
         </CardHeader>
         <CardContent className="py-2 px-4">
           <div className="text-lg font-bold">
-            {symbol}{formatAmount(metrics.currentIncome)}
+            {symbol}
+            {formatAmount(metrics.currentIncome)}
           </div>
           <Badge
             variant="outline"
             className={`text-xs ${getChangeColor(metrics.incomeChange)}`}
           >
             {getChangeIcon(metrics.incomeChange)}
-            {metrics.incomeChange > 0 ? '+' : ''}{metrics.incomeChange.toFixed(1)}%
+            {metrics.incomeChange > 0 ? "+" : ""}
+            {metrics.incomeChange.toFixed(1)}%
           </Badge>
         </CardContent>
       </Card>
@@ -279,19 +322,23 @@ export function AdvancedMetrics({
       {/* Expense Change */}
       <Card className="shadow-sm">
         <CardHeader className="flex flex-row items-center justify-between py-2 px-4">
-          <CardTitle className="text-xs font-medium">Gastos vs Mes Anterior</CardTitle>
+          <CardTitle className="text-xs font-medium">
+            Gastos vs Mes Anterior
+          </CardTitle>
           <TrendingUp className="h-4 w-4 text-red-500" />
         </CardHeader>
         <CardContent className="py-2 px-4">
           <div className="text-lg font-bold">
-            {symbol}{formatAmount(metrics.currentExpenses)}
+            {symbol}
+            {formatAmount(metrics.currentExpenses)}
           </div>
           <Badge
             variant="outline"
             className={`text-xs ${getChangeColor(metrics.expenseChange)}`}
           >
             {getChangeIcon(metrics.expenseChange)}
-            {metrics.expenseChange > 0 ? '+' : ''}{metrics.expenseChange.toFixed(1)}%
+            {metrics.expenseChange > 0 ? "+" : ""}
+            {metrics.expenseChange.toFixed(1)}%
           </Badge>
         </CardContent>
       </Card>
@@ -299,7 +346,9 @@ export function AdvancedMetrics({
       {/* Top Category */}
       <Card className="shadow-sm">
         <CardHeader className="flex flex-row items-center justify-between py-2 px-4">
-          <CardTitle className="text-xs font-medium">Categoría Mayor Gasto</CardTitle>
+          <CardTitle className="text-xs font-medium">
+            Categoría Mayor Gasto
+          </CardTitle>
           <Target className="h-4 w-4 text-orange-500" />
         </CardHeader>
         <CardContent className="py-2 px-4">
@@ -307,10 +356,9 @@ export function AdvancedMetrics({
             {metrics.topExpenseCategory?.[0] || "N/A"}
           </div>
           <div className="text-xs text-muted-foreground">
-            {metrics.topExpenseCategory ?
-              `${symbol}${formatAmount(metrics.topExpenseCategory[1])}` :
-              "Sin gastos"
-            }
+            {metrics.topExpenseCategory
+              ? `${symbol}${formatAmount(metrics.topExpenseCategory[1])}`
+              : "Sin gastos"}
           </div>
         </CardContent>
       </Card>
@@ -319,12 +367,15 @@ export function AdvancedMetrics({
       {metrics.isCurrentMonth && (
         <Card className="shadow-sm">
           <CardHeader className="flex flex-row items-center justify-between py-2 px-4">
-            <CardTitle className="text-xs font-medium">Proyección del Mes</CardTitle>
+            <CardTitle className="text-xs font-medium">
+              Proyección del Mes
+            </CardTitle>
             <BarChart3 className="h-4 w-4 text-blue-500" />
           </CardHeader>
           <CardContent className="py-2 px-4">
             <div className="text-lg font-bold">
-              {symbol}{formatAmount(metrics.projectedMonthlyExpenses)}
+              {symbol}
+              {formatAmount(metrics.projectedMonthlyExpenses)}
             </div>
             <div className="text-xs text-muted-foreground">
               Gasto proyectado total
@@ -337,15 +388,24 @@ export function AdvancedMetrics({
       {metrics.isCurrentMonth && metrics.remainingDays > 0 && (
         <Card className="shadow-sm">
           <CardHeader className="flex flex-row items-center justify-between py-2 px-4">
-            <CardTitle className="text-xs font-medium">Presupuesto Diario</CardTitle>
-            <AlertTriangle className={`h-4 w-4 ${metrics.dailyBudgetRemaining < 0 ? 'text-red-500' : 'text-green-500'}`} />
+            <CardTitle className="text-xs font-medium">
+              Presupuesto Diario
+            </CardTitle>
+            <AlertTriangle
+              className={`h-4 w-4 ${metrics.dailyBudgetRemaining < 0 ? "text-red-500" : "text-green-500"}`}
+            />
           </CardHeader>
           <CardContent className="py-2 px-4">
-            <div className={`text-lg font-bold ${metrics.dailyBudgetRemaining < 0 ? 'text-red-600' : 'text-green-600'}`}>
-              {symbol}{formatAmount(Math.abs(metrics.dailyBudgetRemaining))}
+            <div
+              className={`text-lg font-bold ${metrics.dailyBudgetRemaining < 0 ? "text-red-600" : "text-green-600"}`}
+            >
+              {symbol}
+              {formatAmount(Math.abs(metrics.dailyBudgetRemaining))}
             </div>
             <div className="text-xs text-muted-foreground">
-              {metrics.dailyBudgetRemaining < 0 ? 'Déficit diario' : `${metrics.remainingDays} días restantes`}
+              {metrics.dailyBudgetRemaining < 0
+                ? "Déficit diario"
+                : `${metrics.remainingDays} días restantes`}
             </div>
           </CardContent>
         </Card>

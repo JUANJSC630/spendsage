@@ -26,6 +26,8 @@ interface Transaction {
   createdAt: Date;
   updatedAt: Date;
   userId: string;
+  fromAccountId: string | null;
+  toAccountId: string | null;
 }
 
 interface Category {
@@ -57,14 +59,19 @@ const months = [
   { value: "12", label: "Diciembre" },
 ];
 
-export function FinancesPageClient({ transactions, categories }: FinancesPageClientProps) {
+export function FinancesPageClient({
+  transactions,
+  categories,
+}: FinancesPageClientProps) {
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth() + 1;
   const currentYear = currentDate.getFullYear();
 
   const [selectedMonth, setSelectedMonth] = useState(currentMonth.toString());
   const [selectedYear, setSelectedYear] = useState(currentYear.toString());
-  const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([]);
+  const [filteredTransactions, setFilteredTransactions] = useState<
+    Transaction[]
+  >([]);
   const { colorTheme } = useColorThemeStore();
   // Generate years array (current year and previous 5 years)
   const years = Array.from({ length: 6 }, (_, i) => {
@@ -88,7 +95,8 @@ export function FinancesPageClient({ transactions, categories }: FinancesPageCli
     setFilteredTransactions(filtered);
   }, [transactions, selectedMonth, selectedYear]);
 
-  const selectedMonthName = months.find(m => m.value === selectedMonth)?.label || "";
+  const selectedMonthName =
+    months.find((m) => m.value === selectedMonth)?.label || "";
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] w-full">
@@ -146,9 +154,13 @@ export function FinancesPageClient({ transactions, categories }: FinancesPageCli
 
       {/* Period indicator */}
       <div className="mb-6">
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-sm font-medium rounded-full" style={{ color: colorTheme }}>
+        <div
+          className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-sm font-medium rounded-full"
+          style={{ color: colorTheme }}
+        >
           <CalendarIcon className="h-4 w-4" />
-          {selectedMonthName} {selectedYear} • {filteredTransactions.length} Movimientos
+          {selectedMonthName} {selectedYear} • {filteredTransactions.length}{" "}
+          Movimientos
         </div>
       </div>
 
@@ -158,18 +170,31 @@ export function FinancesPageClient({ transactions, categories }: FinancesPageCli
             <FromTransaction />
           </div>
           <div className="border border-slate-100 p-4 rounded-md transition-colors duration-300 ease-in">
-            <ListTransaction transactions={filteredTransactions} categories={categories} />
+            <ListTransaction
+              transactions={filteredTransactions}
+              categories={categories}
+            />
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <CardTotal transactions={filteredTransactions} categories={categories} type="income" title="Total de Ingresos" />
+          <CardTotal
+            transactions={filteredTransactions}
+            categories={categories}
+            type="income"
+            title="Total de Ingresos"
+          />
           <CardTotal
             transactions={filteredTransactions}
             categories={categories}
             type="expenses"
             title="Total de Gastos"
           />
-          <CardTotal transactions={filteredTransactions} categories={categories} type="balance" title="Balance Total" />
+          <CardTotal
+            transactions={filteredTransactions}
+            categories={categories}
+            type="balance"
+            title="Balance Total"
+          />
         </div>
       </div>
     </div>

@@ -17,7 +17,8 @@ export function SidebarItem({ item, setOpen, onItemClick }: SidebarItemProps) {
   const { href, icon: Icon, label } = item;
   const pathname = usePathname();
   const { colorTheme } = useSyncColorTheme();
-  const isActive = pathname === href || (href !== "/" && pathname.startsWith(href));
+  const isActive =
+    pathname === href || (href !== "/" && pathname.startsWith(href));
 
   const link = (
     <Link
@@ -66,7 +67,10 @@ export function SidebarItem({ item, setOpen, onItemClick }: SidebarItemProps) {
 
       {/* Hover background when not active */}
       {!isActive && (
-        <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-150 bg-slate-100" style={{ zIndex: -1 }} />
+        <span
+          className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-150 bg-slate-100"
+          style={{ zIndex: -1 }}
+        />
       )}
     </Link>
   );

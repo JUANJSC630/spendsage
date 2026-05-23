@@ -8,7 +8,7 @@ export async function PATCH(
     params,
   }: {
     params: { budgetId: string };
-  }
+  },
 ) {
   try {
     const { userId } = auth();
@@ -40,7 +40,7 @@ export async function DELETE(
     params,
   }: {
     params: { budgetId: string };
-  }
+  },
 ) {
   try {
     const { userId } = auth();

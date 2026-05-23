@@ -5,19 +5,19 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
-import { 
-  Folder, 
-  Home, 
-  Car, 
-  ShoppingCart, 
-  Coffee, 
-  Gamepad2, 
-  Heart, 
+import {
+  Folder,
+  Home,
+  Car,
+  ShoppingCart,
+  Coffee,
+  Gamepad2,
+  Heart,
   GraduationCap,
   Plane,
   Shirt,
   Smartphone,
-  DollarSign
+  DollarSign,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -103,12 +103,14 @@ function CategoryForm() {
       router.refresh();
     } catch (error) {
       console.error("Error creating category:", error);
-      
+
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 400) {
           toast.error("Ya existe una categoría con ese nombre");
         } else if (error.response?.status === 500) {
-          toast.error("Error del servidor. ¿Necesitas reiniciar el servidor de desarrollo?");
+          toast.error(
+            "Error del servidor. ¿Necesitas reiniciar el servidor de desarrollo?",
+          );
         } else {
           toast.error("Error de conexión. Verifica tu conexión a internet.");
         }
@@ -120,7 +122,8 @@ function CategoryForm() {
 
   const { isValid } = form.formState;
 
-  const SelectedIconComponent = iconOptions.find(icon => icon.value === selectedIcon)?.icon || Folder;
+  const SelectedIconComponent =
+    iconOptions.find((icon) => icon.value === selectedIcon)?.icon || Folder;
 
   return (
     <div className="space-y-4">
@@ -135,7 +138,10 @@ function CategoryForm() {
                 <FormItem>
                   <FormLabel>Nombre</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Ej: Alimentación, Transporte..." />
+                    <Input
+                      {...field}
+                      placeholder="Ej: Alimentación, Transporte..."
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -149,8 +155,8 @@ function CategoryForm() {
                 <FormItem>
                   <FormLabel>Descripción (Opcional)</FormLabel>
                   <FormControl>
-                    <Textarea 
-                      {...field} 
+                    <Textarea
+                      {...field}
                       placeholder="Describe brevemente esta categoría..."
                       rows={2}
                     />
@@ -192,18 +198,24 @@ function CategoryForm() {
                 <FormItem>
                   <FormLabel>Ícono</FormLabel>
                   <FormControl>
-                    <Select 
+                    <Select
                       onValueChange={(value) => {
                         field.onChange(value);
                         setSelectedIcon(value);
-                      }} 
+                      }}
                       value={field.value}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Selecciona un ícono">
                           <div className="flex items-center gap-2">
                             <SelectedIconComponent className="h-4 w-4" />
-                            <span>{iconOptions.find(icon => icon.value === selectedIcon)?.label}</span>
+                            <span>
+                              {
+                                iconOptions.find(
+                                  (icon) => icon.value === selectedIcon,
+                                )?.label
+                              }
+                            </span>
                           </div>
                         </SelectValue>
                       </SelectTrigger>
@@ -240,8 +252,8 @@ function CategoryForm() {
                           className="w-8 h-8 rounded-full border-2 border-gray-300"
                           style={{ backgroundColor: selectedColor }}
                         />
-                        <Input 
-                          {...field} 
+                        <Input
+                          {...field}
                           type="text"
                           placeholder="#3B82F6"
                           onChange={(e) => {
@@ -256,7 +268,9 @@ function CategoryForm() {
                             key={color}
                             type="button"
                             className={`w-8 h-8 rounded-full border-2 ${
-                              selectedColor === color ? 'border-gray-900' : 'border-gray-300'
+                              selectedColor === color
+                                ? "border-gray-900"
+                                : "border-gray-300"
                             }`}
                             style={{ backgroundColor: color }}
                             onClick={() => {
@@ -273,12 +287,10 @@ function CategoryForm() {
               )}
             />
           </div>
-          
+
           <Button
             type="submit"
-            className={`w-full mt-8 ${
-              !isValid ? "opacity-50" : "opacity-100"
-            }`}
+            className={`w-full mt-8 ${!isValid ? "opacity-50" : "opacity-100"}`}
             disabled={!isValid}
           >
             Crear Categoría

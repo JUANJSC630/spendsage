@@ -14,8 +14,8 @@ export const getCategoriesQuery = (userId: string) => ({
       {
         isDefault: true,
         isActive: true,
-      }
-    ]
+      },
+    ],
   },
   orderBy: [
     {
@@ -42,8 +42,8 @@ export const getAllCategoriesQuery = (userId: string) => ({
       },
       {
         isDefault: true,
-      }
-    ]
+      },
+    ],
   },
   orderBy: [
     {
@@ -69,22 +69,25 @@ export async function getActiveCategories(userId: string) {
   const categories = await db.category.findMany(getCategoriesQuery(userId));
 
   // Deduplicar por slug, priorizando categorías por defecto
-  const uniqueCategories = categories.reduce((acc, category) => {
-    const existingIndex = acc.findIndex(c => c.slug === category.slug);
+  const uniqueCategories = categories.reduce(
+    (acc, category) => {
+      const existingIndex = acc.findIndex((c) => c.slug === category.slug);
 
-    if (existingIndex === -1) {
-      // No existe, agregar
-      acc.push(category);
-    } else {
-      // Existe, mantener la por defecto si aplica
-      const existing = acc[existingIndex];
-      if (category.isDefault && !existing.isDefault) {
-        acc[existingIndex] = category;
+      if (existingIndex === -1) {
+        // No existe, agregar
+        acc.push(category);
+      } else {
+        // Existe, mantener la por defecto si aplica
+        const existing = acc[existingIndex];
+        if (category.isDefault && !existing.isDefault) {
+          acc[existingIndex] = category;
+        }
       }
-    }
 
-    return acc;
-  }, [] as typeof categories);
+      return acc;
+    },
+    [] as typeof categories,
+  );
 
   return uniqueCategories;
 }
@@ -96,20 +99,23 @@ export async function getAllCategories(userId: string) {
   const categories = await db.category.findMany(getAllCategoriesQuery(userId));
 
   // Deduplicar por slug, priorizando categorías por defecto
-  const uniqueCategories = categories.reduce((acc, category) => {
-    const existingIndex = acc.findIndex(c => c.slug === category.slug);
+  const uniqueCategories = categories.reduce(
+    (acc, category) => {
+      const existingIndex = acc.findIndex((c) => c.slug === category.slug);
 
-    if (existingIndex === -1) {
-      acc.push(category);
-    } else {
-      const existing = acc[existingIndex];
-      if (category.isDefault && !existing.isDefault) {
-        acc[existingIndex] = category;
+      if (existingIndex === -1) {
+        acc.push(category);
+      } else {
+        const existing = acc[existingIndex];
+        if (category.isDefault && !existing.isDefault) {
+          acc[existingIndex] = category;
+        }
       }
-    }
 
-    return acc;
-  }, [] as typeof categories);
+      return acc;
+    },
+    [] as typeof categories,
+  );
 
   return uniqueCategories;
 }

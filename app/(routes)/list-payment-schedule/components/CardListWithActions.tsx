@@ -13,13 +13,18 @@ import {
 import CardList from "./CardList";
 import { DuplicateListModal } from "./DuplicateListModal";
 import { EditListModal } from "./EditListModal/EditListModal";
-import { usePrefetchListPaymentSchedule, ListPaymentScheduleWithStats } from "@/hooks/use-payment-schedules";
+import {
+  usePrefetchListPaymentSchedule,
+  ListPaymentScheduleWithStats,
+} from "@/hooks/use-payment-schedules";
 
 interface CardListWithActionsProps {
   listPaymentSchedule: ListPaymentScheduleWithStats;
 }
 
-export function CardListWithActions({ listPaymentSchedule }: CardListWithActionsProps) {
+export function CardListWithActions({
+  listPaymentSchedule,
+}: CardListWithActionsProps) {
   const [showDuplicateModal, setShowDuplicateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const prefetchList = usePrefetchListPaymentSchedule();
@@ -31,8 +36,14 @@ export function CardListWithActions({ listPaymentSchedule }: CardListWithActions
   return (
     <>
       <div className="relative group w-full" onMouseEnter={handleMouseEnter}>
-        <Link href={`/list-payment-schedule/${listPaymentSchedule.id}`} className="block w-full">
-          <CardList listPaymentScheduleName={listPaymentSchedule.name} stats={listPaymentSchedule._stats} />
+        <Link
+          href={`/list-payment-schedule/${listPaymentSchedule.id}`}
+          className="block w-full"
+        >
+          <CardList
+            listPaymentScheduleName={listPaymentSchedule.name}
+            stats={listPaymentSchedule._stats}
+          />
         </Link>
 
         {/* Desktop: botones en hover (top-left) */}
@@ -41,7 +52,11 @@ export function CardListWithActions({ listPaymentSchedule }: CardListWithActions
           <Button
             variant="secondary"
             size="sm"
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowDuplicateModal(true); }}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setShowDuplicateModal(true);
+            }}
             className="h-8 w-8 p-0 bg-white/90 hover:bg-white shadow-md"
             title="Duplicar lista"
           >
@@ -57,7 +72,10 @@ export function CardListWithActions({ listPaymentSchedule }: CardListWithActions
                 variant="secondary"
                 size="sm"
                 className="h-8 w-8 p-0 bg-white/80 shadow-sm"
-                onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
               >
                 <MoreVertical className="h-4 w-4" />
               </Button>

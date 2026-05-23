@@ -1,6 +1,15 @@
-import { useQuery, useMutation, useQueryClient, useQueries } from '@tanstack/react-query';
-import { useAuth } from '@clerk/nextjs';
-import { ListPaymentSchedule, PaymentSchedule, PaymentItem } from '@prisma/client';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  useQueries,
+} from "@tanstack/react-query";
+import { useAuth } from "@clerk/nextjs";
+import {
+  ListPaymentSchedule,
+  PaymentSchedule,
+  PaymentItem,
+} from "@prisma/client";
 
 type PaymentScheduleWithItems = PaymentSchedule & {
   paymentItems: PaymentItem[];
@@ -24,41 +33,52 @@ export type ListPaymentScheduleWithStats = ListPaymentSchedule & {
 
 // Query Keys
 export const paymentScheduleKeys = {
-  all: ['payment-schedules'] as const,
-  lists: () => [...paymentScheduleKeys.all, 'lists'] as const,
+  all: ["payment-schedules"] as const,
+  lists: () => [...paymentScheduleKeys.all, "lists"] as const,
   list: (id: string) => [...paymentScheduleKeys.lists(), id] as const,
-  schedules: (listId: string) => [...paymentScheduleKeys.list(listId), 'schedules'] as const,
-  schedule: (id: string) => [...paymentScheduleKeys.all, 'schedule', id] as const,
-  items: (scheduleId: string) => [...paymentScheduleKeys.schedule(scheduleId), 'items'] as const,
+  schedules: (listId: string) =>
+    [...paymentScheduleKeys.list(listId), "schedules"] as const,
+  schedule: (id: string) =>
+    [...paymentScheduleKeys.all, "schedule", id] as const,
+  items: (scheduleId: string) =>
+    [...paymentScheduleKeys.schedule(scheduleId), "items"] as const,
 };
 
 // API Functions
 const api = {
-  getListPaymentSchedules: async (): Promise<ListPaymentScheduleWithStats[]> => {
-    const response = await fetch('/api/list-payment-schedule');
-    if (!response.ok) throw new Error('Failed to fetch payment schedule lists');
+  getListPaymentSchedules: async (): Promise<
+    ListPaymentScheduleWithStats[]
+  > => {
+    const response = await fetch("/api/list-payment-schedule");
+    if (!response.ok) throw new Error("Failed to fetch payment schedule lists");
     return response.json();
   },
 
-  getListPaymentScheduleById: async (id: string): Promise<ListPaymentScheduleWithSchedules> => {
+  getListPaymentScheduleById: async (
+    id: string,
+  ): Promise<ListPaymentScheduleWithSchedules> => {
     const response = await fetch(`/api/list-payment-schedule/${id}`);
-    if (!response.ok) throw new Error('Failed to fetch payment schedule list');
+    if (!response.ok) throw new Error("Failed to fetch payment schedule list");
     return response.json();
   },
 
   getPaymentItems: async (scheduleId: string): Promise<PaymentItem[]> => {
-    const response = await fetch(`/api/payment-schedule/${scheduleId}/payment-item`);
-    if (!response.ok) throw new Error('Failed to fetch payment items');
+    const response = await fetch(
+      `/api/payment-schedule/${scheduleId}/payment-item`,
+    );
+    if (!response.ok) throw new Error("Failed to fetch payment items");
     return response.json();
   },
 
-  createListPaymentSchedule: async (data: { name: string }): Promise<ListPaymentSchedule> => {
-    const response = await fetch('/api/list-payment-schedule', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+  createListPaymentSchedule: async (data: {
+    name: string;
+  }): Promise<ListPaymentSchedule> => {
+    const response = await fetch("/api/list-payment-schedule", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
-    if (!response.ok) throw new Error('Failed to create payment schedule list');
+    if (!response.ok) throw new Error("Failed to create payment schedule list");
     return response.json();
   },
 
@@ -68,12 +88,12 @@ const api = {
     toDate: Date;
     listPaymentScheduleId: string;
   }): Promise<PaymentSchedule> => {
-    const response = await fetch('/api/payment-schedule', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const response = await fetch("/api/payment-schedule", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
-    if (!response.ok) throw new Error('Failed to create payment schedule');
+    if (!response.ok) throw new Error("Failed to create payment schedule");
     return response.json();
   },
 
@@ -84,12 +104,15 @@ const api = {
     description: string;
     check?: boolean;
   }): Promise<PaymentItem> => {
-    const response = await fetch(`/api/payment-schedule/${data.paymentScheduleId}/payment-item`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    if (!response.ok) throw new Error('Failed to create payment item');
+    const response = await fetch(
+      `/api/payment-schedule/${data.paymentScheduleId}/payment-item`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      },
+    );
+    if (!response.ok) throw new Error("Failed to create payment item");
     return response.json();
   },
 
@@ -101,67 +124,88 @@ const api = {
     description?: string;
     check?: boolean;
   }): Promise<PaymentItem> => {
-    const response = await fetch(`/api/payment-schedule/${data.paymentScheduleId}/payment-item/${data.id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    if (!response.ok) throw new Error('Failed to update payment item');
+    const response = await fetch(
+      `/api/payment-schedule/${data.paymentScheduleId}/payment-item/${data.id}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      },
+    );
+    if (!response.ok) throw new Error("Failed to update payment item");
     return response.json();
   },
 
-  deletePaymentItem: async (paymentScheduleId: string, itemId: string): Promise<void> => {
-    const response = await fetch(`/api/payment-schedule/${paymentScheduleId}/payment-item/${itemId}`, {
-      method: 'DELETE',
-    });
-    if (!response.ok) throw new Error('Failed to delete payment item');
+  deletePaymentItem: async (
+    paymentScheduleId: string,
+    itemId: string,
+  ): Promise<void> => {
+    const response = await fetch(
+      `/api/payment-schedule/${paymentScheduleId}/payment-item/${itemId}`,
+      {
+        method: "DELETE",
+      },
+    );
+    if (!response.ok) throw new Error("Failed to delete payment item");
   },
 
   deletePaymentSchedule: async (id: string): Promise<void> => {
     const response = await fetch(`/api/payment-schedule/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
-    if (!response.ok) throw new Error('Failed to delete payment schedule');
+    if (!response.ok) throw new Error("Failed to delete payment schedule");
   },
 
   deleteListPaymentSchedule: async (id: string): Promise<void> => {
     const response = await fetch(`/api/list-payment-schedule/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
-    if (!response.ok) throw new Error('Failed to delete payment schedule list');
+    if (!response.ok) throw new Error("Failed to delete payment schedule list");
   },
 
-  duplicateListPaymentSchedule: async (id: string, name: string): Promise<ListPaymentScheduleWithSchedules> => {
+  duplicateListPaymentSchedule: async (
+    id: string,
+    name: string,
+  ): Promise<ListPaymentScheduleWithSchedules> => {
     const response = await fetch(`/api/list-payment-schedule/${id}/duplicate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name }),
     });
-    if (!response.ok) throw new Error('Failed to duplicate payment schedule list');
+    if (!response.ok)
+      throw new Error("Failed to duplicate payment schedule list");
     return response.json();
   },
 
-  updateListPaymentSchedule: async (data: { id: string; name: string }): Promise<ListPaymentSchedule> => {
+  updateListPaymentSchedule: async (data: {
+    id: string;
+    name: string;
+  }): Promise<ListPaymentSchedule> => {
     const response = await fetch(`/api/list-payment-schedule/${data.id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: data.name }),
     });
-    if (!response.ok) throw new Error('Failed to update payment schedule list');
+    if (!response.ok) throw new Error("Failed to update payment schedule list");
     return response.json();
   },
 
-  updatePaymentSchedule: async (data: { id: string; name: string; fromDate: Date; toDate: Date }): Promise<PaymentSchedule> => {
+  updatePaymentSchedule: async (data: {
+    id: string;
+    name: string;
+    fromDate: Date;
+    toDate: Date;
+  }): Promise<PaymentSchedule> => {
     const response = await fetch(`/api/payment-schedule/${data.id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         name: data.name,
         fromDate: data.fromDate,
-        toDate: data.toDate
+        toDate: data.toDate,
       }),
     });
-    if (!response.ok) throw new Error('Failed to update payment schedule');
+    if (!response.ok) throw new Error("Failed to update payment schedule");
     return response.json();
   },
 };
@@ -189,7 +233,7 @@ export function useListPaymentSchedule(id: string) {
 
 export function usePrefetchListPaymentSchedule() {
   const queryClient = useQueryClient();
-  
+
   return (id: string) => {
     queryClient.prefetchQuery({
       queryKey: paymentScheduleKeys.list(id),
@@ -227,7 +271,7 @@ export function useCreatePaymentSchedule() {
     mutationFn: api.createPaymentSchedule,
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
-        queryKey: paymentScheduleKeys.list(variables.listPaymentScheduleId)
+        queryKey: paymentScheduleKeys.list(variables.listPaymentScheduleId),
       });
     },
   });
@@ -240,7 +284,7 @@ export function useCreatePaymentItem() {
     mutationFn: api.createPaymentItem,
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
-        queryKey: paymentScheduleKeys.items(variables.paymentScheduleId)
+        queryKey: paymentScheduleKeys.items(variables.paymentScheduleId),
       });
     },
   });
@@ -254,12 +298,12 @@ export function useUpdatePaymentItem() {
     onMutate: async (updatedItem) => {
       // Cancel any outgoing refetches so they don't overwrite our optimistic update
       await queryClient.cancelQueries({
-        queryKey: paymentScheduleKeys.items(updatedItem.paymentScheduleId)
+        queryKey: paymentScheduleKeys.items(updatedItem.paymentScheduleId),
       });
 
       // Snapshot the previous value
       const previousItems = queryClient.getQueryData<PaymentItem[]>(
-        paymentScheduleKeys.items(updatedItem.paymentScheduleId)
+        paymentScheduleKeys.items(updatedItem.paymentScheduleId),
       );
 
       // Optimistically update to the new value
@@ -268,12 +312,12 @@ export function useUpdatePaymentItem() {
           paymentScheduleKeys.items(updatedItem.paymentScheduleId),
           (old) => {
             if (!old) return old;
-            
+
             // Map to update the item
             const newItems = old.map((item) =>
-              item.id === updatedItem.id ? { ...item, ...updatedItem } : item
+              item.id === updatedItem.id ? { ...item, ...updatedItem } : item,
             );
-            
+
             // Re-sort the array exactly like the server does: first by 'check' (false first), then by 'date'
             return newItems.sort((a, b) => {
               // 1. Sort by check
@@ -283,26 +327,29 @@ export function useUpdatePaymentItem() {
               // 2. Sort by date
               return new Date(a.date).getTime() - new Date(b.date).getTime();
             });
-          }
+          },
         );
       }
 
       // Return a context object with the snapshotted value
-      return { previousItems, paymentScheduleId: updatedItem.paymentScheduleId };
+      return {
+        previousItems,
+        paymentScheduleId: updatedItem.paymentScheduleId,
+      };
     },
     // If the mutation fails, use the context returned from onMutate to roll back
     onError: (err, variables, context) => {
       if (context?.previousItems) {
         queryClient.setQueryData(
           paymentScheduleKeys.items(context.paymentScheduleId),
-          context.previousItems
+          context.previousItems,
         );
       }
     },
     // Always refetch after error or success to ensure data is in sync
     onSettled: (_, __, variables) => {
       queryClient.invalidateQueries({
-        queryKey: paymentScheduleKeys.items(variables.paymentScheduleId)
+        queryKey: paymentScheduleKeys.items(variables.paymentScheduleId),
       });
     },
   });
@@ -312,11 +359,16 @@ export function useDeletePaymentItem() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ paymentScheduleId, itemId }: { paymentScheduleId: string; itemId: string }) =>
-      api.deletePaymentItem(paymentScheduleId, itemId),
+    mutationFn: ({
+      paymentScheduleId,
+      itemId,
+    }: {
+      paymentScheduleId: string;
+      itemId: string;
+    }) => api.deletePaymentItem(paymentScheduleId, itemId),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
-        queryKey: paymentScheduleKeys.items(variables.paymentScheduleId)
+        queryKey: paymentScheduleKeys.items(variables.paymentScheduleId),
       });
     },
   });
@@ -363,7 +415,9 @@ export function useUpdateListPaymentSchedule() {
     mutationFn: api.updateListPaymentSchedule,
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: paymentScheduleKeys.lists() });
-      queryClient.invalidateQueries({ queryKey: paymentScheduleKeys.list(data.id) });
+      queryClient.invalidateQueries({
+        queryKey: paymentScheduleKeys.list(data.id),
+      });
     },
   });
 }
@@ -391,9 +445,17 @@ export function useGlobalPaymentSummary(scheduleIds: string[]) {
   }, 0);
 
   const totalAmount = totalPaid + totalPending;
-  const progress = totalAmount === 0 ? 0 : Math.round((totalPaid / totalAmount) * 100);
+  const progress =
+    totalAmount === 0 ? 0 : Math.round((totalPaid / totalAmount) * 100);
 
-  return { isLoading, totalPaid, totalPending, totalAmount, progress, totalItems: allItems.length };
+  return {
+    isLoading,
+    totalPaid,
+    totalPending,
+    totalAmount,
+    progress,
+    totalItems: allItems.length,
+  };
 }
 
 export function useUpdatePaymentSchedule() {

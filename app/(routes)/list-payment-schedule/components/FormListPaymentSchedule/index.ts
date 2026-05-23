@@ -1,1 +1,1 @@
-export * from './FormListPaymentSchedule';
+export * from "./FormListPaymentSchedule";

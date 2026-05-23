@@ -31,10 +31,10 @@ export default function layout({ children }: { children: React.ReactNode }) {
       {/* Right pane: Image & Branding */}
       <div className="relative hidden w-0 flex-1 lg:block">
         <div className="absolute inset-0 h-full w-full object-cover bg-cover bg-center bg-[url('/pexels-fox-58267-1172675.jpg')]" />
-        
+
         {/* Gradient Overlay for modern look */}
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-slate-900/20 mix-blend-multiply" />
-        
+
         {/* Content over image */}
         <div className="absolute bottom-0 left-0 right-0 p-16 text-white flex flex-col justify-end h-full bg-gradient-to-t from-slate-900/90 via-transparent to-transparent">
           <div className="flex flex-col gap-6 transform transition-all duration-700 translate-y-0 opacity-100">
@@ -52,9 +52,10 @@ export default function layout({ children }: { children: React.ReactNode }) {
                 SpendSage
               </h1>
             </div>
-            
+
             <p className="text-xl font-medium text-slate-200 mb-6 max-w-xl leading-relaxed drop-shadow-md">
-              Una aplicación moderna e inteligente de presupuestos para ayudarte a tomar el control absoluto de tus finanzas y alcanzar tus metas.
+              Una aplicación moderna e inteligente de presupuestos para ayudarte
+              a tomar el control absoluto de tus finanzas y alcanzar tus metas.
             </p>
 
             <div className="grid grid-cols-2 gap-x-8 gap-y-6 max-w-2xl mt-4">
@@ -63,28 +64,40 @@ export default function layout({ children }: { children: React.ReactNode }) {
                   <TrendingUp className="w-6 h-6 text-emerald-400" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg drop-shadow-sm">Seguimiento Real</h3>
-                  <p className="text-sm text-slate-300 font-medium">Controla cada centavo</p>
+                  <h3 className="font-semibold text-lg drop-shadow-sm">
+                    Seguimiento Real
+                  </h3>
+                  <p className="text-sm text-slate-300 font-medium">
+                    Controla cada centavo
+                  </p>
                 </div>
               </div>
-              
+
               <div className="flex items-center gap-4 group cursor-default">
                 <div className="p-3.5 bg-blue-500/20 rounded-2xl backdrop-blur-md border border-blue-500/30 group-hover:bg-blue-500/30 transition-colors">
                   <PieChart className="w-6 h-6 text-blue-400" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg drop-shadow-sm">Gráficos Claros</h3>
-                  <p className="text-sm text-slate-300 font-medium">Visualiza tu economía</p>
+                  <h3 className="font-semibold text-lg drop-shadow-sm">
+                    Gráficos Claros
+                  </h3>
+                  <p className="text-sm text-slate-300 font-medium">
+                    Visualiza tu economía
+                  </p>
                 </div>
               </div>
-              
+
               <div className="flex items-center gap-4 col-span-2 group cursor-default">
                 <div className="p-3.5 bg-indigo-500/20 rounded-2xl backdrop-blur-md border border-indigo-500/30 group-hover:bg-indigo-500/30 transition-colors">
                   <ShieldCheck className="w-6 h-6 text-indigo-400" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg drop-shadow-sm">Seguridad Total</h3>
-                  <p className="text-sm text-slate-300 font-medium">Tus datos financieros están encriptados y protegidos</p>
+                  <h3 className="font-semibold text-lg drop-shadow-sm">
+                    Seguridad Total
+                  </h3>
+                  <p className="text-sm text-slate-300 font-medium">
+                    Tus datos financieros están encriptados y protegidos
+                  </p>
                 </div>
               </div>
             </div>

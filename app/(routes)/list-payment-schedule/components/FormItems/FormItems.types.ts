@@ -3,5 +3,5 @@ import { Dispatch, SetStateAction } from "react";
 
 export type FormItemsProps = {
   setOpen: Dispatch<SetStateAction<boolean>>;
-  paymentSchedule: PaymentSchedule
+  paymentSchedule: PaymentSchedule;
 };

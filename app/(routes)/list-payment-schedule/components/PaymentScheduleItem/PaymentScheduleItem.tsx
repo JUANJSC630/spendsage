@@ -27,7 +27,7 @@ export default function PaymentScheduleItem(props: PaymentScheduleItemProps) {
   }, [paymentItem.check]);
 
   const handleCheckboxChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const newCheckedState = event.target.checked;
     setChecked(newCheckedState);
@@ -46,10 +46,10 @@ export default function PaymentScheduleItem(props: PaymentScheduleItemProps) {
     }
   };
   return (
-    <div 
+    <div
       className={cn(
         "group flex flex-col sm:flex-row sm:items-center justify-between py-3 px-2 sm:py-2 sm:px-1 border-b border-slate-100 last:border-0 transition-colors gap-2 sm:gap-0",
-        checked ? "opacity-60" : "hover:bg-slate-50/50"
+        checked ? "opacity-60" : "hover:bg-slate-50/50",
       )}
     >
       <div className="flex items-start sm:items-center space-x-3 flex-1 overflow-hidden w-full">
@@ -61,17 +61,23 @@ export default function PaymentScheduleItem(props: PaymentScheduleItemProps) {
         </div>
         <div className="flex flex-col min-w-0 flex-1">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-0.5 sm:gap-2">
-            <span className={cn(
-              "text-sm font-medium text-slate-800 break-words line-clamp-2 sm:truncate transition-all",
-              checked && "text-slate-500 line-through"
-            )}>
+            <span
+              className={cn(
+                "text-sm font-medium text-slate-800 break-words line-clamp-2 sm:truncate transition-all",
+                checked && "text-slate-500 line-through",
+              )}
+            >
               {paymentItem.description}
             </span>
-            <span className={cn(
-              "text-sm font-semibold flex items-center shrink-0",
-              checked ? "text-slate-500" : "text-slate-900"
-            )}>
-              <span className="mr-0.5 text-slate-400 font-normal">{symbol}</span>
+            <span
+              className={cn(
+                "text-sm font-semibold flex items-center shrink-0",
+                checked ? "text-slate-500" : "text-slate-900",
+              )}
+            >
+              <span className="mr-0.5 text-slate-400 font-normal">
+                {symbol}
+              </span>
               {new Intl.NumberFormat("de-DE", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
@@ -80,9 +86,9 @@ export default function PaymentScheduleItem(props: PaymentScheduleItemProps) {
           </div>
           <div className="text-slate-400 text-[11px] mt-0.5">
             {new Date(paymentItem.date).toLocaleDateString("es-ES", {
-              day: 'numeric',
-              month: 'short',
-              year: 'numeric'
+              day: "numeric",
+              month: "short",
+              year: "numeric",
             })}
           </div>
         </div>

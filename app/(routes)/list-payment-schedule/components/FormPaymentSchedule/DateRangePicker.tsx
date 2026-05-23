@@ -66,7 +66,7 @@ export function DateRangePicker({
             variant={"outline"}
             className={cn(
               "w-full justify-start text-left font-normal",
-              !date?.from && "text-muted-foreground"
+              !date?.from && "text-muted-foreground",
             )}
             suppressHydrationWarning
           >

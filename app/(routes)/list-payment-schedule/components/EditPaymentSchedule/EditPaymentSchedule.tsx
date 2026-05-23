@@ -38,13 +38,17 @@ const editPaymentScheduleFormSchema = z.object({
   }),
 });
 
-type EditPaymentScheduleFormValues = z.infer<typeof editPaymentScheduleFormSchema>;
+type EditPaymentScheduleFormValues = z.infer<
+  typeof editPaymentScheduleFormSchema
+>;
 
 interface EditPaymentScheduleProps {
   paymentSchedule: PaymentSchedule;
 }
 
-export function EditPaymentSchedule({ paymentSchedule }: EditPaymentScheduleProps) {
+export function EditPaymentSchedule({
+  paymentSchedule,
+}: EditPaymentScheduleProps) {
   const [open, setOpen] = useState(false);
   const updatePaymentScheduleMutation = useUpdatePaymentSchedule();
 
@@ -91,7 +95,11 @@ export function EditPaymentSchedule({ paymentSchedule }: EditPaymentScheduleProp
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="sm" className="h-10 w-10 sm:h-8 sm:w-8 p-0 text-slate-500 hover:text-slate-900">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-10 w-10 sm:h-8 sm:w-8 p-0 text-slate-500 hover:text-slate-900"
+        >
           <Edit className="w-4 h-4" />
         </Button>
       </DialogTrigger>
@@ -149,7 +157,9 @@ export function EditPaymentSchedule({ paymentSchedule }: EditPaymentScheduleProp
                 type="submit"
                 disabled={updatePaymentScheduleMutation.isPending}
               >
-                {updatePaymentScheduleMutation.isPending ? "Actualizando..." : "Actualizar"}
+                {updatePaymentScheduleMutation.isPending
+                  ? "Actualizando..."
+                  : "Actualizar"}
               </Button>
             </DialogFooter>
           </form>

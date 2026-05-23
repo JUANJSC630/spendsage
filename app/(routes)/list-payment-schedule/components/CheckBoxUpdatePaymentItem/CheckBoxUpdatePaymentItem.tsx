@@ -2,7 +2,7 @@ import React from "react";
 import { CheckBoxUpdatePaymentItemProps } from "./CheckBoxUpdatePaymentItem.types";
 
 export function CheckBoxUpdatePaymentItem(
-  props: CheckBoxUpdatePaymentItemProps
+  props: CheckBoxUpdatePaymentItemProps,
 ) {
   const { checked, onChange, disabled = false } = props;
 

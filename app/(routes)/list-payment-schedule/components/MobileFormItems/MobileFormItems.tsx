@@ -28,8 +28,8 @@ import { MobileDatePicker } from "@/components/ui/react-datepicker";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { formSchema } from "./FormItems.form";
-import { FormItemsProps } from "./FormItems.types";
+import { formSchema } from "../FormItems/FormItems.form";
+import { FormItemsProps } from "../FormItems/FormItems.types";
 import { Checkbox } from "@/components/ui/checkbox";
 import useFormatAmount from "@/hooks/useFormatAmount";
 import { useCreatePaymentItem } from "@/hooks/use-payment-schedules";
@@ -159,11 +159,10 @@ export function MobileFormItems(props: FormItemsProps) {
           )}
         />
         <div>
-          <Button
-            type="submit"
-            disabled={createPaymentItemMutation.isPending}
-          >
-            {createPaymentItemMutation.isPending ? "Creando..." : "Crear Item de Pago"}
+          <Button type="submit" disabled={createPaymentItemMutation.isPending}>
+            {createPaymentItemMutation.isPending
+              ? "Creando..."
+              : "Crear Item de Pago"}
           </Button>
         </div>
       </form>

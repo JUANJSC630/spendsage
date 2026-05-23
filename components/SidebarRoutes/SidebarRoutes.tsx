@@ -47,10 +47,19 @@ export function SidebarRoutes({ setOpen, onItemClick }: SidebarRoutesProps) {
       <div className="flex flex-col gap-6">
         <div>
           <SectionLabel label="General" show={setOpen} />
-          <motion.div variants={stagger} initial="hidden" animate="visible" className="flex flex-col gap-0.5">
+          <motion.div
+            variants={stagger}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col gap-0.5"
+          >
             {dataGeneralSidebar.map((item) => (
               <motion.div key={item.label} variants={itemFade}>
-                <SidebarItem item={item} setOpen={setOpen} onItemClick={onItemClick} />
+                <SidebarItem
+                  item={item}
+                  setOpen={setOpen}
+                  onItemClick={onItemClick}
+                />
               </motion.div>
             ))}
           </motion.div>
@@ -58,10 +67,19 @@ export function SidebarRoutes({ setOpen, onItemClick }: SidebarRoutesProps) {
 
         <div>
           <SectionLabel label="Configuración" show={setOpen} />
-          <motion.div variants={stagger} initial="hidden" animate="visible" className="flex flex-col gap-0.5">
+          <motion.div
+            variants={stagger}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col gap-0.5"
+          >
             {dataSettingsSidebar.map((item) => (
               <motion.div key={item.label} variants={itemFade}>
-                <SidebarItem item={item} setOpen={setOpen} onItemClick={onItemClick} />
+                <SidebarItem
+                  item={item}
+                  setOpen={setOpen}
+                  onItemClick={onItemClick}
+                />
               </motion.div>
             ))}
           </motion.div>
@@ -71,7 +89,9 @@ export function SidebarRoutes({ setOpen, onItemClick }: SidebarRoutesProps) {
       {/* Footer: UserButton + branding */}
       <div className="flex flex-col gap-3">
         <Separator className="opacity-50" />
-        <div className={`flex items-center gap-3 px-3 py-1 ${setOpen ? "" : "justify-center"}`}>
+        <div
+          className={`flex items-center gap-3 px-3 py-1 ${setOpen ? "" : "justify-center"}`}
+        >
           <UserButton />
           <AnimatePresence initial={false}>
             {setOpen && (

@@ -19,7 +19,7 @@ export const dataGeneralSidebar = [
     label: "Finanzas",
     href: "/finances",
   },
-    {
+  {
     icon: ListCheck,
     label: "Lista de Pagos",
     href: "/list-payment-schedule",

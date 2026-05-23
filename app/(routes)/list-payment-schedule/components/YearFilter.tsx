@@ -14,15 +14,22 @@ interface YearFilterProps {
   onYearChange: (year: number | null) => void;
 }
 
-export function YearFilter({ availableYears, selectedYear, onYearChange }: YearFilterProps) {
+export function YearFilter({
+  availableYears,
+  selectedYear,
+  onYearChange,
+}: YearFilterProps) {
   const currentYear = new Date().getFullYear();
-  const value = selectedYear !== null ? selectedYear.toString() : currentYear.toString();
-  
+  const value =
+    selectedYear !== null ? selectedYear.toString() : currentYear.toString();
+
   return (
     <div className="flex items-center gap-2">
       <Select
         value={value}
-        onValueChange={(value) => onYearChange(value === "all" ? null : parseInt(value))}
+        onValueChange={(value) =>
+          onYearChange(value === "all" ? null : parseInt(value))
+        }
       >
         <SelectTrigger className="w-24 sm:w-32">
           <SelectValue placeholder={currentYear.toString()} />

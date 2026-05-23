@@ -36,11 +36,17 @@ import { cn } from "@/lib/utils";
 import { toast } from "react-hot-toast";
 
 import { EditPaymentItemProps } from "./EditPaymentItem.types";
-import { editPaymentItemFormSchema, EditPaymentItemFormValues } from "./EditPaymentItem.form";
+import {
+  editPaymentItemFormSchema,
+  EditPaymentItemFormValues,
+} from "./EditPaymentItem.form";
 import { useUpdatePaymentItem } from "@/hooks/use-payment-schedules";
 import useFormatAmount from "@/hooks/useFormatAmount";
 
-export default function EditPaymentItem({ paymentItem, paymentSchedule }: EditPaymentItemProps) {
+export default function EditPaymentItem({
+  paymentItem,
+  paymentSchedule,
+}: EditPaymentItemProps) {
   const [open, setOpen] = useState(false);
   const updatePaymentItemMutation = useUpdatePaymentItem();
   const formatAmount = useFormatAmount();

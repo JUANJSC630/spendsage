@@ -23,12 +23,9 @@ import { CalendarIcon } from "@/utils/CalendarIcon";
 import { useCurrencyStore } from "@/hooks/useCurrencyStore";
 
 export function Navbar() {
-  
-
   return (
     <div className="py-4 px-6">
       <div className="container mx-auto flex flex-col-reverse md:flex-row items-end md:items-center justify-end gap-2 md:gap-8">
-        
         <div className="flex items-center gap-4">
           <Popover>
             <PopoverTrigger asChild>
@@ -51,10 +48,7 @@ export function Navbar() {
               avoidCollisions={true}
               sticky="always"
             >
-              <Calendar
-                mode="single"
-                className="rounded-md border shadow-md"
-              />
+              <Calendar mode="single" className="rounded-md border shadow-md" />
             </PopoverContent>
           </Popover>
         </div>

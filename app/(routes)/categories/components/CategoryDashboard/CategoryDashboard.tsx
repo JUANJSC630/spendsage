@@ -20,17 +20,24 @@ interface CategoryDashboardProps {
   inactiveCount: number;
 }
 
-export function CategoryDashboard({ categories, inactiveCount }: CategoryDashboardProps) {
-  const expenseCategories = categories.filter(cat => cat.type === 'expense');
-  const incomeCategories = categories.filter(cat => cat.type === 'income');
-  const otherCategories = categories.filter(cat => !['expense', 'income'].includes(cat.type));
+export function CategoryDashboard({
+  categories,
+  inactiveCount,
+}: CategoryDashboardProps) {
+  const expenseCategories = categories.filter((cat) => cat.type === "expense");
+  const incomeCategories = categories.filter((cat) => cat.type === "income");
+  const otherCategories = categories.filter(
+    (cat) => !["expense", "income"].includes(cat.type),
+  );
 
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3">
         <Card className="shadow-sm bg-white border">
           <CardHeader className="flex flex-row items-center justify-between py-2 px-3 sm:px-4">
-            <CardTitle className="text-xs font-medium text-gray-600">Total Categorías</CardTitle>
+            <CardTitle className="text-xs font-medium text-gray-600">
+              Total Categorías
+            </CardTitle>
             <Tags className="h-4 w-4 text-blue-500" />
           </CardHeader>
           <CardContent className="py-1 sm:py-2 px-3 sm:px-4">
@@ -43,11 +50,15 @@ export function CategoryDashboard({ categories, inactiveCount }: CategoryDashboa
 
         <Card className="shadow-sm bg-white border">
           <CardHeader className="flex flex-row items-center justify-between py-2 px-3 sm:px-4">
-            <CardTitle className="text-xs font-medium text-gray-600">Gastos</CardTitle>
+            <CardTitle className="text-xs font-medium text-gray-600">
+              Gastos
+            </CardTitle>
             <TrendingUp className="h-4 w-4 text-red-500" />
           </CardHeader>
           <CardContent className="py-1 sm:py-2 px-3 sm:px-4">
-            <div className="text-2xl font-bold text-red-600">{expenseCategories.length}</div>
+            <div className="text-2xl font-bold text-red-600">
+              {expenseCategories.length}
+            </div>
             <div className="text-xs text-muted-foreground">
               Categorías de gastos
             </div>
@@ -56,11 +67,15 @@ export function CategoryDashboard({ categories, inactiveCount }: CategoryDashboa
 
         <Card className="shadow-sm bg-white border">
           <CardHeader className="flex flex-row items-center justify-between py-2 px-3 sm:px-4">
-            <CardTitle className="text-xs font-medium text-gray-600">Ingresos</CardTitle>
+            <CardTitle className="text-xs font-medium text-gray-600">
+              Ingresos
+            </CardTitle>
             <DollarSign className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent className="py-1 sm:py-2 px-3 sm:px-4">
-            <div className="text-2xl font-bold text-green-600">{incomeCategories.length}</div>
+            <div className="text-2xl font-bold text-green-600">
+              {incomeCategories.length}
+            </div>
             <div className="text-xs text-muted-foreground">
               Categorías de ingresos
             </div>
@@ -69,11 +84,15 @@ export function CategoryDashboard({ categories, inactiveCount }: CategoryDashboa
 
         <Card className="shadow-sm bg-white border">
           <CardHeader className="flex flex-row items-center justify-between py-2 px-3 sm:px-4">
-            <CardTitle className="text-xs font-medium text-gray-600">Archivadas</CardTitle>
+            <CardTitle className="text-xs font-medium text-gray-600">
+              Archivadas
+            </CardTitle>
             <Archive className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent className="py-1 sm:py-2 px-3 sm:px-4">
-            <div className="text-2xl font-bold text-gray-600">{inactiveCount}</div>
+            <div className="text-2xl font-bold text-gray-600">
+              {inactiveCount}
+            </div>
             <div className="text-xs text-muted-foreground">
               Categorías inactivas
             </div>
@@ -89,10 +108,12 @@ export function CategoryDashboard({ categories, inactiveCount }: CategoryDashboa
               ¡Bienvenido al Gestor de Categorías!
             </h3>
             <p className="text-sm text-gray-600 mb-3">
-              Personaliza tus finanzas creando categorías únicas para tus transacciones y presupuestos.
+              Personaliza tus finanzas creando categorías únicas para tus
+              transacciones y presupuestos.
             </p>
             <div className="text-xs text-blue-600 bg-blue-100 px-3 py-1 rounded-md">
-              💡 Usa el formulario de la izquierda para crear tu primera categoría
+              💡 Usa el formulario de la izquierda para crear tu primera
+              categoría
             </div>
           </CardContent>
         </Card>

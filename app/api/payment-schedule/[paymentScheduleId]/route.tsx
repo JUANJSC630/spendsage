@@ -22,12 +22,14 @@ export async function PUT(req: Request, { params }: Params) {
     const { paymentScheduleId } = params;
     const { name, fromDate, toDate } = body;
 
-    if (!name || typeof name !== 'string') {
+    if (!name || typeof name !== "string") {
       return new NextResponse("Name is required", { status: 400 });
     }
 
     if (!fromDate || !toDate) {
-      return new NextResponse("FromDate and ToDate are required", { status: 400 });
+      return new NextResponse("FromDate and ToDate are required", {
+        status: 400,
+      });
     }
 
     // Verificar que el PaymentSchedule pertenece al usuario

@@ -8,4 +8,6 @@ export const editPaymentItemFormSchema = z.object({
   description: z.string().min(1, "La descripción es requerida"),
 });
 
-export type EditPaymentItemFormValues = z.infer<typeof editPaymentItemFormSchema>;
+export type EditPaymentItemFormValues = z.infer<
+  typeof editPaymentItemFormSchema
+>;

@@ -5,7 +5,10 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { ButtonAddPaymentSchedule } from "./ButtonAddPaymentSchedule/ButtonAddPaymentSchedule";
 import { CardPaymentSchedule } from "./CardPaymentSchedule";
-import { useListPaymentSchedule, useGlobalPaymentSummary } from "@/hooks/use-payment-schedules";
+import {
+  useListPaymentSchedule,
+  useGlobalPaymentSummary,
+} from "@/hooks/use-payment-schedules";
 import { useCurrencyStore } from "@/hooks/useCurrencyStore";
 import { Progress } from "@/components/ui/progress";
 import { motion } from "framer-motion";
@@ -30,7 +33,10 @@ function DetailSkeleton() {
         <div className="h-28 bg-slate-100 rounded-2xl animate-pulse" />
         <div className="flex flex-col gap-4">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-64 bg-slate-100 rounded-xl animate-pulse" />
+            <div
+              key={i}
+              className="h-64 bg-slate-100 rounded-xl animate-pulse"
+            />
           ))}
         </div>
       </div>
@@ -40,7 +46,8 @@ function DetailSkeleton() {
 
 function GlobalSummary({ scheduleIds }: { scheduleIds: string[] }) {
   const { currency } = useCurrencyStore();
-  const { isLoading, totalPaid, totalPending, totalAmount, progress } = useGlobalPaymentSummary(scheduleIds);
+  const { isLoading, totalPaid, totalPending, totalAmount, progress } =
+    useGlobalPaymentSummary(scheduleIds);
 
   const fmt = (amount: number) =>
     new Intl.NumberFormat("es-CO", {
@@ -69,11 +76,15 @@ function GlobalSummary({ scheduleIds }: { scheduleIds: string[] }) {
       <div className="grid grid-cols-2 sm:flex sm:items-center sm:justify-between gap-3 mb-4">
         <div>
           <p className="text-slate-400 text-xs">Pagado</p>
-          <p className="font-semibold text-emerald-600 text-base sm:text-sm">{fmt(totalPaid)}</p>
+          <p className="font-semibold text-emerald-600 text-base sm:text-sm">
+            {fmt(totalPaid)}
+          </p>
         </div>
         <div className="text-right sm:text-left">
           <p className="text-slate-400 text-xs">Pendiente</p>
-          <p className="font-semibold text-rose-600 text-base sm:text-sm">{fmt(totalPending)}</p>
+          <p className="font-semibold text-rose-600 text-base sm:text-sm">
+            {fmt(totalPending)}
+          </p>
         </div>
         <div className="col-span-2 sm:col-span-1 sm:ml-auto sm:text-right">
           <p className="text-slate-400 text-xs">Total · Progreso</p>
@@ -97,8 +108,14 @@ const cardVariants = {
   }),
 };
 
-export function PaymentScheduleDetailPage({ listPaymentId }: PaymentScheduleDetailPageProps) {
-  const { data: listPaymentSchedule, isLoading, error } = useListPaymentSchedule(listPaymentId);
+export function PaymentScheduleDetailPage({
+  listPaymentId,
+}: PaymentScheduleDetailPageProps) {
+  const {
+    data: listPaymentSchedule,
+    isLoading,
+    error,
+  } = useListPaymentSchedule(listPaymentId);
 
   if (isLoading) {
     return <DetailSkeleton />;
@@ -109,7 +126,9 @@ export function PaymentScheduleDetailPage({ listPaymentId }: PaymentScheduleDeta
       <div className="flex flex-col items-center justify-center py-16 px-4">
         <p className="text-slate-500 mb-4">Lista de pagos no encontrada.</p>
         <Link href="/list-payment-schedule">
-          <Button variant="outline" size="sm">Volver</Button>
+          <Button variant="outline" size="sm">
+            Volver
+          </Button>
         </Link>
       </div>
     );
@@ -134,7 +153,9 @@ export function PaymentScheduleDetailPage({ listPaymentId }: PaymentScheduleDeta
             </h1>
           </div>
           <div className="shrink-0">
-            <ButtonAddPaymentSchedule listPaymentScheduleId={listPaymentSchedule.id} />
+            <ButtonAddPaymentSchedule
+              listPaymentScheduleId={listPaymentSchedule.id}
+            />
           </div>
         </div>
       </div>
@@ -168,13 +189,37 @@ export function PaymentScheduleDetailPage({ listPaymentId }: PaymentScheduleDeta
                 viewBox="0 0 64 64"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <rect x="8" y="16" width="48" height="36" rx="5" stroke="currentColor" strokeWidth="2.5" />
-                <path d="M8 24h48" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-                <path d="M22 36h20M22 43h12" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-                <path d="M20 12v8M32 12v8M44 12v8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+                <rect
+                  x="8"
+                  y="16"
+                  width="48"
+                  height="36"
+                  rx="5"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                />
+                <path
+                  d="M8 24h48"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M22 36h20M22 43h12"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M20 12v8M32 12v8M44 12v8"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
               </svg>
               <p className="text-slate-400 text-sm">
-                No hay sub-listas de pagos. Usa el botón &ldquo;Agregar&rdquo; para crear una.
+                No hay sub-listas de pagos. Usa el botón &ldquo;Agregar&rdquo;
+                para crear una.
               </p>
             </motion.div>
           )}

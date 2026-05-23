@@ -10,6 +10,6 @@ interface Category {
 }
 
 export type ListTransactionProps = {
-    transactions: Transactions[];
-    categories: Category[];
+  transactions: Transactions[];
+  categories: Category[];
 };

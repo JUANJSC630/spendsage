@@ -5,7 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { getActiveCategories } from "@/lib/categoryQueries";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
@@ -39,10 +39,10 @@ export async function POST(req: Request) {
     if (!slug) {
       slug = data.name
         .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '') // Remove accents
-        .replace(/[^a-z0-9]+/g, '_')
-        .replace(/(^_|_$)/g, '');
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "") // Remove accents
+        .replace(/[^a-z0-9]+/g, "_")
+        .replace(/(^_|_$)/g, "");
     }
 
     const category = await db.category.create({
@@ -61,7 +61,12 @@ export async function POST(req: Request) {
     return NextResponse.json(category);
   } catch (e) {
     console.log("[CATEGORIES]", e);
-    if (typeof e === "object" && e !== null && "code" in e && (e as any).code === 'P2002') {
+    if (
+      typeof e === "object" &&
+      e !== null &&
+      "code" in e &&
+      (e as any).code === "P2002"
+    ) {
       return new NextResponse("Category name already exists", { status: 400 });
     }
     return new NextResponse("Internal Server Error", { status: 500 });

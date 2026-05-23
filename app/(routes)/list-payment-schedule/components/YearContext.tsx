@@ -30,7 +30,7 @@ export function YearProvider({ children, data }: YearProviderProps) {
 
   const filteredData = useMemo(() => {
     if (!selectedYear) return data;
-    
+
     return data.filter((item) => {
       const itemYear = new Date(item.createdAt).getFullYear();
       return itemYear === selectedYear;
@@ -38,7 +38,9 @@ export function YearProvider({ children, data }: YearProviderProps) {
   }, [data, selectedYear]);
 
   return (
-    <YearContext.Provider value={{ selectedYear, setSelectedYear, filteredData }}>
+    <YearContext.Provider
+      value={{ selectedYear, setSelectedYear, filteredData }}
+    >
       {children}
     </YearContext.Provider>
   );

@@ -25,26 +25,27 @@ export const MobileDatePicker = ({
   placeholder = "Pick a date",
 }: MobileDatePickerProps) => {
   // Custom input component
-  const CustomInput = forwardRef<HTMLButtonElement, { value?: string; onClick?: () => void }>(
-    ({ value, onClick }, ref) => (
-      <Button
-        type="button"
-        variant="outline"
-        onClick={onClick}
-        ref={ref}
-        className={cn(
-          "w-full justify-start text-left font-normal",
-          !date && "text-muted-foreground",
-          className
-        )}
-        disabled={disabled}
-      >
-        <CalendarIcon className="mr-2 h-4 w-4" />
-        {value || placeholder}
-      </Button>
-    )
-  );
-  
+  const CustomInput = forwardRef<
+    HTMLButtonElement,
+    { value?: string; onClick?: () => void }
+  >(({ value, onClick }, ref) => (
+    <Button
+      type="button"
+      variant="outline"
+      onClick={onClick}
+      ref={ref}
+      className={cn(
+        "w-full justify-start text-left font-normal",
+        !date && "text-muted-foreground",
+        className,
+      )}
+      disabled={disabled}
+    >
+      <CalendarIcon className="mr-2 h-4 w-4" />
+      {value || placeholder}
+    </Button>
+  ));
+
   CustomInput.displayName = "CustomDateInput";
 
   return (
@@ -96,32 +97,34 @@ export const MobileDateRangePicker = ({
   };
 
   // Display formatted date range or placeholder
-  const displayValue = startDate && endDate
-    ? `${format(startDate, "dd/MM/yyyy")} - ${format(endDate, "dd/MM/yyyy")}`
-    : startDate
-    ? format(startDate, "dd/MM/yyyy")
-    : placeholder;
+  const displayValue =
+    startDate && endDate
+      ? `${format(startDate, "dd/MM/yyyy")} - ${format(endDate, "dd/MM/yyyy")}`
+      : startDate
+        ? format(startDate, "dd/MM/yyyy")
+        : placeholder;
 
   // Custom input component for range picker
-  const CustomInput = forwardRef<HTMLButtonElement, { value?: string; onClick?: () => void }>(
-    ({ onClick }, ref) => (
-      <Button
-        type="button"
-        variant="outline"
-        onClick={onClick}
-        ref={ref}
-        className={cn(
-          "w-full justify-start text-left font-normal",
-          !startDate && !endDate && "text-muted-foreground",
-          className
-        )}
-        disabled={disabled}
-      >
-        <CalendarIcon className="mr-2 h-4 w-4" />
-        {displayValue}
-      </Button>
-    )
-  );
+  const CustomInput = forwardRef<
+    HTMLButtonElement,
+    { value?: string; onClick?: () => void }
+  >(({ onClick }, ref) => (
+    <Button
+      type="button"
+      variant="outline"
+      onClick={onClick}
+      ref={ref}
+      className={cn(
+        "w-full justify-start text-left font-normal",
+        !startDate && !endDate && "text-muted-foreground",
+        className,
+      )}
+      disabled={disabled}
+    >
+      <CalendarIcon className="mr-2 h-4 w-4" />
+      {displayValue}
+    </Button>
+  ));
 
   CustomInput.displayName = "CustomDateRangeInput";
 

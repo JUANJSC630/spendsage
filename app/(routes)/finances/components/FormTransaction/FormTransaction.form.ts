@@ -20,9 +20,7 @@ export const formSchema = z.object({
     .refine((value) => value.length >= 1, {
       message: "El monto debe tener al menos 1 dígito",
     }),
-    date: z.date(
-      {
-        required_error: "La fecha es requerida",
-      }
-    ),
+  date: z.date({
+    required_error: "La fecha es requerida",
+  }),
 });

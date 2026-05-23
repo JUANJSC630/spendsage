@@ -17,7 +17,9 @@ interface FinancialSummaryDynamicProps {
   className?: string;
 }
 
-export default function FinancialSummaryDynamic(props: FinancialSummaryDynamicProps) {
+export default function FinancialSummaryDynamic(
+  props: FinancialSummaryDynamicProps,
+) {
   const { data, categories } = props;
   const cardClass =
     "w-full rounded-lg border bg-card text-card-foreground shadow-sm h-[100px] flex flex-col justify-center items-center";

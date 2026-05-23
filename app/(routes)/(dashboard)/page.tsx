@@ -1,7 +1,10 @@
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { DashboardClient } from "./components/DashboardClient";
-import { getActiveCategories, basicCategorySelect } from "@/lib/categoryQueries";
+import {
+  getActiveCategories,
+  basicCategorySelect,
+} from "@/lib/categoryQueries";
 
 export default async function dashboardPage() {
   // const [expenses, setExpenses] = useState(123010);

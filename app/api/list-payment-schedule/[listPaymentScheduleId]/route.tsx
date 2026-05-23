@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 interface Params {
   params: { listPaymentScheduleId: string };
@@ -37,7 +37,9 @@ export async function GET(req: Request, { params }: Params) {
     });
 
     if (!listPaymentSchedule) {
-      return new NextResponse("List Payment Schedule not found", { status: 404 });
+      return new NextResponse("List Payment Schedule not found", {
+        status: 404,
+      });
     }
 
     return NextResponse.json(listPaymentSchedule);
@@ -63,7 +65,7 @@ export async function PUT(req: Request, { params }: Params) {
     const { listPaymentScheduleId } = params;
     const { name } = body;
 
-    if (!name || typeof name !== 'string') {
+    if (!name || typeof name !== "string") {
       return new NextResponse("Name is required", { status: 400 });
     }
 

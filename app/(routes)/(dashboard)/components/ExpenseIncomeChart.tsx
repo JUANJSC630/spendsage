@@ -23,7 +23,7 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 interface Category {
@@ -64,11 +64,11 @@ export default function ExpenseIncomeChart(props: ExpenseIncomeChartProps) {
 
   useEffect(() => {
     const map = new Map();
-    categories.forEach(category => {
+    categories.forEach((category) => {
       map.set(category.slug, {
         name: category.name,
         color: category.color,
-        type: category.type
+        type: category.type,
       });
     });
     setCategoryMap(map);
@@ -88,29 +88,32 @@ export default function ExpenseIncomeChart(props: ExpenseIncomeChartProps) {
       return transactionDate >= startDate && transactionDate <= endDate;
     });
 
-    const grouped = filteredTransactions.reduce((acc, transaction) => {
-      const date = new Date(transaction.date);
-      const key = `${date.getFullYear()}-${(date.getMonth() + 1)
-        .toString()
-        .padStart(2, "0")}`;
+    const grouped = filteredTransactions.reduce(
+      (acc, transaction) => {
+        const date = new Date(transaction.date);
+        const key = `${date.getFullYear()}-${(date.getMonth() + 1)
+          .toString()
+          .padStart(2, "0")}`;
 
-      if (!acc[key]) {
-        acc[key] = { income: 0, expenses: 0 };
-      }
-
-      const amount = parseFloat(transaction.amount);
-      const categoryInfo = categoryMap.get(transaction.category);
-
-      if (categoryInfo) {
-        if (categoryInfo.type === "income") {
-          acc[key].income += amount;
-        } else if (categoryInfo.type === "expense") {
-          acc[key].expenses += amount;
+        if (!acc[key]) {
+          acc[key] = { income: 0, expenses: 0 };
         }
-      }
 
-      return acc;
-    }, {} as Record<string, { income: number; expenses: number }>);
+        const amount = parseFloat(transaction.amount);
+        const categoryInfo = categoryMap.get(transaction.category);
+
+        if (categoryInfo) {
+          if (categoryInfo.type === "income") {
+            acc[key].income += amount;
+          } else if (categoryInfo.type === "expense") {
+            acc[key].expenses += amount;
+          }
+        }
+
+        return acc;
+      },
+      {} as Record<string, { income: number; expenses: number }>,
+    );
 
     setGroupedData(grouped);
   }, [startDate, endDate, transactions, categoryMap]);

@@ -39,9 +39,7 @@ interface Category {
   isActive: boolean;
 }
 
-const periods = [
-  { value: "monthly", label: "Mensual" },
-];
+const periods = [{ value: "monthly", label: "Mensual" }];
 
 function BudgetForm() {
   const router = useRouter();
@@ -56,13 +54,15 @@ function BudgetForm() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('/api/categories');
+        const response = await axios.get("/api/categories");
         // Filter only active categories
-        const activeCategories = response.data.filter((category: Category) => category.isActive);
+        const activeCategories = response.data.filter(
+          (category: Category) => category.isActive,
+        );
         setCategories(activeCategories);
       } catch (error) {
-        console.error('Error fetching categories:', error);
-        toast.error('Error al cargar las categorías');
+        console.error("Error fetching categories:", error);
+        toast.error("Error al cargar las categorías");
       } finally {
         setLoadingCategories(false);
       }
@@ -90,10 +90,10 @@ function BudgetForm() {
         toast.error("El monto debe ser mayor que 0");
         return;
       }
-      
+
       await axios.post(`/api/budgets`, values);
       toast.success("¡Presupuesto creado! 🎯");
-      
+
       setTimeout(() => {
         router.push("/budgets");
       }, 1000);
@@ -110,11 +110,11 @@ function BudgetForm() {
     const value = e.target.value.replace(/\D/g, "");
     form.setValue("amount", value);
     form.trigger("amount");
-    
+
     if (value === "0") {
-      form.setError("amount", { 
-        type: "manual", 
-        message: "El monto debe ser mayor que 0" 
+      form.setError("amount", {
+        type: "manual",
+        message: "El monto debe ser mayor que 0",
       });
     }
   };
@@ -151,21 +151,28 @@ function BudgetForm() {
                 <FormItem className="space-y-1.5">
                   <FormLabel>Categoría</FormLabel>
                   <FormControl>
-                    <Select 
+                    <Select
                       onValueChange={(value) => {
                         field.onChange(value);
                         form.trigger("category");
-                      }} 
-                      value={field.value} 
+                      }}
+                      value={field.value}
                       disabled={loadingCategories}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder={loadingCategories ? "Cargando categorías..." : "Selecciona una categoría"} />
+                        <SelectValue
+                          placeholder={
+                            loadingCategories
+                              ? "Cargando categorías..."
+                              : "Selecciona una categoría"
+                          }
+                        />
                       </SelectTrigger>
                       <SelectContent>
                         {categories.length === 0 && !loadingCategories ? (
                           <div className="p-2 text-sm text-gray-500">
-                            No hay categorías disponibles. Crea una en la sección Categorías.
+                            No hay categorías disponibles. Crea una en la
+                            sección Categorías.
                           </div>
                         ) : (
                           categories.map((category) => (
@@ -177,9 +184,13 @@ function BudgetForm() {
                                 />
                                 <span>{category.name}</span>
                                 <span className="text-xs text-gray-500">
-                                  ({category.type === 'income' ? 'Ingreso' : 
-                                    category.type === 'expense' ? 'Gasto' : 
-                                    category.type})
+                                  (
+                                  {category.type === "income"
+                                    ? "Ingreso"
+                                    : category.type === "expense"
+                                      ? "Gasto"
+                                      : category.type}
+                                  )
                                 </span>
                               </div>
                             </SelectItem>
@@ -246,8 +257,10 @@ function BudgetForm() {
                   <FormItem className="space-y-1.5">
                     <FormLabel>Mes</FormLabel>
                     <FormControl>
-                      <Select 
-                        onValueChange={(value) => field.onChange(parseInt(value))} 
+                      <Select
+                        onValueChange={(value) =>
+                          field.onChange(parseInt(value))
+                        }
                         value={field.value.toString()}
                       >
                         <SelectTrigger>
@@ -255,7 +268,10 @@ function BudgetForm() {
                         </SelectTrigger>
                         <SelectContent>
                           {months.map((month) => (
-                            <SelectItem key={month.value} value={month.value.toString()}>
+                            <SelectItem
+                              key={month.value}
+                              value={month.value.toString()}
+                            >
                               {month.label}
                             </SelectItem>
                           ))}
@@ -274,8 +290,10 @@ function BudgetForm() {
                   <FormItem className="space-y-1.5">
                     <FormLabel>Año</FormLabel>
                     <FormControl>
-                      <Select 
-                        onValueChange={(value) => field.onChange(parseInt(value))} 
+                      <Select
+                        onValueChange={(value) =>
+                          field.onChange(parseInt(value))
+                        }
                         value={field.value.toString()}
                       >
                         <SelectTrigger>
@@ -296,7 +314,7 @@ function BudgetForm() {
               />
             </div>
           </div>
-          
+
           <Button
             type="submit"
             className={`w-full ${!isValid ? "opacity-50" : "opacity-100"}`}

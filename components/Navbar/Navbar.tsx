@@ -8,14 +8,18 @@ import { SidebarRoutes } from "../SidebarRoutes";
 import { UserButton } from "@clerk/nextjs";
 import { LogoDashboard } from "../LogoDashboard";
 import { useSyncColorTheme } from "@/hooks/useColorThemeStore";
-import { dataGeneralSidebar, dataSettingsSidebar } from "../SidebarRoutes/SidebarRoutes.data";
+import {
+  dataGeneralSidebar,
+  dataSettingsSidebar,
+} from "../SidebarRoutes/SidebarRoutes.data";
 
 const allRoutes = [...dataGeneralSidebar, ...dataSettingsSidebar];
 
 function usePageTitle() {
   const pathname = usePathname();
   const match = allRoutes.find(
-    (r) => r.href === pathname || (r.href !== "/" && pathname.startsWith(r.href))
+    (r) =>
+      r.href === pathname || (r.href !== "/" && pathname.startsWith(r.href)),
   );
   return match?.label ?? "SpendSage";
 }
@@ -35,7 +39,10 @@ export function NavbarDashboard() {
           </button>
         </SheetTrigger>
         <SheetContent side="left" className="p-0 w-[260px]">
-          <div className="h-0.5 w-full" style={{ backgroundColor: colorTheme }} />
+          <div
+            className="h-0.5 w-full"
+            style={{ backgroundColor: colorTheme }}
+          />
           <LogoDashboard open={true} />
           <SidebarRoutes setOpen={true} onItemClick={() => setIsOpen(false)} />
         </SheetContent>

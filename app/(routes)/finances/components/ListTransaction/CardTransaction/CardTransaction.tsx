@@ -36,7 +36,7 @@ export default function CardTransaction(props: CardTransactionProps) {
   // Get category info using mapping
   const categoryInfo = getCategoryInfo(categories, transaction.category);
   const categoryName = categoryInfo.category?.name || transaction.category;
-  const isIncome = categoryInfo.category?.type === 'income';
+  const isIncome = categoryInfo.category?.type === "income";
 
   return (
     <div
@@ -48,17 +48,11 @@ export default function CardTransaction(props: CardTransactionProps) {
         <p className="text-sm text-gray-400">
           {new Date(transaction.date).toLocaleDateString("es-ES")}
         </p>
-        <p>
-          {categoryName}
-        </p>
+        <p>{categoryName}</p>
       </div>
       <div className="col-span-2 md:col-span-1 flex flex-col gap-2 items-end">
         <p
-          className={`text-lg ${
-            isIncome
-              ? "text-green-500"
-              : "text-red-500"
-          }`}
+          className={`text-lg ${isIncome ? "text-green-500" : "text-red-500"}`}
         >
           {isIncome ? "+" : "-"}
           {symbol}

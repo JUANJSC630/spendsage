@@ -56,7 +56,11 @@ export function Sidebar() {
         className="absolute -right-3 top-16 h-6 w-6 rounded-full border border-slate-200 bg-white shadow-sm hover:bg-slate-50 text-slate-500 z-10"
         title={open ? "Colapsar" : "Expandir"}
       >
-        {open ? <ChevronLeft className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
+        {open ? (
+          <ChevronLeft className="h-3 w-3" />
+        ) : (
+          <ChevronRight className="h-3 w-3" />
+        )}
       </Button>
     </motion.div>
   );

@@ -24,7 +24,9 @@ type CardTotalMonthlyDynamicProps = {
   classText?: string;
 };
 
-export default function CardTotalMonthlyDynamic(props: CardTotalMonthlyDynamicProps) {
+export default function CardTotalMonthlyDynamic(
+  props: CardTotalMonthlyDynamicProps,
+) {
   const { transactions, categories } = props;
   const { getSymbol } = useCurrencyStore();
   const formatAmount = useFormatAmount();
@@ -39,11 +41,11 @@ export default function CardTotalMonthlyDynamic(props: CardTotalMonthlyDynamicPr
   // Create category map for type lookup
   const categoryMap = useMemo(() => {
     const map = new Map();
-    categories.forEach(category => {
+    categories.forEach((category) => {
       map.set(category.slug, {
         name: category.name,
         color: category.color,
-        type: category.type
+        type: category.type,
       });
     });
     return map;
@@ -59,7 +61,10 @@ export default function CardTotalMonthlyDynamic(props: CardTotalMonthlyDynamicPr
 
       if (props.type === "income" && categoryInfo.category.type === "income") {
         acc += amount;
-      } else if (props.type === "expenses" && categoryInfo.category.type === "expense") {
+      } else if (
+        props.type === "expenses" &&
+        categoryInfo.category.type === "expense"
+      ) {
         acc += amount;
       } else if (props.type === "balance") {
         if (categoryInfo.category.type === "income") {

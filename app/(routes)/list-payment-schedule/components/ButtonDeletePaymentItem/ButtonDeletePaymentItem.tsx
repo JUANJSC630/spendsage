@@ -7,7 +7,7 @@ import { ButtonDeletePaymentItemProps } from "./ButtonDeletePaymentItem.types";
 import { useDeletePaymentItem } from "@/hooks/use-payment-schedules";
 
 export default function ButtonDeletePaymentItem(
-  props: ButtonDeletePaymentItemProps
+  props: ButtonDeletePaymentItemProps,
 ) {
   const { paymentSchedule, paymentItem } = props;
   const deleteMutation = useDeletePaymentItem();
@@ -26,9 +26,9 @@ export default function ButtonDeletePaymentItem(
 
   return (
     <div>
-      <Button 
-        variant="ghost" 
-        size="icon" 
+      <Button
+        variant="ghost"
+        size="icon"
         onClick={onDeletePaymentScheduleItem}
         disabled={deleteMutation.isPending}
       >

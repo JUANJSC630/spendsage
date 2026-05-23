@@ -8,7 +8,7 @@ export async function DELETE(
     params,
   }: {
     params: { transactionId: string };
-  }
+  },
 ) {
   try {
     const { userId } = auth();

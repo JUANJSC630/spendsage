@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useSyncColorTheme } from "@/hooks/useColorThemeStore";
 import { hexToRgba } from "@/hooks/useHexToRgba";

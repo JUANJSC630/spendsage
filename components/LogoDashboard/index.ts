@@ -1,1 +1,1 @@
-export * from './LogoDashboard';
+export * from "./LogoDashboard";

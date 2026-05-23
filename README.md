@@ -16,6 +16,7 @@ The application is designed to simplify personal financial management, allowing 
 ## Technologies Used
 
 ### Frontend
+
 - **Next.js**: React framework for server-side rendering and static site generation
 - **React**: Library for building user interfaces
 - **TypeScript**: Typed superset of JavaScript
@@ -29,12 +30,14 @@ The application is designed to simplify personal financial management, allowing 
 - **Lucide React**: Icons
 
 ### Backend
+
 - **Next.js API Routes**: Serverless API endpoints
 - **Prisma ORM**: ORM for databases with TypeScript
 - **PostgreSQL**: Relational database
 - **Clerk**: Authentication and user management
 
 ### DevOps & Tools
+
 - **Vercel**: Deployment and hosting
 - **Vercel Analytics**: Usage analytics
 - **TypeScript**: Static typing
@@ -44,6 +47,7 @@ The application is designed to simplify personal financial management, allowing 
 ## Database Structure
 
 The application uses the following main models:
+
 - **Transactions**: Financial transaction records
 - **ListPaymentSchedule**: Payment schedule lists
 - **PaymentSchedule**: Individual payment schedules

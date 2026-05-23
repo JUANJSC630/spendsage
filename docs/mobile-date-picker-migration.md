@@ -1,54 +1,59 @@
 # Migración a Date Pickers Compatibles con Dispositivos Móviles
 
 ## Problema Identificado
+
 Los componentes actuales de selección de fechas basados en Radix UI (a través de Shadcn) no funcionan correctamente en dispositivos móviles. Específicamente, los popovers no se abren cuando se interactúa con ellos en dispositivos móviles, lo que impide la selección de fechas.
 
 ## Solución Propuesta
+
 Implementar componentes de selección de fechas alternativos utilizando la biblioteca `react-datepicker` que tiene mejor soporte para dispositivos móviles. Esta biblioteca utiliza un enfoque de "portal" que asegura que el selector de fechas siempre sea visible y utilizable en dispositivos móviles.
 
 ## Componentes Creados
 
 ### 1. Componentes Base:
+
 - `MobileDatePicker` - Para selección de fechas individuales
 - `MobileDateRangePicker` - Para selección de rangos de fechas
 
 ### 2. Componentes de Formulario Adaptados:
+
 - `MobileFormItems` - Versión compatible con móviles de `FormItems`
 - `MobileFormPaymentSchedule` - Versión compatible con móviles de `FormPaymentSchedule`
 
 ## Estrategia de Implementación
 
 ### Paso 1: Detección de Dispositivo Móvil
+
 Implementar una utilidad para detectar si el usuario está en un dispositivo móvil:
 
 ```typescript
 // hooks/useIsMobile.ts
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export default function useIsMobile() {
   const [isMobile, setIsMobile] = useState(false);
-  
+
   useEffect(() => {
     // Función para comprobar si es móvil
     const checkIfMobile = () => {
-      const userAgent = 
-        typeof window.navigator === 'undefined' ? '' : navigator.userAgent;
+      const userAgent =
+        typeof window.navigator === "undefined" ? "" : navigator.userAgent;
       const mobile = Boolean(
         userAgent.match(
-          /Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i
-        )
+          /Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i,
+        ),
       );
       setIsMobile(mobile);
     };
-    
+
     checkIfMobile();
-    window.addEventListener('resize', checkIfMobile);
-    
+    window.addEventListener("resize", checkIfMobile);
+
     return () => {
-      window.removeEventListener('resize', checkIfMobile);
+      window.removeEventListener("resize", checkIfMobile);
     };
   }, []);
-  
+
   return isMobile;
 }
 ```
@@ -75,11 +80,11 @@ interface AdaptiveDatePickerProps {
 
 export function AdaptiveDatePicker(props: AdaptiveDatePickerProps) {
   const isMobile = useIsMobile();
-  
+
   if (isMobile) {
     return <MobileDatePicker {...props} />;
   }
-  
+
   return <DatePicker {...props} />;
 }
 ```
@@ -105,20 +110,20 @@ interface AdaptiveDateRangePickerProps {
 
 export function AdaptiveDateRangePicker(props: AdaptiveDateRangePickerProps) {
   const isMobile = useIsMobile();
-  
+
   if (isMobile) {
     return <MobileDateRangePicker {...props} />;
   }
-  
+
   // Adaptar el formato para el DateRangePicker original
   const adaptedProps = {
     date: props.dateRange,
     onDateChange: props.onDateRangeChange,
     placeholder: props.placeholder,
     className: props.className,
-    disabled: props.disabled
+    disabled: props.disabled,
   };
-  
+
   return <DateRangePicker {...adaptedProps} />;
 }
 ```
@@ -128,6 +133,7 @@ export function AdaptiveDateRangePicker(props: AdaptiveDateRangePickerProps) {
 Modificar todos los formularios que utilizan selectores de fechas para usar los componentes adaptativos:
 
 1. Reemplazar las importaciones:
+
 ```tsx
 // Antes
 import { DatePicker } from "@/components/ui/date-picker";
@@ -136,6 +142,7 @@ import { AdaptiveDatePicker } from "@/components/ui/adaptive-date-picker";
 ```
 
 2. Reemplazar los componentes:
+
 ```tsx
 // Antes
 <DatePicker date={field.value} onDateChange={field.onChange} />

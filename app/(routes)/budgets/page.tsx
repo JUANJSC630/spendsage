@@ -1,12 +1,12 @@
-import { Wallet, PlusCircle } from 'lucide-react';
-import React from 'react';
-import Link from 'next/link';
+import { Wallet, PlusCircle } from "lucide-react";
+import React from "react";
+import Link from "next/link";
 
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { db } from '@/lib/db';
-import { auth } from '@clerk/nextjs/server';
-import { BudgetsPageClient } from './components/BudgetsPageClient';
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { db } from "@/lib/db";
+import { auth } from "@clerk/nextjs/server";
+import { BudgetsPageClient } from "./components/BudgetsPageClient";
 
 // Interfaces que coinciden con las del componente cliente
 interface BudgetData {
@@ -47,7 +47,7 @@ export default async function BudgetsPage() {
     where: {
       userId,
       month: currentMonth,
-      year: currentYear
+      year: currentYear,
     },
     orderBy: {
       createdAt: "desc",
@@ -57,17 +57,17 @@ export default async function BudgetsPage() {
   // Fetch categories for the budgets
   const categories = await db.category.findMany({
     where: {
-      userId
-    }
+      userId,
+    },
   });
 
   // Create a map of category slugs to their details
   const categoryMap = new Map();
-  categories.forEach(category => {
+  categories.forEach((category) => {
     categoryMap.set(category.slug, {
       id: category.id,
       name: category.name,
-      color: category.color
+      color: category.color,
     });
   });
 
@@ -76,7 +76,9 @@ export default async function BudgetsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
         <div className="flex items-center gap-3 mb-6">
           <Wallet className="h-6 w-6 !text-gray-600" />
-          <h1 className="text-2xl font-bold text-gray-900">Gestión de Presupuestos</h1>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Gestión de Presupuestos
+          </h1>
         </div>
         <Card className="shadow-sm border border-slate-100">
           <CardContent className="flex flex-col items-center justify-center py-12 text-center">
@@ -85,7 +87,8 @@ export default async function BudgetsPage() {
               No hay presupuestos para este mes
             </h3>
             <p className="text-gray-500 max-w-md mx-auto mb-6">
-              Crea tu primer presupuesto para comenzar a gestionar tus gastos y mantener tus finanzas bajo control.
+              Crea tu primer presupuesto para comenzar a gestionar tus gastos y
+              mantener tus finanzas bajo control.
             </p>
             <Button asChild size="lg" className="mt-4">
               <Link href="/budgets/create">
@@ -100,56 +103,64 @@ export default async function BudgetsPage() {
   }
 
   // Calculate total budget amount
-  const totalBudget = budgets.reduce((sum, budget) => sum + parseFloat(budget.amount), 0);
-  
+  const totalBudget = budgets.reduce(
+    (sum, budget) => sum + parseFloat(budget.amount),
+    0,
+  );
+
   // Calculate actual spent amounts from transactions for the current month
   const firstDayOfMonth = new Date(currentYear, currentMonth - 1, 1);
   const lastDayOfMonth = new Date(currentYear, currentMonth, 0);
-  
+
   // Get all transactions for the current month and user
   const transactions = await db.transactions.findMany({
     where: {
       userId,
       date: {
         gte: firstDayOfMonth,
-        lte: lastDayOfMonth
+        lte: lastDayOfMonth,
       },
       category: {
-        not: "income" // Only count expense transactions
-      }
+        not: "income", // Only count expense transactions
+      },
     },
     select: {
       category: true,
-      amount: true
-    }
+      amount: true,
+    },
   });
-  
+
   // Calculate spent amounts by category
   const spentByCategory = new Map<string, number>();
-  transactions.forEach(tx => {
+  transactions.forEach((tx) => {
     const current = spentByCategory.get(tx.category) || 0;
     spentByCategory.set(tx.category, current + parseFloat(tx.amount));
   });
-  
+
   // Map budgets with real spent amounts
-  const budgetsWithSpent = budgets.map(budget => {
+  const budgetsWithSpent = budgets.map((budget) => {
     const spent = spentByCategory.get(budget.category) || 0;
     return { ...budget, spent };
   });
-  
-  const totalSpent = budgetsWithSpent.reduce((sum, budget) => sum + (budget.spent || 0), 0);
+
+  const totalSpent = budgetsWithSpent.reduce(
+    (sum, budget) => sum + (budget.spent || 0),
+    0,
+  );
 
   // Create budget alerts
   const alerts: BudgetAlert[] = [];
-  
+
   // Check for overspent budgets
-  const overspentBudgets = budgetsWithSpent.filter(budget => budget.spent > parseFloat(budget.amount));
+  const overspentBudgets = budgetsWithSpent.filter(
+    (budget) => budget.spent > parseFloat(budget.amount),
+  );
   if (overspentBudgets.length > 0) {
     alerts.push({
       id: "overspent",
       title: "Presupuestos excedidos",
       description: `Tienes ${overspentBudgets.length} presupuesto(s) que han superado el límite establecido.`,
-      variant: "destructive"
+      variant: "destructive",
     });
   }
 
@@ -158,15 +169,16 @@ export default async function BudgetsPage() {
     alerts.push({
       id: "near-limit",
       title: "Cerca del límite",
-      description: "Estás aproximándote al límite de tu presupuesto total para este mes.",
-      variant: "default"
+      description:
+        "Estás aproximándote al límite de tu presupuesto total para este mes.",
+      variant: "default",
     });
   }
 
   // Prepare budget data for client component
-  const budgetsForClient: BudgetData[] = budgetsWithSpent.map(budget => {
+  const budgetsForClient: BudgetData[] = budgetsWithSpent.map((budget) => {
     const categoryInfo = categoryMap.get(budget.category) || null;
-    
+
     return {
       id: budget.id,
       name: categoryInfo?.name || budget.category, // Use category name if available, fallback to slug
@@ -175,7 +187,7 @@ export default async function BudgetsPage() {
       endDate: new Date(budget.year, budget.month, 0),
       spent: budget.spent,
       categoryId: categoryInfo?.id || null,
-      category: categoryInfo
+      category: categoryInfo,
     };
   });
 
@@ -183,10 +195,12 @@ export default async function BudgetsPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
       <div className="flex items-center gap-3 mb-6">
         <Wallet className="h-6 w-6 !text-gray-600" />
-        <h1 className="text-2xl font-bold text-gray-900">Gestión de Presupuestos</h1>
+        <h1 className="text-2xl font-bold text-gray-900">
+          Gestión de Presupuestos
+        </h1>
       </div>
-      
-      <BudgetsPageClient 
+
+      <BudgetsPageClient
         budgets={budgetsForClient}
         totalBudget={totalBudget}
         totalSpent={totalSpent}

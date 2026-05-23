@@ -26,10 +26,17 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 
 import { DuplicateListModalProps } from "./DuplicateListModal.types";
-import { duplicateListFormSchema, DuplicateListFormValues } from "./DuplicateListModal.form";
+import {
+  duplicateListFormSchema,
+  DuplicateListFormValues,
+} from "./DuplicateListModal.form";
 import { useDuplicateListPaymentSchedule } from "@/hooks/use-payment-schedules";
 
-export function DuplicateListModal({ listPaymentSchedule, open, onOpenChange }: DuplicateListModalProps) {
+export function DuplicateListModal({
+  listPaymentSchedule,
+  open,
+  onOpenChange,
+}: DuplicateListModalProps) {
   const { toast } = useToast();
   const duplicateListMutation = useDuplicateListPaymentSchedule();
 
@@ -72,8 +79,9 @@ export function DuplicateListModal({ listPaymentSchedule, open, onOpenChange }: 
             Duplicar Lista de Pagos
           </DialogTitle>
           <DialogDescription>
-            Se creará una copia completa de la lista &quot;{listPaymentSchedule.name}&quot; con todos sus
-            cronogramas de pagos e items. La lista original permanecerá intacta.
+            Se creará una copia completa de la lista &quot;
+            {listPaymentSchedule.name}&quot; con todos sus cronogramas de pagos
+            e items. La lista original permanecerá intacta.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -85,7 +93,10 @@ export function DuplicateListModal({ listPaymentSchedule, open, onOpenChange }: 
                 <FormItem>
                   <FormLabel>Nombre de la nueva lista</FormLabel>
                   <FormControl>
-                    <Input placeholder="Nombre de la lista duplicada" {...field} />
+                    <Input
+                      placeholder="Nombre de la lista duplicada"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -101,10 +112,7 @@ export function DuplicateListModal({ listPaymentSchedule, open, onOpenChange }: 
               >
                 Cancelar
               </Button>
-              <Button
-                type="submit"
-                disabled={duplicateListMutation.isPending}
-              >
+              <Button type="submit" disabled={duplicateListMutation.isPending}>
                 {duplicateListMutation.isPending ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

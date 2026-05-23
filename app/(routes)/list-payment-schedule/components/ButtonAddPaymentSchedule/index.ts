@@ -1,1 +1,1 @@
-export * from './ButtonAddPaymentSchedule';
+export * from "./ButtonAddPaymentSchedule";

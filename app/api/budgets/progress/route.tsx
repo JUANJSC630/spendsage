@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 
 import { db } from "@/lib/db";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {
   try {
@@ -47,7 +47,7 @@ export async function GET(req: Request) {
 
         const spent = transactions.reduce(
           (total, transaction) => total + parseFloat(transaction.amount),
-          0
+          0,
         );
 
         const budgetAmount = parseFloat(budget.amount);
@@ -61,7 +61,7 @@ export async function GET(req: Request) {
           isOverBudget: spent > budgetAmount,
           transactionCount: transactions.length,
         };
-      })
+      }),
     );
 
     return NextResponse.json(budgetProgress);

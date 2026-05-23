@@ -6,7 +6,6 @@ export type SidebarItemProps = {
     icon: LucideIcon;
     href: string;
   };
-  key: string;
   setOpen: boolean;
   onItemClick?: () => void;
 };

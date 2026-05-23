@@ -47,6 +47,7 @@ interface Category {
   type: string;
   color: string;
   icon: string;
+  isDefault?: boolean;
 }
 
 function FromTransaction() {
@@ -60,11 +61,11 @@ function FromTransaction() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('/api/categories');
+        const response = await axios.get("/api/categories");
         setCategories(response.data);
       } catch (error) {
-        console.error('Error fetching categories:', error);
-        toast.error('Error al cargar las categorías');
+        console.error("Error fetching categories:", error);
+        toast.error("Error al cargar las categorías");
       } finally {
         setLoadingCategories(false);
       }
@@ -115,14 +116,24 @@ function FromTransaction() {
                 <FormItem>
                   <FormLabel>Categoría</FormLabel>
                   <FormControl>
-                    <Select onValueChange={field.onChange} value={field.value} disabled={loadingCategories}>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      disabled={loadingCategories}
+                    >
                       <SelectTrigger>
-                        <SelectValue placeholder={loadingCategories ? "Cargando categorías..." : "Selecciona una categoría"} />
+                        <SelectValue
+                          placeholder={
+                            loadingCategories
+                              ? "Cargando categorías..."
+                              : "Selecciona una categoría"
+                          }
+                        />
                       </SelectTrigger>
                       <SelectContent>
                         {categories.length === 0 && !loadingCategories ? (
                           <div className="p-2 text-sm text-gray-500">
-                            No hay categorías disponibles. 
+                            No hay categorías disponibles.
                             <br />
                             Crea una en la sección Categorías.
                           </div>
@@ -137,9 +148,13 @@ function FromTransaction() {
                                   />
                                   <span>{category.name}</span>
                                   <span className="text-xs text-gray-500">
-                                    ({category.type === 'income' ? 'Ingreso' :
-                                      category.type === 'expense' ? 'Gasto' :
-                                      category.type})
+                                    (
+                                    {category.type === "income"
+                                      ? "Ingreso"
+                                      : category.type === "expense"
+                                        ? "Gasto"
+                                        : category.type}
+                                    )
                                   </span>
                                 </div>
                                 {category.isDefault && (

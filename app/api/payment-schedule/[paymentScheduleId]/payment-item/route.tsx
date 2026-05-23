@@ -2,11 +2,11 @@ import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export async function GET(
   req: Request,
-  { params }: { params: { paymentScheduleId: string } }
+  { params }: { params: { paymentScheduleId: string } },
 ) {
   try {
     const { userId } = auth();
@@ -20,10 +20,7 @@ export async function GET(
         paymentScheduleId: params.paymentScheduleId,
         userId,
       },
-      orderBy: [
-        { check: "asc" },
-        { date: "asc" },
-      ],
+      orderBy: [{ check: "asc" }, { date: "asc" }],
     });
 
     return NextResponse.json(paymentItems);
@@ -35,15 +32,17 @@ export async function GET(
 
 export async function POST(
   req: Request,
-  { params }: { params: { paymentScheduleId: string } }
+  { params }: { params: { paymentScheduleId: string } },
 ) {
   try {
     const { userId } = auth();
-    const data = await req.json();
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
+
+    const body = await req.json();
+    const { description, amount, date, check } = body;
 
     const paymentSchedule = await db.paymentSchedule.findUnique({
       where: {
@@ -59,7 +58,10 @@ export async function POST(
       data: {
         paymentScheduleId: params.paymentScheduleId,
         userId,
-        ...data,
+        description,
+        amount,
+        date: new Date(date),
+        check: check ?? false,
       },
     });
 

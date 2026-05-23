@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export async function PATCH(
   req: Request,
@@ -10,7 +10,7 @@ export async function PATCH(
     params,
   }: {
     params: { categoryId: string };
-  }
+  },
 ) {
   try {
     const { userId } = auth();
@@ -24,11 +24,13 @@ export async function PATCH(
     // Check if it's a default category (cannot be modified)
     const existingCategory = await db.category.findUnique({
       where: { id: categoryId },
-      select: { isDefault: true, userId: true }
+      select: { isDefault: true, userId: true },
     });
 
     if (existingCategory?.isDefault) {
-      return new NextResponse("Cannot modify default categories", { status: 403 });
+      return new NextResponse("Cannot modify default categories", {
+        status: 403,
+      });
     }
 
     // Generate new slug if name is being updated
@@ -36,8 +38,8 @@ export async function PATCH(
     if (data.name) {
       updateData.slug = data.name
         .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '_')
-        .replace(/(^_|_$)/g, '');
+        .replace(/[^a-z0-9]+/g, "_")
+        .replace(/(^_|_$)/g, "");
     }
 
     const category = await db.category.update({
@@ -51,7 +53,12 @@ export async function PATCH(
     return NextResponse.json(category);
   } catch (e) {
     console.log("[PATCH CATEGORY]", e);
-    if (typeof e === "object" && e !== null && "code" in e && (e as any).code === 'P2002') {
+    if (
+      typeof e === "object" &&
+      e !== null &&
+      "code" in e &&
+      (e as any).code === "P2002"
+    ) {
       return new NextResponse("Category name already exists", { status: 400 });
     }
     return new NextResponse("Internal Server Error", { status: 500 });
@@ -64,7 +71,7 @@ export async function DELETE(
     params,
   }: {
     params: { categoryId: string };
-  }
+  },
 ) {
   try {
     const { userId } = auth();
@@ -77,11 +84,13 @@ export async function DELETE(
     // Check if it's a default category (cannot be deleted)
     const existingCategory = await db.category.findUnique({
       where: { id: categoryId },
-      select: { isDefault: true, userId: true, slug: true }
+      select: { isDefault: true, userId: true, slug: true },
     });
 
     if (existingCategory?.isDefault) {
-      return new NextResponse("Cannot delete default categories", { status: 403 });
+      return new NextResponse("Cannot delete default categories", {
+        status: 403,
+      });
     }
 
     // Check if category is being used in transactions or budgets
@@ -89,24 +98,28 @@ export async function DELETE(
       where: {
         userId,
         category: {
-          in: await db.category.findUnique({
-            where: { id: categoryId, userId },
-            select: { slug: true }
-          }).then(cat => cat ? [cat.slug] : [])
-        }
-      }
+          in: await db.category
+            .findUnique({
+              where: { id: categoryId, userId },
+              select: { slug: true },
+            })
+            .then((cat) => (cat ? [cat.slug] : [])),
+        },
+      },
     });
 
     const budgetsCount = await db.budget.count({
       where: {
         userId,
         category: {
-          in: await db.category.findUnique({
-            where: { id: categoryId, userId },
-            select: { slug: true }
-          }).then(cat => cat ? [cat.slug] : [])
-        }
-      }
+          in: await db.category
+            .findUnique({
+              where: { id: categoryId, userId },
+              select: { slug: true },
+            })
+            .then((cat) => (cat ? [cat.slug] : [])),
+        },
+      },
     });
 
     if (transactionsCount > 0 || budgetsCount > 0) {

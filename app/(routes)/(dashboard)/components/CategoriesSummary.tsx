@@ -33,17 +33,20 @@ export default function CategoriesSummary(props: CategoriesSummaryProps) {
     );
   });
 
-  const totals = currentMonthTransactions.reduce((acc, item) => {
-    const category = item.category;
-    const amount = parseFloat(item.amount);
+  const totals = currentMonthTransactions.reduce(
+    (acc, item) => {
+      const category = item.category;
+      const amount = parseFloat(item.amount);
 
-    if (!acc[category]) {
-      acc[category] = 0;
-    }
+      if (!acc[category]) {
+        acc[category] = 0;
+      }
 
-    acc[category] += amount;
-    return acc;
-  }, {} as Record<string, number>);
+      acc[category] += amount;
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
 
   const data = {
     labels: ["Ingresos", "Gastos Variables", "Gastos Fijos"],

@@ -49,14 +49,19 @@ const months = [
   { value: "12", label: "Diciembre" },
 ];
 
-export function DashboardClient({ transactions, categories }: DashboardClientProps) {
+export function DashboardClient({
+  transactions,
+  categories,
+}: DashboardClientProps) {
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth() + 1;
   const currentYear = currentDate.getFullYear();
 
   const [selectedMonth, setSelectedMonth] = useState(currentMonth.toString());
   const [selectedYear, setSelectedYear] = useState(currentYear.toString());
-  const [filteredTransactions, setFilteredTransactions] = useState<Transactions[]>([]);
+  const [filteredTransactions, setFilteredTransactions] = useState<
+    Transactions[]
+  >([]);
   const { colorTheme } = useColorThemeStore();
   // Generate years array (current year and previous 5 years)
   const years = Array.from({ length: 6 }, (_, i) => {
@@ -80,7 +85,8 @@ export function DashboardClient({ transactions, categories }: DashboardClientPro
     setFilteredTransactions(filtered);
   }, [transactions, selectedMonth, selectedYear]);
 
-  const selectedMonthName = months.find(m => m.value === selectedMonth)?.label || "";
+  const selectedMonthName =
+    months.find((m) => m.value === selectedMonth)?.label || "";
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
@@ -135,9 +141,13 @@ export function DashboardClient({ transactions, categories }: DashboardClientPro
 
       {/* Period indicator */}
       <div className="w-full">
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-sm font-medium rounded-full" style={{ color: colorTheme }}>
+        <div
+          className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-sm font-medium rounded-full"
+          style={{ color: colorTheme }}
+        >
           <CalendarIcon className="h-4 w-4" />
-          {selectedMonthName} {selectedYear} • {filteredTransactions.length} Movimientos
+          {selectedMonthName} {selectedYear} • {filteredTransactions.length}{" "}
+          Movimientos
         </div>
       </div>
 
@@ -168,14 +178,21 @@ export function DashboardClient({ transactions, categories }: DashboardClientPro
                   <CardTitle>Distribución por Categorías</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CategoriesSummaryDynamic transactions={filteredTransactions} categories={categories} />
+                  <CategoriesSummaryDynamic
+                    transactions={filteredTransactions}
+                    categories={categories}
+                  />
                 </CardContent>
               </Card>
             </div>
 
             {/* Monthly Chart */}
             <div className="xl:col-span-2">
-              <ExpenseIncomeChart transactions={filteredTransactions} categories={categories} className="h-full" />
+              <ExpenseIncomeChart
+                transactions={filteredTransactions}
+                categories={categories}
+                className="h-full"
+              />
             </div>
           </div>
 

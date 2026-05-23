@@ -1,10 +1,10 @@
-import { ArrowLeft, PlusCircle } from 'lucide-react';
-import Link from 'next/link';
-import React from 'react';
+import { ArrowLeft, PlusCircle } from "lucide-react";
+import Link from "next/link";
+import React from "react";
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BudgetForm } from '../components/BudgetForm/BudgetForm';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { BudgetForm } from "../components/BudgetForm/BudgetForm";
 
 export default function CreateBudgetPage() {
   return (
@@ -18,7 +18,7 @@ export default function CreateBudgetPage() {
         <PlusCircle className="h-6 w-6 text-blue-600" />
         <h1 className="text-2xl font-bold text-gray-900">Crear Presupuesto</h1>
       </div>
-      
+
       <Card className="max-w-2xl mx-auto">
         <CardHeader>
           <CardTitle>Nuevo Presupuesto</CardTitle>

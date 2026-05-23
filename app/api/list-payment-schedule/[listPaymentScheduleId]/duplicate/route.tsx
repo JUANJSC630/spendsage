@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 interface Params {
   params: { listPaymentScheduleId: string };
@@ -21,7 +21,7 @@ export async function POST(req: Request, { params }: Params) {
       return new NextResponse("Bad Request", { status: 400 });
     }
 
-    if (!name || name.trim() === '') {
+    if (!name || name.trim() === "") {
       return new NextResponse("Name is required", { status: 400 });
     }
 
@@ -43,7 +43,9 @@ export async function POST(req: Request, { params }: Params) {
     });
 
     if (!originalList) {
-      return new NextResponse("List Payment Schedule not found", { status: 404 });
+      return new NextResponse("List Payment Schedule not found", {
+        status: 404,
+      });
     }
 
     // Crear la nueva lista duplicada

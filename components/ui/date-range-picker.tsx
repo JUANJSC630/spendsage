@@ -1,25 +1,25 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { CalendarIcon } from "lucide-react"
-import { DateRange } from "react-day-picker"
-import { format } from "date-fns"
+import * as React from "react";
+import { CalendarIcon } from "lucide-react";
+import { DateRange } from "react-day-picker";
+import { format } from "date-fns";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
 
 interface DateRangePickerProps {
-  date?: DateRange
-  onDateChange?: (date: DateRange | undefined) => void
-  placeholder?: string
-  className?: string
-  disabled?: boolean
+  date?: DateRange;
+  onDateChange?: (date: DateRange | undefined) => void;
+  placeholder?: string;
+  className?: string;
+  disabled?: boolean;
 }
 
 export function DateRangePicker({
@@ -59,7 +59,7 @@ export function DateRangePicker({
             variant={"outline"}
             className={cn(
               "w-full justify-start text-left font-normal",
-              !date?.from && "text-muted-foreground"
+              !date?.from && "text-muted-foreground",
             )}
             disabled={disabled}
             suppressHydrationWarning
@@ -81,5 +81,5 @@ export function DateRangePicker({
         </PopoverContent>
       </Popover>
     </div>
-  )
+  );
 }

@@ -35,7 +35,7 @@ export async function DELETE(req: Request, { params }: Params) {
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { paymentItemId: string } }
+  { params }: { params: { paymentItemId: string } },
 ) {
   try {
     const { userId } = auth();

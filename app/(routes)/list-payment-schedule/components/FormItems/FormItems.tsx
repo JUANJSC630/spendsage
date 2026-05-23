@@ -146,8 +146,8 @@ export function FormItems(props: FormItemsProps) {
               <FormLabel>Fecha</FormLabel>
               <FormControl>
                 <AdaptiveDatePicker
-                  date={field.value}
-                  onDateChange={field.onChange}
+                  date={field.value ?? null}
+                  onDateChange={(d) => field.onChange(d ?? undefined)}
                   placeholder="Selecciona una fecha"
                 />
               </FormControl>
@@ -156,11 +156,10 @@ export function FormItems(props: FormItemsProps) {
           )}
         />
         <div>
-          <Button
-            type="submit"
-            disabled={createPaymentItemMutation.isPending}
-          >
-            {createPaymentItemMutation.isPending ? "Creando..." : "Crear Item de Pago"}
+          <Button type="submit" disabled={createPaymentItemMutation.isPending}>
+            {createPaymentItemMutation.isPending
+              ? "Creando..."
+              : "Crear Item de Pago"}
           </Button>
         </div>
       </form>

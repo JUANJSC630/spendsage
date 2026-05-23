@@ -16,8 +16,8 @@ export const useCurrencyStore = create<CurrencyState>((set, get) => ({
         state.currency === "USD"
           ? "EUR"
           : state.currency === "EUR"
-          ? "COP"
-          : "USD";
+            ? "COP"
+            : "USD";
       if (typeof window !== "undefined") {
         localStorage.setItem("currency", newCurrency); // Actualizar localStorage en el cliente
       }

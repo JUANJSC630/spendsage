@@ -18,8 +18,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { formSchema } from "./FormPaymentSchedule.form";
-import { FormPaymentScheduleProps } from "./FormPaymentSchedule.types";
+import { formSchema } from "../FormPaymentSchedule/FormPaymentSchedule.form";
+import { FormPaymentScheduleProps } from "../FormPaymentSchedule/FormPaymentSchedule.types";
 // Import the new mobile-friendly date range picker
 import { MobileDateRangePicker } from "@/components/ui/react-datepicker";
 

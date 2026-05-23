@@ -1,1 +1,1 @@
-export * from './CheckBoxUpdatePaymentItem';
+export * from "./CheckBoxUpdatePaymentItem";
