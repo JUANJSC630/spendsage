@@ -53,6 +53,25 @@ const api = {
     return res.json();
   },
 
+  updateTransaction: async ({
+    id,
+    ...data
+  }: {
+    id: string;
+    description?: string;
+    amount?: string;
+    category?: string;
+    date?: Date;
+  }): Promise<Transactions> => {
+    const res = await fetch(`/api/transactions/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error("Failed to update transaction");
+    return res.json();
+  },
+
   deleteTransaction: async (id: string): Promise<void> => {
     const res = await fetch(`/api/transactions/${id}`, { method: "DELETE" });
     if (!res.ok) throw new Error("Failed to delete transaction");
@@ -85,6 +104,31 @@ export function useCreateTransaction() {
       queryClient.setQueryData<Transactions[]>(transactionKeys.list(), (old) =>
         old ? [newTx, ...old] : [newTx],
       );
+      queryClient.invalidateQueries({ queryKey: transactionKeys.list() });
+    },
+  });
+}
+
+export function useUpdateTransaction() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: api.updateTransaction,
+    onMutate: async ({ id, ...patch }) => {
+      await queryClient.cancelQueries({ queryKey: transactionKeys.list() });
+      const previous = queryClient.getQueryData<Transactions[]>(
+        transactionKeys.list(),
+      );
+      queryClient.setQueryData<Transactions[]>(transactionKeys.list(), (old) =>
+        old?.map((t) => (t.id === id ? { ...t, ...patch } : t)) ?? [],
+      );
+      return { previous };
+    },
+    onError: (_, __, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(transactionKeys.list(), context.previous);
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: transactionKeys.list() });
     },
   });
