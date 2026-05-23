@@ -1,70 +1,94 @@
 "use client";
-import { useRouter } from "next/navigation";
 
-import React, { useEffect, useState } from "react";
-import { CardTransactionProps } from "./CardTransaction.types";
-import { Trash } from "lucide-react";
-import axios from "axios";
+import { motion } from "framer-motion";
+import { Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
+import { Transactions } from "@prisma/client";
 import { useCurrencyStore } from "@/hooks/useCurrencyStore";
 import useFormatAmount from "@/hooks/useFormatAmount";
 import { getCategoryInfo } from "@/lib/categoryMapping";
+import { useDeleteTransaction } from "@/hooks/use-transactions";
 
-export default function CardTransaction(props: CardTransactionProps) {
-  const { transaction, categories } = props;
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  color: string;
+  type: string;
+  isDefault: boolean;
+}
 
+interface CardTransactionProps {
+  transaction: Transactions;
+  categories: Category[];
+}
+
+export default function CardTransaction({
+  transaction,
+  categories,
+}: CardTransactionProps) {
   const formatAmount = useFormatAmount();
   const { getSymbol } = useCurrencyStore();
-  const [symbol, setSymbol] = useState<string>(""); // Nuevo estado para manejar el símbolo de la moneda
+  const { mutate: deleteTransaction, isPending } = useDeleteTransaction();
 
-  useEffect(() => {
-    // Actualiza el símbolo después de la hidratación
-    setSymbol(getSymbol());
-  }, [getSymbol]);
-  const router = useRouter();
+  const symbol = getSymbol();
+  const { category } = getCategoryInfo(categories, transaction.category);
+  const categoryName = category?.name ?? transaction.category;
+  const isIncome = category?.type === "income";
+  const categoryColor = category?.color ?? "#94a3b8";
 
-  const deleteTransaction = async () => {
-    try {
-      await axios.delete(`/api/transactions/${transaction.id}`);
-      toast.success("¡Transacción eliminada exitosamente! ❌");
-      router.refresh();
-    } catch (error) {
-      toast.error("Ocurrió un error al eliminar la transacción 😢");
-    }
+  const handleDelete = () => {
+    deleteTransaction(transaction.id, {
+      onSuccess: () => toast.success("Transacción eliminada"),
+      onError: () => toast.error("Error al eliminar"),
+    });
   };
 
-  // Get category info using mapping
-  const categoryInfo = getCategoryInfo(categories, transaction.category);
-  const categoryName = categoryInfo.category?.name || transaction.category;
-  const isIncome = categoryInfo.category?.type === "income";
-
   return (
-    <div
-      key={transaction.id}
-      className="grid md:grid-cols-3 gap-4 bg-gray-50 rounded-lg p-4"
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, x: -16, transition: { duration: 0.15 } }}
+      className="group flex items-center gap-3 bg-white rounded-xl px-4 py-3 hover:shadow-sm transition-shadow duration-200"
     >
-      <div className="col-span-2">
-        <p className="text-lg font-bold">{transaction.description}</p>
-        <p className="text-sm text-gray-400">
-          {new Date(transaction.date).toLocaleDateString("es-ES")}
+      <div
+        className="w-1.5 h-8 rounded-full flex-shrink-0"
+        style={{ backgroundColor: categoryColor }}
+      />
+
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-slate-800 truncate">
+          {transaction.description}
         </p>
-        <p>{categoryName}</p>
+        <p className="text-xs text-slate-400">
+          {categoryName} ·{" "}
+          {new Date(transaction.date).toLocaleDateString("es-ES", {
+            day: "numeric",
+            month: "short",
+          })}
+        </p>
       </div>
-      <div className="col-span-2 md:col-span-1 flex flex-col gap-2 items-end">
-        <p
-          className={`text-lg ${isIncome ? "text-green-500" : "text-red-500"}`}
+
+      <div className="flex items-center gap-2.5 flex-shrink-0">
+        <span
+          className={`text-sm font-bold tabular-nums ${
+            isIncome ? "text-emerald-600" : "text-red-500"
+          }`}
         >
           {isIncome ? "+" : "-"}
           {symbol}
           {formatAmount(transaction.amount)}
-        </p>
+        </span>
         <button
-          className="hover:text-red-500 text-red-700/50"
-          onClick={deleteTransaction}
+          onClick={handleDelete}
+          disabled={isPending}
+          className="opacity-0 group-hover:opacity-100 transition-opacity duration-150 text-slate-300 hover:text-red-400 disabled:opacity-30"
+          aria-label="Eliminar transacción"
         >
-          <Trash size={24} />
+          <Trash2 className="w-3.5 h-3.5" />
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 }

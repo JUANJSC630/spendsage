@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { CalendarIcon, Filter } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useState, useMemo } from "react";
+import { motion } from "framer-motion";
+import { TrendingUp, TrendingDown, ArrowLeftRight } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -10,41 +10,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-import CardTotal from "../CardTotal/CardTotal";
-import { FromTransaction } from "../FormTransaction";
+import { useSyncColorTheme } from "@/hooks/useColorThemeStore";
+import { useCurrencyStore } from "@/hooks/useCurrencyStore";
+import useFormatAmount from "@/hooks/useFormatAmount";
+import {
+  useTransactions,
+  useTransactionCategories,
+} from "@/hooks/use-transactions";
+import { getCategoryInfo } from "@/lib/categoryMapping";
+import { FormTransaction } from "../FormTransaction";
 import { ListTransaction } from "../ListTransaction/ListTransaction";
-import { useColorThemeStore } from "@/hooks/useColorThemeStore";
 
-interface Transaction {
-  id: string;
-  amount: string;
-  description: string;
-  category: string;
-  date: Date;
-  createdAt: Date;
-  updatedAt: Date;
-  userId: string;
-  fromAccountId: string | null;
-  toAccountId: string | null;
-}
-
-interface Category {
-  id: string;
-  name: string;
-  slug: string;
-  color: string;
-  type: string;
-  isDefault: boolean;
-}
-
-interface FinancesPageClientProps {
-  transactions: Transaction[];
-  categories: Category[];
-}
-
-const months = [
+const MONTHS = [
   { value: "1", label: "Enero" },
   { value: "2", label: "Febrero" },
   { value: "3", label: "Marzo" },
@@ -59,144 +36,197 @@ const months = [
   { value: "12", label: "Diciembre" },
 ];
 
-export function FinancesPageClient({
-  transactions,
-  categories,
-}: FinancesPageClientProps) {
-  const currentDate = new Date();
-  const currentMonth = currentDate.getMonth() + 1;
-  const currentYear = currentDate.getFullYear();
+const stagger = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.09 } },
+};
 
-  const [selectedMonth, setSelectedMonth] = useState(currentMonth.toString());
-  const [selectedYear, setSelectedYear] = useState(currentYear.toString());
-  const [filteredTransactions, setFilteredTransactions] = useState<
-    Transaction[]
-  >([]);
-  const { colorTheme } = useColorThemeStore();
-  // Generate years array (current year and previous 5 years)
-  const years = Array.from({ length: 6 }, (_, i) => {
-    const year = currentYear - i;
-    return { value: year.toString(), label: year.toString() };
-  });
+const fadeUp = {
+  hidden: { opacity: 0, y: 18 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.42, ease: [0.25, 0.46, 0.45, 0.94] },
+  },
+};
 
-  // Filter transactions by selected month and year
-  useEffect(() => {
-    const filtered = transactions.filter((transaction) => {
-      const transactionDate = new Date(transaction.date);
-      const transactionMonth = transactionDate.getMonth() + 1;
-      const transactionYear = transactionDate.getFullYear();
+export function FinancesPageClient() {
+  const now = new Date();
+  const [selectedMonth, setSelectedMonth] = useState(
+    (now.getMonth() + 1).toString(),
+  );
+  const [selectedYear, setSelectedYear] = useState(
+    now.getFullYear().toString(),
+  );
 
-      return (
-        transactionMonth === parseInt(selectedMonth) &&
-        transactionYear === parseInt(selectedYear)
-      );
+  const { colorTheme } = useSyncColorTheme();
+  const { getSymbol } = useCurrencyStore();
+  const formatAmount = useFormatAmount();
+
+  const { data: allTransactions = [], isLoading: loadingTx } =
+    useTransactions();
+  const { data: categories = [] } = useTransactionCategories();
+
+  const currentYear = now.getFullYear();
+  const years = useMemo(
+    () =>
+      Array.from({ length: 6 }, (_, i) => {
+        const y = currentYear - i;
+        return { value: y.toString(), label: y.toString() };
+      }),
+    [currentYear],
+  );
+
+  const filtered = useMemo(
+    () =>
+      allTransactions.filter((t) => {
+        const d = new Date(t.date);
+        return (
+          d.getMonth() + 1 === parseInt(selectedMonth) &&
+          d.getFullYear() === parseInt(selectedYear)
+        );
+      }),
+    [allTransactions, selectedMonth, selectedYear],
+  );
+
+  const { totalIncome, totalExpenses, totalBalance } = useMemo(() => {
+    let income = 0;
+    let expenses = 0;
+    filtered.forEach((t) => {
+      const amount = parseFloat(t.amount);
+      const { category } = getCategoryInfo(categories, t.category);
+      if (category?.type === "income") income += amount;
+      else if (category?.type === "expense") expenses += amount;
     });
+    return {
+      totalIncome: income,
+      totalExpenses: expenses,
+      totalBalance: income - expenses,
+    };
+  }, [filtered, categories]);
 
-    setFilteredTransactions(filtered);
-  }, [transactions, selectedMonth, selectedYear]);
-
+  const symbol = getSymbol();
   const selectedMonthName =
-    months.find((m) => m.value === selectedMonth)?.label || "";
+    MONTHS.find((m) => m.value === selectedMonth)?.label ?? "";
+
+  const stats = [
+    {
+      key: "income",
+      label: "Ingresos",
+      value: totalIncome,
+      Icon: TrendingUp,
+      color: "#10b981",
+      bg: "#f0fdf4",
+    },
+    {
+      key: "expenses",
+      label: "Gastos",
+      value: totalExpenses,
+      Icon: TrendingDown,
+      color: "#ef4444",
+      bg: "#fef2f2",
+    },
+    {
+      key: "balance",
+      label: "Balance",
+      value: totalBalance,
+      Icon: ArrowLeftRight,
+      color: totalBalance >= 0 ? colorTheme : "#ef4444",
+      bg: totalBalance >= 0 ? "#f8fafc" : "#fef2f2",
+    },
+  ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] w-full">
-      {/* Header with filters */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <div className="flex items-center gap-3">
-          <CalendarIcon className="h-6 w-6 text-gray-600" />
-          <h1 className="text-2xl font-bold text-gray-900">Finanzas</h1>
+    <motion.div
+      className="max-w-5xl mx-auto px-4 sm:px-6 py-8 pb-[calc(2rem+env(safe-area-inset-bottom))] w-full"
+      variants={stagger}
+      initial="hidden"
+      animate="visible"
+    >
+      {/* Header */}
+      <motion.div
+        variants={fadeUp}
+        className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8"
+      >
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+            Finanzas
+          </h1>
+          <p className="text-sm text-slate-400 mt-1">
+            {selectedMonthName} {selectedYear} · {filtered.length} movimientos
+          </p>
         </div>
 
-        <Card className="w-full sm:w-auto">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Filter className="h-4 w-4" />
-              Filtrar por período
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="pt-0">
-            <div className="flex flex-col sm:flex-row gap-3">
-              <div className="space-y-1">
-                <label className="text-xs text-gray-500 font-medium">Mes</label>
-                <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-                  <SelectTrigger className="w-full sm:w-[140px]">
-                    <SelectValue placeholder="Seleccionar mes" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {months.map((month) => (
-                      <SelectItem key={month.value} value={month.value}>
-                        {month.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+        <div className="flex items-center gap-2">
+          <Select value={selectedMonth} onValueChange={setSelectedMonth}>
+            <SelectTrigger className="w-[130px] h-9 text-sm border-slate-200 bg-slate-50 focus:ring-0">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {MONTHS.map((m) => (
+                <SelectItem key={m.value} value={m.value}>
+                  {m.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
-              <div className="space-y-1">
-                <label className="text-xs text-gray-500 font-medium">Año</label>
-                <Select value={selectedYear} onValueChange={setSelectedYear}>
-                  <SelectTrigger className="w-full sm:w-[100px]">
-                    <SelectValue placeholder="Año" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {years.map((year) => (
-                      <SelectItem key={year.value} value={year.value}>
-                        {year.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+          <Select value={selectedYear} onValueChange={setSelectedYear}>
+            <SelectTrigger className="w-[90px] h-9 text-sm border-slate-200 bg-slate-50 focus:ring-0">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {years.map((y) => (
+                <SelectItem key={y.value} value={y.value}>
+                  {y.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </motion.div>
+
+      {/* Stats */}
+      <motion.div
+        variants={fadeUp}
+        className="grid grid-cols-3 gap-3 sm:gap-4 mb-8"
+      >
+        {stats.map(({ key, label, value, Icon, color, bg }) => (
+          <div
+            key={key}
+            className="rounded-2xl px-4 sm:px-5 py-4"
+            style={{ backgroundColor: bg }}
+          >
+            <div className="flex items-center gap-1.5 mb-2">
+              <Icon className="w-3.5 h-3.5 flex-shrink-0" style={{ color }} />
+              <span className="text-[11px] font-medium text-slate-500 truncate">
+                {label}
+              </span>
             </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Period indicator */}
-      <div className="mb-6">
-        <div
-          className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-sm font-medium rounded-full"
-          style={{ color: colorTheme }}
-        >
-          <CalendarIcon className="h-4 w-4" />
-          {selectedMonthName} {selectedYear} • {filteredTransactions.length}{" "}
-          Movimientos
-        </div>
-      </div>
-
-      <div className="grid gap-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="border border-slate-100 p-4 rounded-md transition-colors duration-300 ease-in">
-            <FromTransaction />
+            <p
+              className="text-lg sm:text-xl font-bold tabular-nums leading-none"
+              style={{ color }}
+            >
+              {symbol}
+              {formatAmount(value.toString())}
+            </p>
           </div>
-          <div className="border border-slate-100 p-4 rounded-md transition-colors duration-300 ease-in">
-            <ListTransaction
-              transactions={filteredTransactions}
-              categories={categories}
-            />
-          </div>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <CardTotal
-            transactions={filteredTransactions}
+        ))}
+      </motion.div>
+
+      {/* Form + List */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <motion.div variants={fadeUp}>
+          <FormTransaction />
+        </motion.div>
+        <motion.div variants={fadeUp}>
+          <ListTransaction
+            transactions={filtered}
             categories={categories}
-            type="income"
-            title="Total de Ingresos"
+            isLoading={loadingTx}
           />
-          <CardTotal
-            transactions={filteredTransactions}
-            categories={categories}
-            type="expenses"
-            title="Total de Gastos"
-          />
-          <CardTotal
-            transactions={filteredTransactions}
-            categories={categories}
-            type="balance"
-            title="Balance Total"
-          />
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }
