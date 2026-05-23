@@ -303,13 +303,14 @@ export function DashboardClient() {
     },
   ];
 
-  // Smart insights (computed inline — no expensive calculation)
+  // Smart insights — only show when the data is real and meaningful
   const insights: {
     type: "success" | "warning" | "danger" | "info";
     text: string;
   }[] = [];
 
-  if (income > 0) {
+  // 1. Savings rate — requires income AND expenses, balance must be nonzero to show danger
+  if (income > 0 && expenses > 0) {
     if (savingsRate >= 20) {
       insights.push({
         type: "success",
@@ -320,7 +321,8 @@ export function DashboardClient() {
         type: "warning",
         text: `Tasa de ahorro de ${savingsRate.toFixed(1)}%. El objetivo es 20% — te faltan ${(20 - savingsRate).toFixed(1)}pp.`,
       });
-    } else {
+    } else if (balance < 0) {
+      // Only show when genuinely overspending — never when balance = 0
       insights.push({
         type: "danger",
         text: `Estás gastando ${symbol}${formatAmount(Math.abs(balance))} más de lo que ingresas este mes.`,
@@ -328,14 +330,16 @@ export function DashboardClient() {
     }
   }
 
-  if (topCategory && topCategoryPct > 50) {
+  // 2. Category concentration — meaningless with only 1 category; raise threshold to 65%
+  if (topCategory && topCategoryPct > 65 && categoryBreakdown.length > 1) {
     insights.push({
       type: "warning",
       text: `${topCategory.name} representa el ${topCategoryPct.toFixed(0)}% de tus gastos. Diversificar te da más control.`,
     });
   }
 
-  if (expenseMoM !== null) {
+  // 3. Month-over-month — only when both months have real expenses
+  if (expenseMoM !== null && expenses > 0 && prevExpenses > 0) {
     if (expenseMoM > 20) {
       insights.push({
         type: "danger",
@@ -349,29 +353,35 @@ export function DashboardClient() {
     }
   }
 
-  if (isCurrentMonth && income > 0 && projectedExpenses > income * 0.85) {
+  // 4. Projection — only mid-month with real expenses and income, not when already doing great
+  const savingsInsightIsGood = insights.some((i) => i.type === "success" && i.text.includes("ahorro"));
+  if (
+    isCurrentMonth &&
+    income > 0 &&
+    expenses > 0 &&
+    daysElapsed >= 5 &&
+    !savingsInsightIsGood &&
+    projectedExpenses > income * 0.85
+  ) {
     insights.push({
       type: "warning",
       text: `A este ritmo proyectas gastar ${symbol}${formatAmount(Math.round(projectedExpenses))} en ${MONTHS[month - 1]} — cerca de tu ingreso total.`,
     });
   }
 
-  if (isCurrentMonth && daysRemaining > 0 && dailyBudget > 0) {
+  // 5. Daily budget — only when there's real margin and income registered
+  if (isCurrentMonth && income > 0 && balance > 0 && daysRemaining > 1 && dailyBudget > 0) {
     insights.push({
       type: "info",
       text: `Quedan ${daysRemaining} días. Presupuesto diario disponible: ${symbol}${formatAmount(Math.round(dailyBudget))}.`,
     });
   }
 
+  // 6. No transactions — the only info insight when month is empty
   if (currentTxs.length === 0) {
     insights.push({
       type: "info",
       text: `No hay movimientos en ${MONTHS[month - 1]} ${year}. Agrega transacciones para ver tu análisis completo.`,
-    });
-  } else if (currentTxs.length < 3) {
-    insights.push({
-      type: "info",
-      text: `Con ${currentTxs.length} transacción${currentTxs.length !== 1 ? "es" : ""}, los análisis son limitados. Registra todos tus movimientos.`,
     });
   }
 
