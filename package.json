@@ -8,7 +8,12 @@
     "dev:clean": "rm -rf .next && next dev",
     "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit",
+    "check": "yarn typecheck && yarn lint && yarn format:check"
   },
   "dependencies": {
     "@clerk/nextjs": "^5.2.8",
