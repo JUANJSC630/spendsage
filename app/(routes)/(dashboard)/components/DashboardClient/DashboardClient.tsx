@@ -478,31 +478,45 @@ export function DashboardClient() {
       {/* ── Hero balance card ───────────────────────────────────────────── */}
       <motion.div
         variants={fadeUp}
-        className="rounded-2xl p-6 text-white"
+        className="rounded-2xl p-5 text-white"
         style={{
           background: `linear-gradient(135deg, ${colorTheme} 0%, ${colorTheme}bb 100%)`,
         }}
       >
-        <p className="text-xs font-medium opacity-70 mb-1 uppercase tracking-wider">
-          Balance del mes
-        </p>
-        <p className="text-4xl sm:text-5xl font-bold tabular-nums mb-5">
-          {balance >= 0 ? "+" : "−"}
-          {symbol}
-          {formatAmount(Math.abs(balance))}
-        </p>
+        {/* Top row: balance + savings rate */}
+        <div className="flex items-start justify-between gap-4 mb-4">
+          <div>
+            <p className="text-[11px] font-medium opacity-60 mb-1 uppercase tracking-wider">
+              Balance del mes
+            </p>
+            <p className="text-2xl sm:text-3xl font-bold tabular-nums">
+              {balance >= 0 ? "+" : "−"}
+              {symbol}
+              {formatAmount(Math.abs(balance))}
+            </p>
+          </div>
+          {income > 0 && (
+            <div className="text-right flex-shrink-0">
+              <p className="text-[11px] opacity-60 mb-1">Ahorro</p>
+              <p className="text-2xl font-bold tabular-nums">
+                {savingsRate.toFixed(1)}%
+              </p>
+            </div>
+          )}
+        </div>
 
-        <div className="grid grid-cols-2 gap-3 mb-5">
-          <div className="bg-white/10 rounded-xl px-4 py-3">
-            <p className="text-[11px] opacity-70 mb-1">Ingresos</p>
-            <p className="text-lg font-bold tabular-nums">
+        {/* Income / Expenses chips */}
+        <div className="grid grid-cols-2 gap-2 mb-4">
+          <div className="bg-white/10 rounded-xl px-3.5 py-2.5">
+            <p className="text-[10px] opacity-60 mb-0.5">Ingresos</p>
+            <p className="text-sm font-bold tabular-nums">
               +{symbol}
               {formatAmount(income)}
             </p>
           </div>
-          <div className="bg-white/10 rounded-xl px-4 py-3">
-            <p className="text-[11px] opacity-70 mb-1">Gastos</p>
-            <p className="text-lg font-bold tabular-nums">
+          <div className="bg-white/10 rounded-xl px-3.5 py-2.5">
+            <p className="text-[10px] opacity-60 mb-0.5">Gastos</p>
+            <p className="text-sm font-bold tabular-nums">
               −{symbol}
               {formatAmount(expenses)}
             </p>
@@ -511,11 +525,11 @@ export function DashboardClient() {
 
         {income > 0 && (
           <div>
-            <div className="flex justify-between text-xs mb-1.5 opacity-75">
+            <div className="flex justify-between text-[11px] mb-1.5 opacity-60">
               <span>Tasa de ahorro</span>
               <span className="font-semibold">{savingsRate.toFixed(1)}%</span>
             </div>
-            <div className="w-full h-1.5 bg-white/20 rounded-full overflow-hidden">
+            <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden">
               <motion.div
                 className="h-full rounded-full bg-white"
                 initial={{ width: 0 }}
