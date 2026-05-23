@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Trash2, Wallet } from "lucide-react";
+import { ChevronLeft, ChevronRight, Trash2, Wallet, Pencil, Check, X } from "lucide-react";
 import toast from "react-hot-toast";
 import {
   AlertDialog,
@@ -18,6 +18,7 @@ import {
 import {
   useBudgetsProgress,
   useDeleteBudget,
+  useUpdateBudget,
   BudgetProgress,
 } from "@/hooks/use-budgets";
 import { useTransactionCategories } from "@/hooks/use-transactions";
@@ -69,13 +70,15 @@ function BudgetItem({
   month,
   year,
 }: BudgetItemProps) {
-  const { mutate: deleteBudget, isPending: isDeleting } = useDeleteBudget(
-    month,
-    year,
-  );
+  const { mutate: deleteBudget, isPending: isDeleting } = useDeleteBudget(month, year);
+  const { mutate: updateBudget, isPending: isUpdating } = useUpdateBudget(month, year);
   const formatAmount = useFormatAmount();
   const { getSymbol } = useCurrencyStore();
   const symbol = getSymbol();
+
+  const [editing, setEditing] = useState(false);
+  const [editValue, setEditValue] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const amount = parseFloat(budget.amount);
   const spent = parseFloat(budget.spent);
@@ -84,11 +87,43 @@ function BudgetItem({
   const isOver = budget.isOverBudget;
   const isNear = !isOver && budget.percentage >= 80;
 
-  const barColor = isOver
-    ? "#ef4444"
-    : isNear
-      ? "#f59e0b"
-      : categoryColor || "#3b82f6";
+  const barColor = isOver ? "#ef4444" : isNear ? "#f59e0b" : categoryColor || "#3b82f6";
+
+  useEffect(() => {
+    if (editing && inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.select();
+    }
+  }, [editing]);
+
+  const startEdit = () => {
+    setEditValue(Math.round(amount).toString());
+    setEditing(true);
+  };
+
+  const cancelEdit = () => {
+    setEditing(false);
+    setEditValue("");
+  };
+
+  const confirmEdit = () => {
+    const numeric = parseInt(editValue.replace(/\D/g, ""), 10);
+    if (!numeric || numeric <= 0) {
+      toast.error("El monto debe ser mayor que 0");
+      return;
+    }
+    updateBudget(
+      { id: budget.id, amount: numeric.toString() },
+      {
+        onSuccess: () => {
+          toast.success("Presupuesto actualizado");
+          setEditing(false);
+          setEditValue("");
+        },
+        onError: () => toast.error("Error al actualizar el presupuesto"),
+      },
+    );
+  };
 
   const handleDelete = () => {
     deleteBudget(budget.id, {
@@ -126,36 +161,67 @@ function BudgetItem({
           )}
         </div>
 
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <button
-              disabled={isDeleting}
-              className="p-1.5 rounded-lg text-slate-300 hover:text-red-400 hover:bg-red-50 transition-colors disabled:opacity-40 opacity-0 group-hover:opacity-100 duration-150 flex-shrink-0"
-              aria-label="Eliminar presupuesto"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
-            </button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>¿Eliminar presupuesto?</AlertDialogTitle>
-              <AlertDialogDescription>
-                Se eliminará permanentemente el presupuesto de{" "}
-                <strong>{categoryName}</strong>. Esta acción no se puede
-                deshacer.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancelar</AlertDialogCancel>
-              <AlertDialogAction
-                onClick={handleDelete}
-                className="bg-red-600 hover:bg-red-700 text-white"
+        <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex-shrink-0">
+          {editing ? (
+            <>
+              <button
+                onClick={confirmEdit}
+                disabled={isUpdating}
+                className="p-1.5 rounded-lg text-slate-300 hover:text-emerald-500 hover:bg-emerald-50 transition-colors disabled:opacity-40"
+                aria-label="Guardar"
               >
-                Eliminar
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+                <Check className="w-3.5 h-3.5" />
+              </button>
+              <button
+                onClick={cancelEdit}
+                disabled={isUpdating}
+                className="p-1.5 rounded-lg text-slate-300 hover:text-slate-500 hover:bg-slate-100 transition-colors"
+                aria-label="Cancelar"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={startEdit}
+              className="p-1.5 rounded-lg text-slate-300 hover:text-blue-500 hover:bg-blue-50 transition-colors"
+              aria-label="Editar monto"
+            >
+              <Pencil className="w-3.5 h-3.5" />
+            </button>
+          )}
+
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <button
+                disabled={isDeleting || editing}
+                className="p-1.5 rounded-lg text-slate-300 hover:text-red-400 hover:bg-red-50 transition-colors disabled:opacity-40"
+                aria-label="Eliminar presupuesto"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>¿Eliminar presupuesto?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Se eliminará permanentemente el presupuesto de{" "}
+                  <strong>{categoryName}</strong>. Esta acción no se puede
+                  deshacer.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleDelete}
+                  className="bg-red-600 hover:bg-red-700 text-white"
+                >
+                  Eliminar
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
       </div>
 
       {/* Progress bar */}
@@ -172,20 +238,43 @@ function BudgetItem({
       {/* Amounts */}
       <div className="flex items-center justify-between text-xs text-slate-500">
         <span>
-          <span className="font-semibold tabular-nums" style={{ color: isOver ? "#ef4444" : "#1e293b" }}>
+          <span
+            className="font-semibold tabular-nums"
+            style={{ color: isOver ? "#ef4444" : "#1e293b" }}
+          >
             {symbol}
             {formatAmount(spent.toString())}
+          </span>{" "}
+          de{" "}
+          {editing ? (
+            <input
+              ref={inputRef}
+              type="text"
+              inputMode="numeric"
+              value={editValue}
+              onChange={(e) => setEditValue(e.target.value.replace(/\D/g, ""))}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") confirmEdit();
+                if (e.key === "Escape") cancelEdit();
+              }}
+              className="inline-block w-24 border-b border-slate-300 bg-transparent text-slate-700 font-semibold tabular-nums focus:outline-none focus:border-blue-400 text-xs px-0.5"
+            />
+          ) : (
+            <span className="tabular-nums">
+              {symbol}
+              {formatAmount(amount.toString())}
+            </span>
+          )}
+        </span>
+        {!editing && (
+          <span
+            className={`font-medium tabular-nums ${isOver ? "text-red-500" : "text-emerald-600"}`}
+          >
+            {isOver ? "−" : ""}
+            {symbol}
+            {formatAmount(Math.abs(remaining).toString())}
           </span>
-          {" "}de {symbol}
-          {formatAmount(amount.toString())}
-        </span>
-        <span
-          className={`font-medium tabular-nums ${isOver ? "text-red-500" : "text-emerald-600"}`}
-        >
-          {isOver ? "−" : ""}
-          {symbol}
-          {formatAmount(Math.abs(remaining).toString())}
-        </span>
+        )}
       </div>
     </motion.div>
   );

@@ -54,6 +54,22 @@ const api = {
     return res.json();
   },
 
+  updateBudget: async ({
+    id,
+    amount,
+  }: {
+    id: string;
+    amount: string;
+  }): Promise<BudgetProgress> => {
+    const res = await fetch(`/api/budgets/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount }),
+    });
+    if (!res.ok) throw new Error("Failed to update budget");
+    return res.json();
+  },
+
   deleteBudget: async (id: string): Promise<void> => {
     const res = await fetch(`/api/budgets/${id}`, { method: "DELETE" });
     if (!res.ok) throw new Error("Failed to delete budget");
@@ -74,6 +90,51 @@ export function useCreateBudget() {
   return useMutation({
     mutationFn: api.createBudget,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: budgetKeys.all });
+    },
+  });
+}
+
+export function useUpdateBudget(month: number, year: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: api.updateBudget,
+    onMutate: async ({ id, amount }) => {
+      await queryClient.cancelQueries({
+        queryKey: budgetKeys.progress(month, year),
+      });
+      const previous = queryClient.getQueryData<BudgetProgress[]>(
+        budgetKeys.progress(month, year),
+      );
+      queryClient.setQueryData<BudgetProgress[]>(
+        budgetKeys.progress(month, year),
+        (old) =>
+          old?.map((b) => {
+            if (b.id !== id) return b;
+            const newAmount = parseFloat(amount);
+            const spent = parseFloat(b.spent);
+            const percentage =
+              newAmount > 0 ? (spent / newAmount) * 100 : 0;
+            return {
+              ...b,
+              amount,
+              remaining: (newAmount - spent).toString(),
+              percentage,
+              isOverBudget: spent > newAmount,
+            };
+          }) ?? [],
+      );
+      return { previous };
+    },
+    onError: (_, __, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(
+          budgetKeys.progress(month, year),
+          context.previous,
+        );
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: budgetKeys.all });
     },
   });
