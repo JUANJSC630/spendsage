@@ -15,10 +15,15 @@ export async function PATCH(
     });
     if (!existing) return new NextResponse("Not Found", { status: 404 });
 
-    const data = await req.json();
+    const { deadline, ...rest } = await req.json();
     const updated = await db.savingsGoal.update({
       where: { id: params.goalId },
-      data,
+      data: {
+        ...rest,
+        ...(deadline !== undefined
+          ? { deadline: deadline ? new Date(deadline) : null }
+          : {}),
+      },
     });
 
     return NextResponse.json(updated);

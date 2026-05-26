@@ -44,7 +44,13 @@ const api = {
     return res.json();
   },
 
-  update: async ({ id, ...data }: Partial<GoalInput> & { id: string; isComplete?: boolean }): Promise<SavingsGoal> => {
+  update: async ({
+    id,
+    ...data
+  }: Partial<GoalInput> & {
+    id: string;
+    isComplete?: boolean;
+  }): Promise<SavingsGoal> => {
     const res = await fetch(`/api/savings-goals/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -86,8 +92,9 @@ export function useUpdateGoal() {
   return useMutation({
     mutationFn: api.update,
     onSuccess: (updated) => {
-      queryClient.setQueryData<SavingsGoal[]>(goalKeys.list(), (old) =>
-        old?.map((g) => (g.id === updated.id ? updated : g)) ?? [],
+      queryClient.setQueryData<SavingsGoal[]>(
+        goalKeys.list(),
+        (old) => old?.map((g) => (g.id === updated.id ? updated : g)) ?? [],
       );
     },
   });
@@ -98,8 +105,9 @@ export function useDeleteGoal() {
   return useMutation({
     mutationFn: api.delete,
     onSuccess: (_, id) => {
-      queryClient.setQueryData<SavingsGoal[]>(goalKeys.list(), (old) =>
-        old?.filter((g) => g.id !== id) ?? [],
+      queryClient.setQueryData<SavingsGoal[]>(
+        goalKeys.list(),
+        (old) => old?.filter((g) => g.id !== id) ?? [],
       );
     },
   });

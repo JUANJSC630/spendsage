@@ -15,6 +15,7 @@ import {
   ArrowUpRight,
   Wallet,
   RefreshCw,
+  Sparkles,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import Link from "next/link";
@@ -32,6 +33,7 @@ import {
   usePendingRecurring,
 } from "@/hooks/use-recurring-transactions";
 import { useSavingsGoals } from "@/hooks/use-savings-goals";
+import { useAiInsights } from "@/hooks/use-ai-insights";
 import { CashFlowChart } from "../CashFlowChart";
 
 const MONTHS = [
@@ -171,8 +173,15 @@ export function DashboardClient() {
   const symbol = getSymbol();
 
   const pendingRecurring = usePendingRecurring(month, year);
-  const { mutate: applyRecurring, isPending: isApplyingRecurring } = useApplyRecurring();
+  const { mutate: applyRecurring, isPending: isApplyingRecurring } =
+    useApplyRecurring();
   const { data: savingsGoals = [] } = useSavingsGoals();
+  // Only call Claude when there are transactions in the app at all
+  const { data: aiInsights = [], isFetching: isFetchingAI } = useAiInsights(
+    month,
+    year,
+    allTransactions.length > 0,
+  );
   const activeGoals = savingsGoals.filter((g) => !g.isComplete).slice(0, 3);
 
   const hour = now.getHours();
@@ -493,17 +502,30 @@ export function DashboardClient() {
         <motion.div
           variants={fadeUp}
           className="rounded-2xl px-4 py-3.5 flex items-center justify-between gap-3"
-          style={{ backgroundColor: `${colorTheme}15`, borderLeft: `3px solid ${colorTheme}` }}
+          style={{
+            backgroundColor: `${colorTheme}15`,
+            borderLeft: `3px solid ${colorTheme}`,
+          }}
         >
           <div className="flex items-center gap-2.5 min-w-0">
-            <RefreshCw className="w-4 h-4 flex-shrink-0" style={{ color: colorTheme }} />
+            <RefreshCw
+              className="w-4 h-4 flex-shrink-0"
+              style={{ color: colorTheme }}
+            />
             <div className="min-w-0">
               <p className="text-sm font-semibold text-slate-800">
-                {pendingRecurring.length} recurrente{pendingRecurring.length !== 1 ? "s" : ""} pendiente{pendingRecurring.length !== 1 ? "s" : ""}
+                {pendingRecurring.length} recurrente
+                {pendingRecurring.length !== 1 ? "s" : ""} pendiente
+                {pendingRecurring.length !== 1 ? "s" : ""}
               </p>
               <p className="text-xs text-slate-400 truncate">
-                {pendingRecurring.slice(0, 3).map((r) => r.description).join(", ")}
-                {pendingRecurring.length > 3 ? ` y ${pendingRecurring.length - 3} más` : ""}
+                {pendingRecurring
+                  .slice(0, 3)
+                  .map((r) => r.description)
+                  .join(", ")}
+                {pendingRecurring.length > 3
+                  ? ` y ${pendingRecurring.length - 3} más`
+                  : ""}
               </p>
             </div>
           </div>
@@ -511,7 +533,12 @@ export function DashboardClient() {
             onClick={() =>
               applyRecurring(
                 { month, year },
-                { onSuccess: ({ created }) => toast.success(`${created} transacción${created !== 1 ? "es" : ""} registrada${created !== 1 ? "s" : ""}`) },
+                {
+                  onSuccess: ({ created }) =>
+                    toast.success(
+                      `${created} transacción${created !== 1 ? "es" : ""} registrada${created !== 1 ? "s" : ""}`,
+                    ),
+                },
               )
             }
             disabled={isApplyingRecurring}
@@ -780,6 +807,49 @@ export function DashboardClient() {
         </motion.div>
       )}
 
+      {/* ── AI Insights ─────────────────────────────────────────────────── */}
+      {(aiInsights.length > 0 || isFetchingAI) && (
+        <motion.div variants={fadeUp} className="rounded-2xl bg-slate-50 p-5">
+          <div className="flex items-center gap-2 mb-3">
+            <Sparkles className="w-4 h-4 text-violet-500" />
+            <p className="text-sm font-semibold text-slate-800">Análisis IA</p>
+            {isFetchingAI && (
+              <span className="text-[11px] text-slate-400 animate-pulse ml-1">
+                Analizando...
+              </span>
+            )}
+          </div>
+          {isFetchingAI ? (
+            <div className="space-y-2">
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="h-4 bg-slate-200 rounded-full animate-pulse"
+                  style={{ width: `${70 + i * 8}%` }}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {aiInsights.map((insight, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  className="flex items-start gap-2.5"
+                >
+                  <span className="w-1 h-1 rounded-full bg-violet-400 flex-shrink-0 mt-1.5" />
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    {insight}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </motion.div>
+      )}
+
       {/* ── Category breakdown + 6-month trend ─────────────────────────── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <motion.div variants={fadeUp} className="rounded-2xl bg-slate-50 p-5">
@@ -869,16 +939,21 @@ export function DashboardClient() {
             {activeGoals.map((goal) => {
               const target = parseFloat(goal.targetAmount);
               const saved = parseFloat(goal.savedAmount);
-              const pct = target > 0 ? Math.min((saved / target) * 100, 100) : 0;
+              const pct =
+                target > 0 ? Math.min((saved / target) * 100, 100) : 0;
               return (
                 <div key={goal.id}>
                   <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center gap-2">
                       <span className="text-base">{goal.emoji}</span>
-                      <span className="text-xs font-medium text-slate-700 truncate">{goal.name}</span>
+                      <span className="text-xs font-medium text-slate-700 truncate">
+                        {goal.name}
+                      </span>
                     </div>
                     <span className="text-xs font-semibold tabular-nums text-slate-500 flex-shrink-0 ml-2">
-                      {symbol}{formatAmount(Math.round(saved).toString())} / {symbol}{formatAmount(Math.round(target).toString())}
+                      {symbol}
+                      {formatAmount(Math.round(saved).toString())} / {symbol}
+                      {formatAmount(Math.round(target).toString())}
                     </span>
                   </div>
                   <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">

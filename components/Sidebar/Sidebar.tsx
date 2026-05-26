@@ -14,14 +14,18 @@ const EXPANDED_WIDTH = 220;
 const COLLAPSED_WIDTH = 64;
 
 export function Sidebar() {
+  const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(true);
   const { colorTheme } = useSyncColorTheme();
 
-  // Persist state across reloads
   useEffect(() => {
     const saved = localStorage.getItem(SIDEBAR_KEY);
     if (saved !== null) setOpen(saved === "true");
+    setMounted(true);
   }, []);
+
+  // Use true until client has hydrated — keeps server/client HTML identical
+  const effectiveOpen = mounted ? open : true;
 
   const toggle = () => {
     setOpen((v) => {
@@ -32,7 +36,7 @@ export function Sidebar() {
 
   return (
     <motion.div
-      animate={{ width: open ? EXPANDED_WIDTH : COLLAPSED_WIDTH }}
+      animate={{ width: effectiveOpen ? EXPANDED_WIDTH : COLLAPSED_WIDTH }}
       transition={{ duration: 0.25, ease: "easeInOut" }}
       className="relative flex flex-col h-screen shrink-0 border-r border-slate-100"
       style={{ backgroundColor: hexToRgba(colorTheme, 0.06) }}
@@ -41,11 +45,11 @@ export function Sidebar() {
       <div className="h-0.5 w-full" style={{ backgroundColor: colorTheme }} />
 
       {/* Logo */}
-      <LogoDashboard open={open} />
+      <LogoDashboard open={effectiveOpen} />
 
       {/* Nav */}
       <div className="flex-1 overflow-hidden">
-        <SidebarRoutes setOpen={open} />
+        <SidebarRoutes setOpen={effectiveOpen} />
       </div>
 
       {/* Collapse toggle — integrated at bottom edge */}
@@ -54,9 +58,9 @@ export function Sidebar() {
         size="icon"
         onClick={toggle}
         className="absolute -right-3 top-16 h-6 w-6 rounded-full border border-slate-200 bg-white shadow-sm hover:bg-slate-50 text-slate-500 z-10"
-        title={open ? "Colapsar" : "Expandir"}
+        title={effectiveOpen ? "Colapsar" : "Expandir"}
       >
-        {open ? (
+        {effectiveOpen ? (
           <ChevronLeft className="h-3 w-3" />
         ) : (
           <ChevronRight className="h-3 w-3" />

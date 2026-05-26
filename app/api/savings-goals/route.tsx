@@ -26,10 +26,14 @@ export async function POST(req: Request) {
     const { userId } = auth();
     if (!userId) return new NextResponse("Unauthorized", { status: 401 });
 
-    const data = await req.json();
+    const { deadline, ...rest } = await req.json();
 
     const goal = await db.savingsGoal.create({
-      data: { userId, ...data },
+      data: {
+        userId,
+        ...rest,
+        ...(deadline ? { deadline: new Date(deadline) } : {}),
+      },
     });
 
     return NextResponse.json(goal);

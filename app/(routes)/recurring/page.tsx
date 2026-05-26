@@ -13,6 +13,7 @@ import {
   useDeleteRecurring,
   useUpdateRecurring,
   useApplyRecurring,
+  useApplyOneRecurring,
   usePendingRecurring,
 } from "@/hooks/use-recurring-transactions";
 import { useTransactionCategories } from "@/hooks/use-transactions";
@@ -49,11 +50,21 @@ import {
 } from "@/components/ui/alert-dialog";
 
 const MONTHS = [
-  "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-  "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
 ];
 
-const DAYS = Array.from({ length: 28 }, (_, i) => i + 1);
+const DAYS = Array.from({ length: 31 }, (_, i) => i + 1);
 
 const formSchema = z.object({
   description: z.string().nonempty("La descripción es requerida"),
@@ -62,7 +73,7 @@ const formSchema = z.object({
     .min(1, "El monto es requerido")
     .refine((v) => /^\d+$/.test(v), "Solo números"),
   category: z.string().nonempty("Selecciona una categoría"),
-  dayOfMonth: z.coerce.number().min(1).max(28),
+  dayOfMonth: z.coerce.number().min(1).max(31),
 });
 
 const stagger = {
@@ -71,7 +82,11 @@ const stagger = {
 };
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] } },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] },
+  },
 };
 
 export default function RecurringPage() {
@@ -86,10 +101,13 @@ export default function RecurringPage() {
 
   const { data: recurring = [], isLoading } = useRecurringTransactions();
   const { data: categories = [] } = useTransactionCategories();
-  const { mutate: createRecurring, isPending: isCreating } = useCreateRecurring();
+  const { mutate: createRecurring, isPending: isCreating } =
+    useCreateRecurring();
   const { mutate: deleteRecurring } = useDeleteRecurring();
   const { mutate: updateRecurring } = useUpdateRecurring();
   const { mutate: applyRecurring, isPending: isApplying } = useApplyRecurring();
+  const { mutate: applyOne, isPending: isApplyingOne } = useApplyOneRecurring();
+  const [applyingId, setApplyingId] = useState<string | null>(null);
   const pending = usePendingRecurring(month, year);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -101,7 +119,12 @@ export default function RecurringPage() {
     createRecurring(values, {
       onSuccess: () => {
         toast.success("Recurrente agregada");
-        form.reset({ description: "", amount: "", category: "", dayOfMonth: 1 });
+        form.reset({
+          description: "",
+          amount: "",
+          category: "",
+          dayOfMonth: 1,
+        });
       },
       onError: () => toast.error("Error al agregar"),
     });
@@ -112,14 +135,19 @@ export default function RecurringPage() {
       { month, year },
       {
         onSuccess: ({ created }) =>
-          toast.success(`${created} transacción${created !== 1 ? "es" : ""} registrada${created !== 1 ? "s" : ""}`),
+          toast.success(
+            `${created} transacción${created !== 1 ? "es" : ""} registrada${created !== 1 ? "s" : ""}`,
+          ),
         onError: () => toast.error("Error al aplicar recurrentes"),
       },
     );
   };
 
   const totalMonthly = useMemo(
-    () => recurring.filter((r) => r.isActive).reduce((s, r) => s + parseFloat(r.amount), 0),
+    () =>
+      recurring
+        .filter((r) => r.isActive)
+        .reduce((s, r) => s + parseFloat(r.amount), 0),
     [recurring],
   );
 
@@ -136,8 +164,8 @@ export default function RecurringPage() {
           Recurrentes
         </h1>
         <p className="text-sm text-slate-400 mt-1">
-          {recurring.filter((r) => r.isActive).length} activas ·{" "}
-          {symbol}{formatAmount(totalMonthly.toString())} / mes
+          {recurring.filter((r) => r.isActive).length} activas · {symbol}
+          {formatAmount(totalMonthly.toString())} / mes
         </p>
       </motion.div>
 
@@ -146,11 +174,15 @@ export default function RecurringPage() {
         <motion.div
           variants={fadeUp}
           className="rounded-2xl p-4 mb-6 flex items-center justify-between gap-4"
-          style={{ backgroundColor: `${colorTheme}18`, borderLeft: `3px solid ${colorTheme}` }}
+          style={{
+            backgroundColor: `${colorTheme}18`,
+            borderLeft: `3px solid ${colorTheme}`,
+          }}
         >
           <div>
             <p className="text-sm font-semibold text-slate-800">
-              {pending.length} pendiente{pending.length !== 1 ? "s" : ""} para {MONTHS[month - 1]}
+              {pending.length} pendiente{pending.length !== 1 ? "s" : ""} para{" "}
+              {MONTHS[month - 1]}
             </p>
             <p className="text-xs text-slate-500 mt-0.5">
               Aplícalas para registrarlas como transacciones de este mes
@@ -162,7 +194,9 @@ export default function RecurringPage() {
             className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-white text-sm font-semibold flex-shrink-0 disabled:opacity-50 transition-opacity"
             style={{ backgroundColor: colorTheme }}
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${isApplying ? "animate-spin" : ""}`} />
+            <RefreshCw
+              className={`w-3.5 h-3.5 ${isApplying ? "animate-spin" : ""}`}
+            />
             {isApplying ? "Aplicando..." : "Aplicar todas"}
           </button>
         </motion.div>
@@ -170,8 +204,13 @@ export default function RecurringPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {/* Form */}
-        <motion.div variants={fadeUp} className="rounded-2xl bg-slate-50 p-6 h-fit">
-          <p className="text-sm font-semibold text-slate-800 mb-4">Nueva recurrente</p>
+        <motion.div
+          variants={fadeUp}
+          className="rounded-2xl bg-slate-50 p-6 h-fit"
+        >
+          <p className="text-sm font-semibold text-slate-800 mb-4">
+            Nueva recurrente
+          </p>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
@@ -179,9 +218,15 @@ export default function RecurringPage() {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-xs text-slate-500">Descripción</FormLabel>
+                    <FormLabel className="text-xs text-slate-500">
+                      Descripción
+                    </FormLabel>
                     <FormControl>
-                      <Input {...field} className="bg-white border-slate-200" placeholder="Ej: Netflix, Arriendo, Laura..." />
+                      <Input
+                        {...field}
+                        className="bg-white border-slate-200"
+                        placeholder="Ej: Netflix, Arriendo, Laura..."
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -193,13 +238,17 @@ export default function RecurringPage() {
                 name="amount"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-xs text-slate-500">Monto</FormLabel>
+                    <FormLabel className="text-xs text-slate-500">
+                      Monto
+                    </FormLabel>
                     <FormControl>
                       <Input
                         type="text"
                         inputMode="numeric"
                         value={formatAmount(form.watch("amount"))}
-                        onChange={(e) => field.onChange(e.target.value.replace(/\D/g, ""))}
+                        onChange={(e) =>
+                          field.onChange(e.target.value.replace(/\D/g, ""))
+                        }
                         className="bg-white border-slate-200"
                         placeholder="0"
                       />
@@ -214,9 +263,14 @@ export default function RecurringPage() {
                 name="category"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-xs text-slate-500">Categoría</FormLabel>
+                    <FormLabel className="text-xs text-slate-500">
+                      Categoría
+                    </FormLabel>
                     <FormControl>
-                      <Select onValueChange={field.onChange} value={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
                         <SelectTrigger className="bg-white border-slate-200">
                           <SelectValue placeholder="Selecciona una categoría" />
                         </SelectTrigger>
@@ -224,10 +278,15 @@ export default function RecurringPage() {
                           {categories.map((cat) => (
                             <SelectItem key={cat.id} value={cat.slug}>
                               <div className="flex items-center gap-2">
-                                <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: cat.color }} />
+                                <div
+                                  className="w-2.5 h-2.5 rounded-full"
+                                  style={{ backgroundColor: cat.color }}
+                                />
                                 <span>{cat.name}</span>
                                 <span className="text-xs text-slate-400">
-                                  {cat.type === "income" ? "· Ingreso" : "· Gasto"}
+                                  {cat.type === "income"
+                                    ? "· Ingreso"
+                                    : "· Gasto"}
                                 </span>
                               </div>
                             </SelectItem>
@@ -245,9 +304,14 @@ export default function RecurringPage() {
                 name="dayOfMonth"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-xs text-slate-500">Día del mes</FormLabel>
+                    <FormLabel className="text-xs text-slate-500">
+                      Día del mes
+                    </FormLabel>
                     <FormControl>
-                      <Select onValueChange={(v) => field.onChange(parseInt(v))} value={field.value.toString()}>
+                      <Select
+                        onValueChange={(v) => field.onChange(parseInt(v))}
+                        value={field.value.toString()}
+                      >
                         <SelectTrigger className="bg-white border-slate-200">
                           <SelectValue />
                         </SelectTrigger>
@@ -287,14 +351,22 @@ export default function RecurringPage() {
           {isLoading ? (
             <div className="space-y-3">
               {[...Array(3)].map((_, i) => (
-                <div key={i} className="h-16 bg-slate-100 rounded-xl animate-pulse" style={{ opacity: 1 - i * 0.3 }} />
+                <div
+                  key={i}
+                  className="h-16 bg-slate-100 rounded-xl animate-pulse"
+                  style={{ opacity: 1 - i * 0.3 }}
+                />
               ))}
             </div>
           ) : recurring.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-10 text-center">
               <RefreshCw className="w-8 h-8 text-slate-200 mb-3" />
-              <p className="text-sm font-medium text-slate-400">Sin recurrentes</p>
-              <p className="text-xs text-slate-300 mt-1">Agrega tus gastos y transferencias fijas</p>
+              <p className="text-sm font-medium text-slate-400">
+                Sin recurrentes
+              </p>
+              <p className="text-xs text-slate-300 mt-1">
+                Agrega tus gastos y transferencias fijas
+              </p>
             </div>
           ) : (
             <motion.div
@@ -308,7 +380,8 @@ export default function RecurringPage() {
                   const { category } = getCategoryInfo(categories, r.category);
                   const catColor = category?.color ?? "#94a3b8";
                   const catName = category?.name ?? r.category;
-                  const isPending = !r.lastAppliedAt ||
+                  const isPending =
+                    !r.lastAppliedAt ||
                     new Date(r.lastAppliedAt).getMonth() + 1 !== month ||
                     new Date(r.lastAppliedAt).getFullYear() !== year;
 
@@ -318,14 +391,23 @@ export default function RecurringPage() {
                       layout
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: r.isActive ? 1 : 0.45, y: 0 }}
-                      exit={{ opacity: 0, x: -16, transition: { duration: 0.15 } }}
+                      exit={{
+                        opacity: 0,
+                        x: -16,
+                        transition: { duration: 0.15 },
+                      }}
                       className="group bg-white rounded-xl px-4 py-3 flex items-center gap-3"
                     >
-                      <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: catColor }} />
+                      <span
+                        className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                        style={{ backgroundColor: catColor }}
+                      />
 
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <p className="text-sm font-medium text-slate-800 truncate">{r.description}</p>
+                          <p className="text-sm font-medium text-slate-800 truncate">
+                            {r.description}
+                          </p>
                           {r.isActive && isPending && (
                             <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-amber-50 text-amber-600 flex-shrink-0">
                               Pendiente
@@ -338,15 +420,75 @@ export default function RecurringPage() {
                       </div>
 
                       <span className="text-sm font-bold tabular-nums text-slate-700 flex-shrink-0">
-                        {symbol}{formatAmount(r.amount)}
+                        {symbol}
+                        {formatAmount(r.amount)}
                       </span>
 
                       <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
+                        {r.isActive && isPending && (
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <button
+                                disabled={applyingId === r.id}
+                                className="p-1.5 rounded-lg text-slate-300 hover:text-emerald-500 hover:bg-emerald-50 transition-colors disabled:opacity-50"
+                                aria-label="Aplicar"
+                              >
+                                <RefreshCw
+                                  className={`w-3.5 h-3.5 ${applyingId === r.id ? "animate-spin" : ""}`}
+                                />
+                              </button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                  ¿Registrar como transacción?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Se registrará <strong>{r.description}</strong>{" "}
+                                  ({symbol}
+                                  {formatAmount(r.amount)}) como transacción de{" "}
+                                  {MONTHS[month - 1]}.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => {
+                                    setApplyingId(r.id);
+                                    applyOne(
+                                      { recurringId: r.id, month, year },
+                                      {
+                                        onSuccess: () => {
+                                          toast.success(
+                                            "Transacción registrada",
+                                          );
+                                          setApplyingId(null);
+                                        },
+                                        onError: () => {
+                                          toast.error("Error al aplicar");
+                                          setApplyingId(null);
+                                        },
+                                      },
+                                    );
+                                  }}
+                                  style={{ backgroundColor: colorTheme }}
+                                >
+                                  Registrar
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        )}
                         <button
                           onClick={() =>
                             updateRecurring(
                               { id: r.id, isActive: !r.isActive },
-                              { onSuccess: () => toast.success(r.isActive ? "Pausada" : "Activada") },
+                              {
+                                onSuccess: () =>
+                                  toast.success(
+                                    r.isActive ? "Pausada" : "Activada",
+                                  ),
+                              },
                             )
                           }
                           className="p-1.5 rounded-lg text-slate-300 hover:text-blue-500 hover:bg-blue-50 transition-colors"
@@ -370,9 +512,13 @@ export default function RecurringPage() {
                           </AlertDialogTrigger>
                           <AlertDialogContent>
                             <AlertDialogHeader>
-                              <AlertDialogTitle>¿Eliminar recurrente?</AlertDialogTitle>
+                              <AlertDialogTitle>
+                                ¿Eliminar recurrente?
+                              </AlertDialogTitle>
                               <AlertDialogDescription>
-                                Se eliminará <strong>{r.description}</strong>. Las transacciones ya registradas no se ven afectadas.
+                                Se eliminará <strong>{r.description}</strong>.
+                                Las transacciones ya registradas no se ven
+                                afectadas.
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
@@ -381,7 +527,8 @@ export default function RecurringPage() {
                                 onClick={() =>
                                   deleteRecurring(r.id, {
                                     onSuccess: () => toast.success("Eliminada"),
-                                    onError: () => toast.error("Error al eliminar"),
+                                    onError: () =>
+                                      toast.error("Error al eliminar"),
                                   })
                                 }
                                 className="bg-red-600 hover:bg-red-700 text-white"

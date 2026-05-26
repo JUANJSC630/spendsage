@@ -47,7 +47,10 @@ const api = {
   update: async ({
     id,
     ...data
-  }: Partial<RecurringInput> & { id: string; isActive?: boolean }): Promise<RecurringTransaction> => {
+  }: Partial<RecurringInput> & {
+    id: string;
+    isActive?: boolean;
+  }): Promise<RecurringTransaction> => {
     const res = await fetch(`/api/recurring-transactions/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -71,6 +74,20 @@ const api = {
       body: JSON.stringify({ month, year }),
     });
     if (!res.ok) throw new Error("Failed to apply recurring transactions");
+    return res.json();
+  },
+
+  applyOne: async (
+    recurringId: string,
+    month: number,
+    year: number,
+  ): Promise<{ created: number }> => {
+    const res = await fetch("/api/recurring-transactions/apply", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ recurringId, month, year }),
+    });
+    if (!res.ok) throw new Error("Failed to apply recurring transaction");
     return res.json();
   },
 };
@@ -135,14 +152,31 @@ export function useApplyRecurring() {
   });
 }
 
+export function useApplyOneRecurring() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      recurringId,
+      month,
+      year,
+    }: {
+      recurringId: string;
+      month: number;
+      year: number;
+    }) => api.applyOne(recurringId, month, year),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: transactionKeys.list() });
+      queryClient.invalidateQueries({ queryKey: recurringKeys.list() });
+    },
+  });
+}
+
 export function usePendingRecurring(month: number, year: number) {
   const { data: recurring = [] } = useRecurringTransactions();
   return recurring.filter((r) => {
     if (!r.isActive) return false;
     if (!r.lastAppliedAt) return true;
     const last = new Date(r.lastAppliedAt);
-    return (
-      last.getMonth() + 1 !== month || last.getFullYear() !== year
-    );
+    return last.getMonth() + 1 !== month || last.getFullYear() !== year;
   });
 }

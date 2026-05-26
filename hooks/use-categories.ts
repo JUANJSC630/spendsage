@@ -126,7 +126,9 @@ export function useSeedDefaultCategories() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (): Promise<{ created: number }> => {
-      const res = await fetch("/api/categories/seed-defaults", { method: "POST" });
+      const res = await fetch("/api/categories/seed-defaults", {
+        method: "POST",
+      });
       if (!res.ok) throw new Error("Failed to seed categories");
       return res.json();
     },

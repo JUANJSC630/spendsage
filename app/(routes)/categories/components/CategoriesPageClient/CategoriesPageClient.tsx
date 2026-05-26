@@ -4,7 +4,10 @@ import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import toast from "react-hot-toast";
-import { useAllCategories, useSeedDefaultCategories } from "@/hooks/use-categories";
+import {
+  useAllCategories,
+  useSeedDefaultCategories,
+} from "@/hooks/use-categories";
 import { useSyncColorTheme } from "@/hooks/useColorThemeStore";
 import { CategoryForm } from "../CategoryForm/CategoryForm";
 import { CategoryList } from "../CategoryList/CategoryList";
@@ -25,7 +28,8 @@ const fadeUp = {
 
 export function CategoriesPageClient() {
   const { data: categories = [], isLoading } = useAllCategories();
-  const { mutate: seedCategories, isPending: isSeeding } = useSeedDefaultCategories();
+  const { mutate: seedCategories, isPending: isSeeding } =
+    useSeedDefaultCategories();
   const { colorTheme } = useSyncColorTheme();
 
   const { activeCount, archivedCount, userCategoryCount } = useMemo(() => {
@@ -57,7 +61,10 @@ export function CategoriesPageClient() {
       animate="visible"
     >
       {/* Header */}
-      <motion.div variants={fadeUp} className="flex items-end justify-between gap-4 mb-6">
+      <motion.div
+        variants={fadeUp}
+        className="flex items-end justify-between gap-4 mb-6"
+      >
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
             Categorías
@@ -84,14 +91,18 @@ export function CategoriesPageClient() {
         <motion.div
           variants={fadeUp}
           className="rounded-2xl px-4 py-3.5 mb-6 flex items-center justify-between gap-4"
-          style={{ backgroundColor: `${colorTheme}12`, borderLeft: `3px solid ${colorTheme}` }}
+          style={{
+            backgroundColor: `${colorTheme}12`,
+            borderLeft: `3px solid ${colorTheme}`,
+          }}
         >
           <div>
             <p className="text-sm font-semibold text-slate-800">
               Empieza con categorías listas para usar
             </p>
             <p className="text-xs text-slate-500 mt-0.5">
-              18 categorías pre-configuradas: freelance, suscripciones, hogar, herramientas de trabajo y más.
+              18 categorías pre-configuradas: freelance, suscripciones, hogar,
+              herramientas de trabajo y más.
             </p>
           </div>
           <button

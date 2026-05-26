@@ -41,8 +41,12 @@ function CashFlowTooltip({
   return (
     <div className="bg-white rounded-xl shadow-lg border border-slate-100 px-3 py-2 text-xs">
       <p className="text-slate-400 mb-0.5">{label}</p>
-      <p className={`font-bold tabular-nums ${val >= 0 ? "text-emerald-600" : "text-red-500"}`}>
-        {val >= 0 ? "+" : "−"}{symbol}{formatAmount(Math.abs(val).toString())}
+      <p
+        className={`font-bold tabular-nums ${val >= 0 ? "text-emerald-600" : "text-red-500"}`}
+      >
+        {val >= 0 ? "+" : "−"}
+        {symbol}
+        {formatAmount(Math.abs(val).toString())}
       </p>
     </div>
   );
@@ -55,7 +59,12 @@ export function CashFlowChart({ transactions, categories, colorTheme }: Props) {
 
   const chartData = useMemo(() => {
     const today = new Date();
-    const days: { date: Date; label: string; balance: number; delta: number }[] = [];
+    const days: {
+      date: Date;
+      label: string;
+      balance: number;
+      delta: number;
+    }[] = [];
 
     for (let i = 29; i >= 0; i--) {
       const d = new Date(today);
@@ -63,7 +72,10 @@ export function CashFlowChart({ transactions, categories, colorTheme }: Props) {
       d.setHours(0, 0, 0, 0);
       days.push({
         date: d,
-        label: d.toLocaleDateString("es-ES", { day: "numeric", month: "short" }),
+        label: d.toLocaleDateString("es-ES", {
+          day: "numeric",
+          month: "short",
+        }),
         balance: 0,
         delta: 0,
       });
@@ -111,7 +123,9 @@ export function CashFlowChart({ transactions, categories, colorTheme }: Props) {
       className="rounded-2xl bg-slate-50 p-5"
     >
       <div className="flex items-center justify-between mb-4">
-        <p className="text-sm font-semibold text-slate-800">Flujo de caja — 30 días</p>
+        <p className="text-sm font-semibold text-slate-800">
+          Flujo de caja — 30 días
+        </p>
         <div className="flex items-center gap-3 text-[10px] text-slate-400">
           {minBalance < 0 && (
             <span className="flex items-center gap-1">
@@ -121,7 +135,10 @@ export function CashFlowChart({ transactions, categories, colorTheme }: Props) {
           )}
           {paycheckDays.length > 0 && (
             <span className="flex items-center gap-1">
-              <span className="w-2 h-0.5 inline-block" style={{ backgroundColor: colorTheme }} />
+              <span
+                className="w-2 h-0.5 inline-block"
+                style={{ backgroundColor: colorTheme }}
+              />
               Ingresos
             </span>
           )}
@@ -129,7 +146,10 @@ export function CashFlowChart({ transactions, categories, colorTheme }: Props) {
       </div>
 
       <ResponsiveContainer width="100%" height={130}>
-        <AreaChart data={chartData} margin={{ top: 4, right: 0, left: 0, bottom: 0 }}>
+        <AreaChart
+          data={chartData}
+          margin={{ top: 4, right: 0, left: 0, bottom: 0 }}
+        >
           <defs>
             <linearGradient id="cashGradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor={colorTheme} stopOpacity={0.18} />
@@ -147,7 +167,10 @@ export function CashFlowChart({ transactions, categories, colorTheme }: Props) {
             tick={{ fontSize: 10, fill: "#cbd5e1" }}
             interval={6}
           />
-          <YAxis hide domain={[Math.min(minBalance * 1.1, 0), maxBalance * 1.1]} />
+          <YAxis
+            hide
+            domain={[Math.min(minBalance * 1.1, 0), maxBalance * 1.1]}
+          />
           <Tooltip
             content={
               <CashFlowTooltip symbol={symbol} formatAmount={formatAmount} />
@@ -155,7 +178,12 @@ export function CashFlowChart({ transactions, categories, colorTheme }: Props) {
             cursor={{ stroke: "#e2e8f0", strokeWidth: 1 }}
           />
           {minBalance < 0 && (
-            <ReferenceLine y={0} stroke="#fca5a5" strokeDasharray="3 3" strokeWidth={1} />
+            <ReferenceLine
+              y={0}
+              stroke="#fca5a5"
+              strokeDasharray="3 3"
+              strokeWidth={1}
+            />
           )}
           <Area
             type="monotone"
@@ -176,7 +204,8 @@ export function CashFlowChart({ transactions, categories, colorTheme }: Props) {
             className="text-[11px] font-semibold px-2.5 py-1 rounded-lg text-white"
             style={{ backgroundColor: colorTheme }}
           >
-            {paycheckDays.length} ingreso{paycheckDays.length !== 1 ? "s" : ""} grandes
+            {paycheckDays.length} ingreso{paycheckDays.length !== 1 ? "s" : ""}{" "}
+            grandes
           </span>
         )}
         {minBalance < 0 && (
@@ -185,7 +214,8 @@ export function CashFlowChart({ transactions, categories, colorTheme }: Props) {
           </span>
         )}
         <span className="text-[11px] text-slate-400 ml-auto tabular-nums">
-          Pico: {symbol}{formatAmount(Math.round(maxBalance).toString())}
+          Pico: {symbol}
+          {formatAmount(Math.round(maxBalance).toString())}
         </span>
       </div>
     </motion.div>
