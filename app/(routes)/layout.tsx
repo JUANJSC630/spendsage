@@ -1,5 +1,6 @@
 import { NavbarDashboard } from "@/components/Navbar";
 import { Sidebar } from "@/components/Sidebar";
+import { QuickAddFAB } from "@/components/QuickAddFAB";
 
 export default function DashboardLayout({
   children,
@@ -17,6 +18,7 @@ export default function DashboardLayout({
         </div>
         <div className="w-full h-full overflow-y-auto">{children}</div>
       </div>
+      <QuickAddFAB />
     </div>
   );
 }

@@ -91,6 +91,37 @@ model Budget {
   @@index([userId, year, month])
 }
 
+model SavingsGoal {
+  id          String    @id @default(uuid())
+  userId      String
+  name        String
+  targetAmount String
+  savedAmount  String   @default("0")
+  emoji       String    @default("🎯")
+  deadline    DateTime?
+  isComplete  Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+model RecurringTransaction {
+  id            String    @id @default(uuid())
+  userId        String
+  description   String
+  amount        String
+  category      String
+  dayOfMonth    Int       @default(1)
+  isActive      Boolean   @default(true)
+  lastAppliedAt DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([userId, isActive])
+}
+
 model Category {
   id          String   @id @default(uuid())
   userId      String?  // nullable for default categories

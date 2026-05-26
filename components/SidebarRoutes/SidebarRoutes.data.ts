@@ -1,11 +1,13 @@
 import {
   LayoutDashboard,
-  ScrollText,
   BadgeDollarSign,
   Settings,
   ListCheck,
   Wallet,
   Tags,
+  RefreshCw,
+  BarChart3,
+  PiggyBank,
 } from "lucide-react";
 
 export const dataGeneralSidebar = [
@@ -18,6 +20,21 @@ export const dataGeneralSidebar = [
     icon: BadgeDollarSign,
     label: "Finanzas",
     href: "/finances",
+  },
+  {
+    icon: RefreshCw,
+    label: "Recurrentes",
+    href: "/recurring",
+  },
+  {
+    icon: BarChart3,
+    label: "Reportes",
+    href: "/reports",
+  },
+  {
+    icon: PiggyBank,
+    label: "Metas",
+    href: "/goals",
   },
   {
     icon: ListCheck,

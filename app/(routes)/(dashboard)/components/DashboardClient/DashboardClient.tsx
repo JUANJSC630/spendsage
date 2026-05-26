@@ -14,7 +14,9 @@ import {
   Clock,
   ArrowUpRight,
   Wallet,
+  RefreshCw,
 } from "lucide-react";
+import toast from "react-hot-toast";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 import {
@@ -25,6 +27,12 @@ import useFormatAmount from "@/hooks/useFormatAmount";
 import { useCurrencyStore } from "@/hooks/useCurrencyStore";
 import { useSyncColorTheme } from "@/hooks/useColorThemeStore";
 import { getCategoryInfo } from "@/lib/categoryMapping";
+import {
+  useApplyRecurring,
+  usePendingRecurring,
+} from "@/hooks/use-recurring-transactions";
+import { useSavingsGoals } from "@/hooks/use-savings-goals";
+import { CashFlowChart } from "../CashFlowChart";
 
 const MONTHS = [
   "Enero",
@@ -161,6 +169,11 @@ export function DashboardClient() {
   const { getSymbol } = useCurrencyStore();
   const { colorTheme } = useSyncColorTheme();
   const symbol = getSymbol();
+
+  const pendingRecurring = usePendingRecurring(month, year);
+  const { mutate: applyRecurring, isPending: isApplyingRecurring } = useApplyRecurring();
+  const { data: savingsGoals = [] } = useSavingsGoals();
+  const activeGoals = savingsGoals.filter((g) => !g.isComplete).slice(0, 3);
 
   const hour = now.getHours();
   const greeting =
@@ -474,6 +487,41 @@ export function DashboardClient() {
           </button>
         </div>
       </motion.div>
+
+      {/* ── Recurring pending banner ───────────────────────────────────── */}
+      {pendingRecurring.length > 0 && isCurrentMonth && (
+        <motion.div
+          variants={fadeUp}
+          className="rounded-2xl px-4 py-3.5 flex items-center justify-between gap-3"
+          style={{ backgroundColor: `${colorTheme}15`, borderLeft: `3px solid ${colorTheme}` }}
+        >
+          <div className="flex items-center gap-2.5 min-w-0">
+            <RefreshCw className="w-4 h-4 flex-shrink-0" style={{ color: colorTheme }} />
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-slate-800">
+                {pendingRecurring.length} recurrente{pendingRecurring.length !== 1 ? "s" : ""} pendiente{pendingRecurring.length !== 1 ? "s" : ""}
+              </p>
+              <p className="text-xs text-slate-400 truncate">
+                {pendingRecurring.slice(0, 3).map((r) => r.description).join(", ")}
+                {pendingRecurring.length > 3 ? ` y ${pendingRecurring.length - 3} más` : ""}
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() =>
+              applyRecurring(
+                { month, year },
+                { onSuccess: ({ created }) => toast.success(`${created} transacción${created !== 1 ? "es" : ""} registrada${created !== 1 ? "s" : ""}`) },
+              )
+            }
+            disabled={isApplyingRecurring}
+            className="text-white text-xs font-semibold px-3.5 py-2 rounded-xl flex-shrink-0 disabled:opacity-50 transition-opacity"
+            style={{ backgroundColor: colorTheme }}
+          >
+            {isApplyingRecurring ? "..." : "Aplicar"}
+          </button>
+        </motion.div>
+      )}
 
       {/* ── Hero balance card ───────────────────────────────────────────── */}
       <motion.div
@@ -802,6 +850,59 @@ export function DashboardClient() {
           <TrendBars data={trendData} />
         </motion.div>
       </div>
+
+      {/* ── Savings goals preview ──────────────────────────────────────── */}
+      {activeGoals.length > 0 && (
+        <motion.div variants={fadeUp} className="rounded-2xl bg-slate-50 p-5">
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-sm font-semibold text-slate-800">Metas</p>
+            <Link
+              href="/goals"
+              className="text-xs font-medium flex items-center gap-0.5 hover:underline"
+              style={{ color: colorTheme }}
+            >
+              Ver todas
+              <ArrowUpRight className="w-3 h-3" />
+            </Link>
+          </div>
+          <div className="space-y-3">
+            {activeGoals.map((goal) => {
+              const target = parseFloat(goal.targetAmount);
+              const saved = parseFloat(goal.savedAmount);
+              const pct = target > 0 ? Math.min((saved / target) * 100, 100) : 0;
+              return (
+                <div key={goal.id}>
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-base">{goal.emoji}</span>
+                      <span className="text-xs font-medium text-slate-700 truncate">{goal.name}</span>
+                    </div>
+                    <span className="text-xs font-semibold tabular-nums text-slate-500 flex-shrink-0 ml-2">
+                      {symbol}{formatAmount(Math.round(saved).toString())} / {symbol}{formatAmount(Math.round(target).toString())}
+                    </span>
+                  </div>
+                  <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                    <motion.div
+                      className="h-full rounded-full"
+                      style={{ backgroundColor: colorTheme }}
+                      initial={{ width: 0 }}
+                      animate={{ width: `${pct}%` }}
+                      transition={{ duration: 0.8, ease: "easeOut" }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </motion.div>
+      )}
+
+      {/* ── Cash flow 30 days ──────────────────────────────────────────── */}
+      <CashFlowChart
+        transactions={allTransactions}
+        categories={categories}
+        colorTheme={colorTheme}
+      />
 
       {/* ── Recent transactions ─────────────────────────────────────────── */}
       <motion.div variants={fadeUp} className="rounded-2xl bg-slate-50 p-5">
